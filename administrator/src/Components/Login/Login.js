@@ -5,6 +5,7 @@ import AccountBoxOutlinedIcon from '@material-ui/icons/AccountBoxOutlined';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import auth from '../Auth/auth';
 
 const styles = {
    box: {
@@ -82,6 +83,9 @@ export default class Login extends Component {
                            })
                            .then(res => {
                               if (res.data.name === this.state.user_name) {
+                                 auth.login(
+                                    res.data.name === this.state.user_name
+                                 );
                                  this.props.history.push('/management');
                               } else {
                                  console.log(res.data.message);
@@ -91,6 +95,9 @@ export default class Login extends Component {
                               }
                            })
                            .catch(err => {
+                              this.setState({
+                                 errors: ['Could not reach the server']
+                              });
                               console.log(err);
                            });
                      }}
