@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, Divider } from '@material-ui/core';
 import { useStyles } from './DashboardStyle.js';
-import { AddEmployee } from '../Employee/AddEmployee.js';
-import { Route, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import './Dashboard.css';
 

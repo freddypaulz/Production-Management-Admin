@@ -2,7 +2,7 @@ import React from 'react';
 import { Box } from '@material-ui/core';
 import Dashboard from '../Dashboard/Dashboard';
 import AddEmployee from '../Employee/AddEmployee';
-import Login from '../Login/Login';
+import Register from '../Register/Register';
 import { Route } from 'react-router';
 
 const Management = () => {
@@ -35,7 +35,7 @@ const Management = () => {
             marginTop='20px'
          >
             <Route path='/management/manage-employee' component={AddEmployee} />
-            <Route path='/management/manage-products' component={Login} />
+            <Route path='/management/manage-user' component={Register} />
          </Box>
       </Box>
    );

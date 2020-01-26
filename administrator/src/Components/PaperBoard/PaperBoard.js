@@ -13,7 +13,9 @@ const useStyles = makeStyles(theme => ({
       alignItems: 'center'
    },
    fixedHeight: {
-      maxHeight: '35vw'
+      maxHeight: '35vw',
+      minWidth: '300px',
+      minHeight: '250px'
    }
 }));
 

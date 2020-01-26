@@ -174,7 +174,7 @@ const AddEmployee = () => {
                   defaultValue=' '
                   style={style}
                >
-                  <MenuItem value=' ' disabled>
+                  <MenuItem fontSize='1vw' value=' ' disabled>
                      Select Designation
                   </MenuItem>
                   <MenuItem value={10}>Manager</MenuItem>
