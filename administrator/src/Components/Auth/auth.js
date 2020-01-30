@@ -1,8 +1,8 @@
 class auth {
    constructor() {
-      this.authenticated = false;
+      this.authenticated = true;
    }
-
+   authenticated = true;
    login = value => {
       console.log(value);
       this.authenticated = value;

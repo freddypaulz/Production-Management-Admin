@@ -3,12 +3,9 @@ const mongoose = require('mongoose');
 const UserSchema = mongoose.Schema({
    name: {
       type: String,
-      required: true
+      required: true,
+      maxlength: [20, 'cannot exceed 20 charecters']
    },
-   // email: {
-   //    type: String,
-   //    required: true
-   // },
    password: {
       type: String,
       required: true

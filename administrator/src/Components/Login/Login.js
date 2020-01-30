@@ -4,7 +4,6 @@ import { PaperBoard } from '../PaperBoard/PaperBoard';
 import AccountBoxOutlinedIcon from '@material-ui/icons/AccountBoxOutlined';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import axios from 'axios';
-import { Redirect } from 'react-router-dom';
 import auth from '../Auth/auth';
 
 const styles = {

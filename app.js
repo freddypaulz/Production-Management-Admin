@@ -36,6 +36,7 @@ app.use(passport.session());
 
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
+app.use('/roles', require('./routes/roles'));
 
 app.listen(5000, () => {
    console.log(`App listening on port ${PORT}!`);

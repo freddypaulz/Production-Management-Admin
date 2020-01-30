@@ -24,7 +24,7 @@ export default function Dashboard(props) {
       <Box display='flex'>
          <Box component='div' className={classes.boxOutProp}>
             <Box className={classes.position}>
-               DASHBOARD
+               <Box>DASHBOARD</Box>
                <ArrowBackIosIcon />
             </Box>
             <Divider />
