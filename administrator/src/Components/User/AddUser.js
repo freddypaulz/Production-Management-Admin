@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
-import { Box, TextField, Button } from '@material-ui/core';
+import {
+   Box,
+   TextField,
+   Button,
+   Select,
+   MenuItem,
+   FormControl,
+   InputLabel
+} from '@material-ui/core';
 import { PaperBoard } from '../PaperBoard/PaperBoard';
 import AccountBoxOutlinedIcon from '@material-ui/icons/AccountBoxOutlined';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
@@ -7,7 +15,6 @@ import axios from 'axios';
 import Styles from '../styles/FormStyles';
 
 const styles = Styles;
-
 export default class AddUser extends Component {
    constructor(props) {
       super();
@@ -15,15 +22,18 @@ export default class AddUser extends Component {
          user_name: '',
          password: '',
          password2: '',
+         role: '',
          errors: [],
-         success: false
+         success: false,
+         Roles: []
       };
       this.onAddHandler = () => {
          axios
             .post('/users/add-user', {
                name: this.state.user_name,
                password: this.state.password,
-               password2: this.state.password2
+               password2: this.state.password2,
+               role: this.state.role
             })
             .then(res => {
                console.log(res);
@@ -47,7 +57,12 @@ export default class AddUser extends Component {
             .catch(err => console.log(err));
       };
    }
-
+   componentDidMount() {
+      axios.get('/roles/roles').then(res => {
+         console.log(res.data.Roles);
+         this.setState({ Roles: res.data.Roles });
+      });
+   }
    render() {
       return (
          <Box style={styles.box}>
@@ -115,6 +130,42 @@ export default class AddUser extends Component {
                         this.setState({ password2: event.target.value });
                      }}
                   ></TextField>
+               </Box>
+               <Box style={styles.box_field}>
+                  <AccountBoxOutlinedIcon
+                     style={styles.icons}
+                     color='primary'
+                  ></AccountBoxOutlinedIcon>
+                  <FormControl required variant='outlined' fullWidth>
+                     <InputLabel
+                        style={{
+                           backgroundColor: 'white',
+                           paddingLeft: '2px',
+                           paddingRight: '2px'
+                        }}
+                     >
+                        Select Role
+                     </InputLabel>
+                     <Select
+                        required
+                        //variant='outlined'
+                        value={this.state.role}
+                        onChange={event => {
+                           console.log(event.target.value);
+                           this.setState({
+                              role: event.target.value
+                           });
+                        }}
+                     >
+                        {this.state.Roles.map((Role, index) => {
+                           return (
+                              <MenuItem selected key={index} value={Role._id}>
+                                 {Role.role_name}
+                              </MenuItem>
+                           );
+                        })}
+                     </Select>
+                  </FormControl>
                </Box>
             </PaperBoard>
             <Box

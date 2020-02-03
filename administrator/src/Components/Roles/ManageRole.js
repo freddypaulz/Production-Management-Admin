@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { PaperBoard } from '../PaperBoard/PaperBoard';
 import MaterialTable from 'material-table';
-import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
-import ZoomInOutlinedIcon from '@material-ui/icons/ZoomInOutlined';
 import axios from 'axios';
-import { Box, Button } from '@material-ui/core';
+import { Box, Button, Snackbar } from '@material-ui/core';
+import MUIAlert from '@material-ui/lab/Alert';
 
 export default class ManageRole extends Component {
    constructor(props) {
@@ -12,73 +10,17 @@ export default class ManageRole extends Component {
       this.EditData = {};
       this.state = {
          columns: [
-            {
-               title: 'Actions',
-               field: 'Actions',
-               cellStyle: {
-                  width: 20,
-                  maxWidth: 20,
-                  textAlign: 'center'
-               },
-               headerStyle: {
-                  width: 40,
-                  maxWidth: 40
-               },
-               render: rowData => (
-                  <EditOutlinedIcon
-                     style={{ marginRight: '1px' }}
-                     onClick={event => {
-                        axios
-                           .post('/users/management/manage-users', {
-                              name: rowData.name
-                           })
-                           .then(user => {
-                              this.EditData = { ...user.data.Users[0] };
-                              console.log(this.EditData);
-                              this.props.history.push({
-                                 pathname: 'manage-users/edit-user',
-                                 state: { user: this.EditData }
-                              });
-                           });
-                     }}
-                  />
-               )
-            },
-            {
-               title: '',
-               field: '',
-               cellStyle: {
-                  width: 50,
-                  maxWidth: 50,
-                  textAlign: 'center'
-               },
-               render: rowData => (
-                  <ZoomInOutlinedIcon
-                     onClick={event => {
-                        axios
-                           .post('/users/management/manage-users', {
-                              name: rowData.name
-                           })
-                           .then(user => {
-                              this.EditData = { ...user.data.Users[0] };
-                              console.log(this.EditData);
-                              this.props.history.push({
-                                 pathname: 'manage-users/edit-user',
-                                 state: { user: this.EditData }
-                              });
-                           });
-                     }}
-                  />
-               )
-            },
             { title: 'ID', field: 'id' },
-            { title: 'Name', field: 'name' },
+            { title: 'Role Name', field: 'role_name' },
             { title: 'Description', field: 'description' }
+            // { title: 'Permissions', field: 'permissions' }
          ],
-         data: []
+         data: [],
+         open: false
       };
    }
    componentDidMount() {
+      let check = false;
       axios
          .get('/roles/roles')
          .then(res => {
@@ -91,6 +33,16 @@ export default class ManageRole extends Component {
             });
          })
          .catch(() => {});
+      if (!check) {
+         check = true;
+         console.log(this.props.location.state);
+         if (this.props.location.state) {
+            console.log(this.props.history.location.state.state.success);
+            this.setState({
+               open: this.props.history.location.state.state.success
+            });
+         }
+      }
    }
    render() {
       return (
@@ -113,50 +65,101 @@ export default class ManageRole extends Component {
                   }}
                   size='large'
                   onClick={() => {
-                     this.props.history.push('manage-roles/edit-role');
+                     this.props.history.push('manage-roles/add-role');
                   }}
                >
                   Add Role
                </Button>
             </Box>
 
-            <PaperBoard>
-               <MaterialTable
-                  title='Manage User'
-                  columns={this.state.columns}
-                  data={this.state.data}
-                  style={{ width: '90%' }}
-                  options={{
-                     sorting: true,
-                     headerStyle: {
-                        backgroundColor: '#3f51b5',
-                        color: '#FFF'
-                     }
-                  }}
-                  localization={{
-                     header: {
-                        actions: ''
-                     }
-                  }}
-                  editable={{
-                     onRowDelete: oldData =>
+            <MaterialTable
+               title='Manage User'
+               columns={this.state.columns}
+               data={this.state.data}
+               style={{ width: '90%', maxHeight: '500px', overflow: 'auto' }}
+               options={{
+                  sorting: true,
+                  headerStyle: {
+                     backgroundColor: '#3f51b5',
+                     color: '#FFF'
+                  }
+               }}
+               actions={[
+                  {
+                     icon: 'edit',
+                     tooltip: 'edit Role',
+                     onClick: (event, rowData) => {
                         axios
-                           .post('/users/management/manage-users/delete-user', {
-                              name: oldData.name
+                           .post('/roles/role', {
+                              role_name: rowData.role_name
                            })
-                           .then(User => {
-                              console.log(User);
-                              if (User) {
-                                 this.setState(prevState => {
-                                    const data = [...prevState.data];
-                                    data.splice(data.indexOf(oldData), 1);
-                                    return { ...prevState, data };
-                                 });
-                              }
-                           })
+                           .then(role => {
+                              this.EditData = { ...role.data };
+                              console.log(this.EditData);
+                              this.props.history.push({
+                                 pathname: 'manage-roles/edit-role',
+                                 state: {
+                                    role: { ...this.EditData.Role[0] }
+                                 }
+                              });
+                              console.log('EditData', this.EditData.Role);
+                           });
+                     }
+                  }
+               ]}
+               editable={{
+                  onRowDelete: oldData =>
+                     axios
+                        .post('/users/management/manage-users/delete-user', {
+                           name: oldData.name
+                        })
+                        .then(User => {
+                           console.log(User);
+                           if (User) {
+                              this.setState(prevState => {
+                                 const data = [...prevState.data];
+                                 data.splice(data.indexOf(oldData), 1);
+                                 return { ...prevState, data };
+                              });
+                           }
+                        })
+               }}
+               onRowClick={(event, rowData) => {
+                  axios
+                     .post('/roles/role', {
+                        role_name: rowData.role_name
+                     })
+                     .then(role => {
+                        this.EditData = { ...role.data };
+                        console.log(this.EditData);
+                        this.props.history.push({
+                           pathname: 'manage-roles/edit-role',
+                           state: {
+                              role: { ...this.EditData.Role[0] }
+                           }
+                        });
+                        console.log('EditData', this.EditData.Role);
+                     });
+               }}
+            />
+            <Snackbar
+               open={this.state.open}
+               autoHideDuration={3000}
+               onClose={() => {
+                  this.setState({ open: false });
+               }}
+            >
+               <MUIAlert
+                  onClose={() => {
+                     this.setState({ open: false });
                   }}
-               />
-            </PaperBoard>
+                  severity='success'
+                  elevation={6}
+                  variant='filled'
+               >
+                  Role Updated !
+               </MUIAlert>
+            </Snackbar>
          </Box>
       );
    }

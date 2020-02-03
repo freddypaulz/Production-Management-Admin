@@ -9,6 +9,7 @@ import {
 import { PaperBoard } from '../PaperBoard/PaperBoard';
 import axios from 'axios';
 import Styles from '../styles/FormStyles';
+import Permissions from './Permissions';
 
 const styles = Styles;
 
@@ -16,22 +17,25 @@ export default class AddUser extends Component {
    constructor(props) {
       super();
       this.state = {
-         user_name: '',
-         password: '',
-         password2: '',
+         role_name: '',
+         description: '',
+         permissions: Permissions,
          errors: [],
-         success: false,
-         permissions: [
-            { name: 'read', value: false },
-            { name: 'write', value: false }
-         ]
+         success: false
       };
       this.onAddHandler = () => {
+         let givenPermissions = [];
+         this.state.permissions.map(permission => {
+            if (permission.value === true) {
+               givenPermissions.push(permission);
+            }
+            return null;
+         });
          axios
-            .post('/users/add-user', {
-               name: this.state.user_name,
-               password: this.state.password,
-               password2: this.state.password2
+            .post('/roles/add-role', {
+               role_name: this.state.role_name,
+               description: this.state.description,
+               permissions: givenPermissions
             })
             .then(res => {
                console.log(res);
@@ -46,10 +50,10 @@ export default class AddUser extends Component {
                      role_name: '',
                      description: '',
                      permissions: [],
-                     errors: '',
+                     errors: [],
                      success: true
                   });
-                  this.props.history.push('/management/manage-users');
+                  this.props.history.push('/management/manage-roles');
                }
             })
             .catch(err => console.log(err));
@@ -58,7 +62,11 @@ export default class AddUser extends Component {
          this.setState({ [value]: event.target.checked });
       };
    }
-
+   componentDidMount() {
+      // this.state.permissions.map(permission => {
+      //    permission.value = false;
+      // });
+   }
    render() {
       return (
          <Box style={styles.box}>
@@ -85,7 +93,7 @@ export default class AddUser extends Component {
                   <TextField
                      fullWidth
                      required
-                     value={this.state.user_name}
+                     value={this.state.role_name}
                      variant='outlined'
                      label='Role Name'
                      type='text'
@@ -98,7 +106,7 @@ export default class AddUser extends Component {
                   <TextField
                      fullWidth
                      multiline
-                     value={this.state.password}
+                     value={this.state.description}
                      variant='outlined'
                      label='Description'
                      type='text'
@@ -115,28 +123,39 @@ export default class AddUser extends Component {
                   justifyContent='flex-start'
                   width='100%'
                >
-                  Permissions
+                  Permissions*
                </Box>
-               <Box width='100%'>
+               <Box
+                  display='flex'
+                  flexWrap='wrap'
+                  maxHeight='200px'
+                  overflow='auto'
+                  border='2px solid #dbdbdb'
+                  padding='5px'
+               >
                   {this.state.permissions.map((permission, index) => {
                      return (
-                        <FormControlLabel
-                           key={index}
-                           control={
-                              <Checkbox
-                                 checked={permission.value}
-                                 onClick={e => {
-                                    permission.value = !permission.value;
-                                    this.setState({
-                                       permissions: [...this.state.permissions]
-                                    });
-                                    console.log(this.state.permissions);
-                                 }}
-                                 value={`${permission.name}`}
-                              />
-                           }
-                           label={`${permission.name}`}
-                        />
+                        <Box width='20%' display='flex'>
+                           <FormControlLabel
+                              key={index}
+                              control={
+                                 <Checkbox
+                                    checked={permission.value}
+                                    onClick={e => {
+                                       permission.value = !permission.value;
+                                       this.setState({
+                                          permissions: [
+                                             ...this.state.permissions
+                                          ]
+                                       });
+                                       console.log(this.state.permissions);
+                                    }}
+                                    value={`${permission.name}`}
+                                 />
+                              }
+                              label={`${permission.name}`}
+                           />
+                        </Box>
                      );
                   })}
                </Box>

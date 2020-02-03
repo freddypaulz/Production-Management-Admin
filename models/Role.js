@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const RoleSchema = mongoose.Schema({
-   name: {
+   role_name: {
       type: String,
       require: [true, 'Please add a Name'],
       maxlength: [20, 'cannot exceed 20 charecters']

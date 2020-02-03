@@ -41,10 +41,11 @@ router.get('/add-user', (req, res) => {
 });
 
 router.post('/add-user', (req, res) => {
-   const { name, password, password2 } = req.body;
+   const { name, password, password2, role } = req.body;
    let errors = [];
-   console.log(name, password2, password);
-   if (!name || !password || !password2) {
+   console.log(req.body);
+   console.log('Data: ', name, password, password2);
+   if (!name || !password || !password2 || !role) {
       errors.push('Enter all required fields');
    }
 
@@ -67,7 +68,8 @@ router.post('/add-user', (req, res) => {
          } else {
             const newUser = new Users({
                name,
-               password
+               password,
+               role
             });
 
             //hash password
@@ -87,11 +89,11 @@ router.post('/add-user', (req, res) => {
    }
 });
 router.post('/update-user', (req, res) => {
-   let { name, password, password2 } = req.body;
+   let { name, password, password2, role } = req.body;
    let EncryptPass = '';
 
    let errors = [];
-   if (!name || !password || !password2) {
+   if (!name || !password || !password2 || !role) {
       errors.push('Enter all required fields');
    }
 
@@ -119,7 +121,7 @@ router.post('/update-user', (req, res) => {
             //Update
             Users.findOneAndUpdate(
                { name },
-               { name, password: EncryptPass }
+               { name, password: EncryptPass, role }
             ).then(User => {
                if (!User) {
                   errors.push('Username Not Found');

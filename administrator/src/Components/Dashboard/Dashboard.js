@@ -3,7 +3,6 @@ import { Box, Divider } from '@material-ui/core';
 import { useStyles } from './DashboardStyle.js';
 import { NavLink } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import './Dashboard.css';
 
 export default function Dashboard(props) {
    const classes = useStyles();
@@ -15,8 +14,7 @@ export default function Dashboard(props) {
          color: 'black'
       },
       navStyleActive: {
-         backgroundColor: '#3f51b5',
-         color: 'white'
+         color: '#3f51b5'
       }
    };
    console.log(props.items);
@@ -24,8 +22,8 @@ export default function Dashboard(props) {
       <Box display='flex'>
          <Box component='div' className={classes.boxOutProp}>
             <Box className={classes.position}>
-               <Box>DASHBOARD</Box>
-               <ArrowBackIosIcon />
+               <Box fontSize='30px'>DASHBOARD</Box>
+               {/* <ArrowBackIosIcon /> */}
             </Box>
             <Divider />
             {props.items.map((item, index) => {

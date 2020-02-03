@@ -1,24 +1,41 @@
 const express = require('express');
 const router = express.Router();
 const Roles = require('../models/Role');
+const Users = require('../models/User');
 
 router.get('/roles', (req, res, next) => {
-   Roles.find({}, { _id: 0 }).then(roles => {
+   Roles.find({}).then(roles => {
       res.send({ Roles: roles });
+   });
+});
+router.post('/role', (req, res, next) => {
+   Roles.find({ role_name: req.body.role_name }).then(role => {
+      res.send({ Role: role });
    });
 });
 
 router.post('/add-role', (req, res) => {
-   const { name, description, permissions } = req.body;
+   const { role_name, description, permissions } = req.body;
    let errors = [];
-   if (!name || !permissions) {
+
+   if (!role_name || !permissions) {
       errors.push('Enter all required fields');
    }
-   if (name.length > 20) {
+
+   if (role_name.length > 20) {
       errors.push('Use 20 or less characters for Name');
    }
-   if (permissions.length < 1) {
-      errors.push('Select atleast one permission');
+
+   if (permissions) {
+      let checkPermission = 0;
+      permissions.map(permission => {
+         if (permission.value) {
+            checkPermission++;
+         }
+      });
+      if (checkPermission === 0) {
+         errors.push('Select atleast one Permission');
+      }
    }
    if (description.length > 200) {
       errors.push('Use 20 or less characters for Name');
@@ -26,22 +43,73 @@ router.post('/add-role', (req, res) => {
    if (errors.length > 0) {
       res.send({ errors });
    } else {
-      Roles.findOne({ name }).then(Role => {
+      Roles.findOne({ role_name }).then(Role => {
          if (Role) {
             errors.push('Username already taken');
             res.send({ errors });
          } else {
             const newRole = new Roles({
-               name,
+               role_name,
                description,
                permissions
             });
             newRole.save().then(Role => {
-               return res.send(Role);
+               return res.send({ Role, errors });
             });
          }
       });
    }
+});
+
+router.post('/edit-role', (req, res) => {
+   const { role_name, description, permissions } = req.body;
+   let errors = [];
+
+   if (!role_name || !permissions) {
+      errors.push('Enter all required fields');
+   }
+   if (role_name.length > 20) {
+      errors.push('Use 20 or less characters for Name');
+   }
+   if (permissions) {
+      let checkPermission = 0;
+      permissions.map(permission => {
+         if (permission.value) {
+            checkPermission++;
+         }
+      });
+      if (checkPermission === 0) {
+         errors.push('Select atleast one Permission');
+      }
+   }
+   if (description.length > 200) {
+      errors.push('Use 20 or less characters for Name');
+   }
+   if (errors.length > 0) {
+      res.send({ errors });
+   } else {
+      Roles.findOneAndUpdate(
+         { role_name },
+         {
+            role_name,
+            description,
+            permissions
+         }
+      ).then(Role => {
+         if (!Role) {
+            errors.push('Username Not found');
+            res.send({ errors });
+         } else {
+            res.send({ Role, errors });
+         }
+      });
+   }
+
+   router.post('/delete-role', (req, res, next) => {
+      Users.findOneAndDelete({ role_name: req.body.role_name }).then(user => {
+         res.send(user);
+      });
+   });
 });
 
 module.exports = router;
