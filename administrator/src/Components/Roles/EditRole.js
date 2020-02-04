@@ -69,24 +69,26 @@ export default class EditRole extends Component {
       };
    }
    componentDidMount() {
-      console.log(this.props.history.location.state.role);
-      if (this.state.role_name === '') {
-         this.setState({
-            role_name: this.props.history.location.state.role.role_name,
-            description: this.props.history.location.state.role.description
-            // permissions: this.props.history.location.state.role.permissions
-         });
-         this.state.permissions.map(permission => {
-            this.props.history.location.state.role.permissions.map(
-               rolePermission => {
-                  if (permission.name === rolePermission.name) {
-                     permission.value = true;
+      if (this.props) {
+         console.log(this.props.history.location.state.role);
+         if (this.state.role_name === '') {
+            this.setState({
+               role_name: this.props.history.location.state.role.role_name,
+               description: this.props.history.location.state.role.description
+            });
+            this.state.permissions.map(permission => {
+               this.props.history.location.state.role.permissions.map(
+                  rolePermission => {
+                     if (permission.name === rolePermission.name) {
+                        permission.value = true;
+                     }
+                     return null;
                   }
-                  return null;
-               }
-            );
-            return null;
-         });
+               );
+               return null;
+            });
+         }
+      } else {
       }
    }
    componentWillUnmount() {

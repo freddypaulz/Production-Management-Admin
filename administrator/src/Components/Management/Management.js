@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from '@material-ui/core';
+import { Box, Button } from '@material-ui/core';
 import Dashboard from '../Dashboard/Dashboard';
 import AddEmployee from '../Employee/AddEmployee';
 import { Route } from 'react-router';
@@ -12,8 +12,9 @@ import {
    AddRoleRoute,
    EditRoleRoute
 } from '../../Routes/Routes';
+import auth from '../Auth/auth';
 
-const Management = () => {
+const Management = props => {
    const dashboardList = [
       { Name: 'Manage Employee', Path: 'manage-employee' },
       { Name: 'Manage User', Path: 'manage-users' },
@@ -42,6 +43,35 @@ const Management = () => {
             width='100%'
             marginTop='20px'
          >
+            <Box
+               width='50%'
+               display='flex'
+               justifyContent='center'
+               flexDirection='column'
+            >
+               <Button
+                  variant='contained'
+                  color='primary'
+                  onClick={() => {
+                     if (auth.logout()) {
+                        props.history.push('/');
+                     }
+                  }}
+               >
+                  Logout
+               </Button>
+               {props.history.location.state ? (
+                  <Box
+                     color='red'
+                     textAlign='center'
+                     marginTop='20px'
+                     padding='10px'
+                  >
+                     {props.history.location.state.msg}
+                  </Box>
+               ) : null}
+            </Box>
+
             <Route
                path='/management/manage-employee'
                component={ManageEmployee}

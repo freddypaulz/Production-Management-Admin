@@ -1,0 +1,24 @@
+import { Redirect } from 'react-router-dom';
+import React from 'react';
+
+const permissionCheck = (props, component) => {
+   const permissions = JSON.parse(sessionStorage.getItem('permissions'));
+   console.log(permissions);
+   const checkPermission = permissions.find(permission => {
+      return permission === component;
+   });
+   console.log(typeof checkPermission);
+   if (typeof checkPermission === 'undefined') {
+      props.history.push({
+         pathname: '/management',
+         state: {
+            msg: 'Permission not Granted. Contact Administrator'
+         }
+      });
+      return false;
+   } else {
+      console.log('Permitted');
+      return true;
+   }
+};
+export default permissionCheck;

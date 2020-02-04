@@ -13,9 +13,10 @@ import AccountBoxOutlinedIcon from '@material-ui/icons/AccountBoxOutlined';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import axios from 'axios';
 import Styles from '../styles/FormStyles';
-
+import permissionCheck from '../Auth/permissionCheck';
 const styles = Styles;
 let display = '';
+
 export default class EditUser extends Component {
    constructor(props) {
       super();
@@ -26,8 +27,7 @@ export default class EditUser extends Component {
          errors: [],
          success: false,
          role: '',
-         Roles: [],
-         disable: false
+         Roles: []
       };
       this.onEditHandler = () => {
          axios
@@ -62,25 +62,25 @@ export default class EditUser extends Component {
       };
    }
    componentDidMount() {
-      axios.get('/roles/roles').then(res => {
-         if (this.state.user_name === '' || this.state.role === '') {
-            this.setState({
-               user_name: this.props.history.location.state.user.name,
-               role: this.props.history.location.state.user.role
-            });
-            console.log(this.state.user_name, this.state.role);
-         }
-         this.setState({ Roles: res.data.Roles });
-         console.log(this.state.Roles);
-      });
-      this.setState({ disable: this.props.history.location.state.view });
-      display = this.props.history.location.state.display;
+      if (permissionCheck(this.props, 'Manage User')) {
+         axios.get('/roles/roles').then(res => {
+            if (this.state.user_name === '' || this.state.role === '') {
+               this.setState({
+                  user_name: this.props.history.location.state.user.name,
+                  role: this.props.history.location.state.user.role
+               });
+               console.log(this.state.user_name, this.state.role);
+            }
+            this.setState({ Roles: res.data.Roles });
+            console.log(this.state.Roles);
+         });
+      }
    }
    render() {
       return (
          <Box style={styles.box}>
             <Box fontSize='30px' mb={3}>
-               {this.props.history.location.state.name} User
+               Edit User
             </Box>
             {this.state.errors.length > 0 ? (
                this.state.errors.map((error, index) => {
@@ -105,7 +105,6 @@ export default class EditUser extends Component {
                   ></AccountBoxOutlinedIcon>
 
                   <TextField
-                     disabled={this.state.disable}
                      fullWidth
                      required
                      value={this.state.user_name}
@@ -117,46 +116,43 @@ export default class EditUser extends Component {
                      }}
                   ></TextField>
                </Box>
-               {!this.props.history.location.state.view ? (
-                  <Box style={{ width: '100%' }}>
-                     <Box style={styles.box_field}>
-                        <VpnKeyIcon
-                           style={styles.icons}
-                           color='primary'
-                        ></VpnKeyIcon>
-                        <TextField
-                           disabled={this.state.disable}
-                           fullWidth
-                           required
-                           value={this.state.password}
-                           variant='outlined'
-                           label='Password'
-                           type='password'
-                           onChange={event => {
-                              this.setState({ password: event.target.value });
-                           }}
-                        />
-                     </Box>
-
-                     <Box style={styles.box_field}>
-                        <VpnKeyIcon
-                           style={styles.icons}
-                           color='primary'
-                        ></VpnKeyIcon>
-                        <TextField
-                           fullWidth
-                           required
-                           value={this.state.password2}
-                           variant='outlined'
-                           label='Confirm Password'
-                           type='password'
-                           onChange={event => {
-                              this.setState({ password2: event.target.value });
-                           }}
-                        ></TextField>
-                     </Box>
+               <Box style={{ width: '100%' }}>
+                  <Box style={styles.box_field}>
+                     <VpnKeyIcon
+                        style={styles.icons}
+                        color='primary'
+                     ></VpnKeyIcon>
+                     <TextField
+                        fullWidth
+                        required
+                        value={this.state.password}
+                        variant='outlined'
+                        label='Password'
+                        type='password'
+                        onChange={event => {
+                           this.setState({ password: event.target.value });
+                        }}
+                     />
                   </Box>
-               ) : null}
+
+                  <Box style={styles.box_field}>
+                     <VpnKeyIcon
+                        style={styles.icons}
+                        color='primary'
+                     ></VpnKeyIcon>
+                     <TextField
+                        fullWidth
+                        required
+                        value={this.state.password2}
+                        variant='outlined'
+                        label='Confirm Password'
+                        type='password'
+                        onChange={event => {
+                           this.setState({ password2: event.target.value });
+                        }}
+                     ></TextField>
+                  </Box>
+               </Box>
 
                <Box style={styles.box_field}>
                   <AccountBoxOutlinedIcon
@@ -174,7 +170,6 @@ export default class EditUser extends Component {
                         Select Role
                      </InputLabel>
                      <Select
-                        disabled={this.state.disable}
                         required
                         value={this.state.role}
                         onChange={event => {
@@ -215,22 +210,20 @@ export default class EditUser extends Component {
                         this.props.history.push('/management/manage-users');
                      }}
                   >
-                     {this.props.history.location.state.action}
+                     Cancel
                   </Button>
                </Box>
-               {!this.props.history.location.state.view ? (
-                  <Box width='100px' style={{ display: display }}>
-                     <Button
-                        fullWidth
-                        variant='contained'
-                        color='primary'
-                        size='large'
-                        onClick={this.onEditHandler}
-                     >
-                        Update
-                     </Button>
-                  </Box>
-               ) : null}
+               <Box width='100px' style={{ display: display }}>
+                  <Button
+                     fullWidth
+                     variant='contained'
+                     color='primary'
+                     size='large'
+                     onClick={this.onEditHandler}
+                  >
+                     Update
+                  </Button>
+               </Box>
             </Box>
          </Box>
       );

@@ -1,19 +1,22 @@
-class auth {
-   constructor() {
-      this.authenticated = true;
+import React from 'react';
+import { Redirect } from 'react-router-dom';
+class auth extends React.Component {
+   constructor(props) {
+      super();
    }
-   authenticated = true;
    login = value => {
       console.log(value);
-      this.authenticated = value;
+      sessionStorage.setItem('authenticated', true);
    };
 
-   logout() {
-      this.authenticated = false;
-   }
+   logout = () => {
+      sessionStorage.clear();
+      return true;
+   };
 
    isAuthenticated() {
-      return this.authenticated;
+      // console.log(sessionStorage.getItem('authenticated'));
+      return sessionStorage.getItem('authenticated');
    }
 }
 

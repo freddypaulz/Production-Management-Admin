@@ -15,7 +15,11 @@ const styles = {
       marginBottom: '20px'
    }
 };
+
 export default class Login extends Component {
+   componentDidMount() {
+      auth.logout();
+   }
    constructor(props) {
       super(props);
       this.state = {
@@ -85,7 +89,30 @@ export default class Login extends Component {
                                  auth.login(
                                     res.data.name === this.state.user_name
                                  );
-                                 this.props.history.push('/management');
+                                 axios
+                                    .post('roles/role', {
+                                       _id: res.data.role
+                                    })
+                                    .then(res => {
+                                       let permissions = [];
+                                       res.data.role[0].permissions.map(
+                                          permission => {
+                                             permissions.push(permission.name);
+                                          }
+                                       );
+                                       sessionStorage.setItem(
+                                          'permissions',
+                                          JSON.stringify(permissions)
+                                       );
+                                       this.props.history.push('/management');
+                                    })
+                                    .catch(err => {
+                                       this.setState({
+                                          errors: [
+                                             'Problem in user. Contact Administrator'
+                                          ]
+                                       });
+                                    });
                               } else {
                                  console.log(res.data.message);
                                  this.setState({

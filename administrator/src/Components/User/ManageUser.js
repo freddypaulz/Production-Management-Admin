@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import MaterialTable from 'material-table';
 import { Box, Button } from '@material-ui/core';
 import axios from 'axios';
+import permissionCheck from '../Auth/permissionCheck';
 
 export default class ManageUser extends Component {
    constructor(props) {
@@ -16,16 +17,19 @@ export default class ManageUser extends Component {
       };
    }
    componentDidMount() {
-      axios.get('/users/users').then(res => {
-         console.log(res.data);
-         for (let i = 0; i < res.data.Users.length; i++) {
-            res.data.Users[i].id = i + 1;
-         }
-         this.setState({
-            data: [...res.data.Users]
+      if (permissionCheck(this.props, 'Manage User')) {
+         axios.get('/users/users').then(res => {
+            console.log(res.data);
+            for (let i = 0; i < res.data.Users.length; i++) {
+               res.data.Users[i].id = i + 1;
+            }
+            this.setState({
+               data: [...res.data.Users]
+            });
          });
-      });
+      }
    }
+   componentWillUnmount() {}
    render() {
       return (
          <Box

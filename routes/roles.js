@@ -8,7 +8,13 @@ router.get('/roles', (req, res, next) => {
       res.send({ Roles: roles });
    });
 });
+
 router.post('/role', (req, res, next) => {
+   Roles.find({ _id: req.body._id }).then(role => {
+      res.send({ role });
+   });
+});
+router.post('/role-name', (req, res, next) => {
    Roles.find({ role_name: req.body.role_name }).then(role => {
       res.send({ Role: role });
    });
@@ -104,12 +110,12 @@ router.post('/edit-role', (req, res) => {
          }
       });
    }
-
-   router.post('/delete-role', (req, res, next) => {
-      Users.findOneAndDelete({ role_name: req.body.role_name }).then(user => {
-         res.send(user);
-      });
+});
+router.post('/delete-role', (req, res) => {
+   Roles.findOneAndDelete({ role_name: req.body.role_name }).then(Role => {
+      res.send(Role);
    });
+   console.log('Hello');
 });
 
 module.exports = router;

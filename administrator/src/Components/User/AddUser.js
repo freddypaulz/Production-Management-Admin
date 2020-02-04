@@ -13,6 +13,7 @@ import AccountBoxOutlinedIcon from '@material-ui/icons/AccountBoxOutlined';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import axios from 'axios';
 import Styles from '../styles/FormStyles';
+import permissionCheck from '../Auth/permissionCheck';
 
 const styles = Styles;
 export default class AddUser extends Component {
@@ -58,10 +59,12 @@ export default class AddUser extends Component {
       };
    }
    componentDidMount() {
-      axios.get('/roles/roles').then(res => {
-         console.log(res.data.Roles);
-         this.setState({ Roles: res.data.Roles });
-      });
+      if (permissionCheck(this.props, 'Manage User')) {
+         axios.get('/roles/roles').then(res => {
+            console.log(res.data.Roles);
+            this.setState({ Roles: res.data.Roles });
+         });
+      }
    }
    render() {
       return (

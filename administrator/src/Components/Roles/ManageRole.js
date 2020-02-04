@@ -3,7 +3,7 @@ import MaterialTable from 'material-table';
 import axios from 'axios';
 import { Box, Button, Snackbar } from '@material-ui/core';
 import MUIAlert from '@material-ui/lab/Alert';
-
+import permissionCheck from '../Auth/permissionCheck';
 export default class ManageRole extends Component {
    constructor(props) {
       super();
@@ -18,21 +18,41 @@ export default class ManageRole extends Component {
          data: [],
          open: false
       };
+      this.onEditHandler = (event, rowData) => {
+         axios
+            .post('/roles/role-name', {
+               role_name: rowData.role_name
+            })
+            .then(role => {
+               this.EditData = { ...role.data };
+               console.log(this.EditData);
+               this.props.history.push({
+                  pathname: 'manage-roles/edit-role',
+                  state: {
+                     role: { ...this.EditData.Role[0] }
+                  }
+               });
+               console.log('EditData', this.EditData.Role);
+            });
+      };
    }
    componentDidMount() {
       let check = false;
-      axios
-         .get('/roles/roles')
-         .then(res => {
-            console.log(res.data);
-            for (let i = 0; i < res.data.Roles.length; i++) {
-               res.data.Roles[i].id = i + 1;
-            }
-            this.setState({
-               data: [...res.data.Roles]
-            });
-         })
-         .catch(() => {});
+      if (permissionCheck(this.props, 'Manage Role')) {
+         axios
+            .get('/roles/roles')
+            .then(res => {
+               console.log(res.data);
+               for (let i = 0; i < res.data.Roles.length; i++) {
+                  res.data.Roles[i].id = i + 1;
+               }
+               this.setState({
+                  data: [...res.data.Roles]
+               });
+            })
+            .catch(() => {});
+      }
+
       if (!check) {
          check = true;
          console.log(this.props.location.state);
@@ -44,6 +64,7 @@ export default class ManageRole extends Component {
          }
       }
    }
+
    render() {
       return (
          <Box
@@ -89,33 +110,19 @@ export default class ManageRole extends Component {
                      icon: 'edit',
                      tooltip: 'edit Role',
                      onClick: (event, rowData) => {
-                        axios
-                           .post('/roles/role', {
-                              role_name: rowData.role_name
-                           })
-                           .then(role => {
-                              this.EditData = { ...role.data };
-                              console.log(this.EditData);
-                              this.props.history.push({
-                                 pathname: 'manage-roles/edit-role',
-                                 state: {
-                                    role: { ...this.EditData.Role[0] }
-                                 }
-                              });
-                              console.log('EditData', this.EditData.Role);
-                           });
+                        this.onEditHandler(event, rowData);
                      }
                   }
                ]}
                editable={{
                   onRowDelete: oldData =>
                      axios
-                        .post('/users/management/manage-users/delete-user', {
-                           name: oldData.name
+                        .post('/roles/delete-role', {
+                           role_name: oldData.role_name
                         })
-                        .then(User => {
-                           console.log(User);
-                           if (User) {
+                        .then(Role => {
+                           console.log(Role);
+                           if (Role) {
                               this.setState(prevState => {
                                  const data = [...prevState.data];
                                  data.splice(data.indexOf(oldData), 1);
@@ -125,21 +132,7 @@ export default class ManageRole extends Component {
                         })
                }}
                onRowClick={(event, rowData) => {
-                  axios
-                     .post('/roles/role', {
-                        role_name: rowData.role_name
-                     })
-                     .then(role => {
-                        this.EditData = { ...role.data };
-                        console.log(this.EditData);
-                        this.props.history.push({
-                           pathname: 'manage-roles/edit-role',
-                           state: {
-                              role: { ...this.EditData.Role[0] }
-                           }
-                        });
-                        console.log('EditData', this.EditData.Role);
-                     });
+                  this.onEditHandler(event, rowData);
                }}
             />
             <Snackbar
