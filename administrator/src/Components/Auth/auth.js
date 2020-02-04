@@ -1,5 +1,4 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 class auth extends React.Component {
    constructor(props) {
       super();

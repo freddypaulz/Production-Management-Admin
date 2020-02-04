@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import MaterialTable from 'material-table';
-import { PaperBoard } from '../PaperBoard/PaperBoard';
+import { PaperBoard } from '../../Components/PaperBoard/PaperBoard';
 
 export default class ManageEmployee extends Component {
    constructor() {

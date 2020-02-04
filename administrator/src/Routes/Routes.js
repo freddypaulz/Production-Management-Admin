@@ -1,8 +1,8 @@
 import React from 'react';
-import AddUser from '../Components/User/AddUser';
-import EditUser from '../Components/User/EditUser';
-import AddRole from '../Components/Roles/AddRole';
-import EditRole from '../Components/Roles/EditRole';
+import AddUser from '../Containers/User/AddUser';
+import EditUser from '../Containers/User/EditUser';
+import AddRole from '../Containers/Roles/AddRole';
+import EditRole from '../Containers/Roles/EditRole';
 import { Route } from 'react-router-dom';
 
 export const AddUserRoute = () => {

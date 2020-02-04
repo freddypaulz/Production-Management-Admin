@@ -1,9 +1,9 @@
 import React from 'react';
-import { PaperBoard } from '../PaperBoard/PaperBoard';
+import { PaperBoard } from '../../Components/PaperBoard/PaperBoard';
 import { Box, TextField, MenuItem, Select, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
-import { Datepick } from '../Date/Datepick';
+import { Datepick } from '../../Components/Date/Datepick';
 
 const useStyles = makeStyles(theme => ({
    BoxIn: {

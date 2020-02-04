@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import MaterialTable from 'material-table';
 import { Box, Button } from '@material-ui/core';
 import axios from 'axios';
-import permissionCheck from '../Auth/permissionCheck';
+import permissionCheck from '../../Components/Auth/permissionCheck';
 
 export default class ManageUser extends Component {
    constructor(props) {

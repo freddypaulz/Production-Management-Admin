@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Box, TextField, Button } from '@material-ui/core';
-import { PaperBoard } from '../PaperBoard/PaperBoard';
+import { PaperBoard } from '../../Components/PaperBoard/PaperBoard';
 import AccountBoxOutlinedIcon from '@material-ui/icons/AccountBoxOutlined';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import axios from 'axios';
-import auth from '../Auth/auth';
+import auth from '../../Components/Auth/auth';
 
 const styles = {
    box: {

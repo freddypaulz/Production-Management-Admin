@@ -3,7 +3,7 @@ import MaterialTable from 'material-table';
 import axios from 'axios';
 import { Box, Button, Snackbar } from '@material-ui/core';
 import MUIAlert from '@material-ui/lab/Alert';
-import permissionCheck from '../Auth/permissionCheck';
+import permissionCheck from '../../Components/Auth/permissionCheck';
 export default class ManageRole extends Component {
    constructor(props) {
       super();

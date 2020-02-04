@@ -6,14 +6,14 @@ import {
    Checkbox,
    FormControlLabel
 } from '@material-ui/core';
-import { PaperBoard } from '../PaperBoard/PaperBoard';
+import { PaperBoard } from '../../Components/PaperBoard/PaperBoard';
 import axios from 'axios';
-import Styles from '../styles/FormStyles';
+import Styles from '../../Components/styles/FormStyles';
 import Permissions from './Permissions';
 
 const styles = Styles;
 
-export default class AddUser extends Component {
+export default class EditRole extends Component {
    constructor(props) {
       super();
       this.state = {
@@ -21,9 +21,10 @@ export default class AddUser extends Component {
          description: '',
          permissions: Permissions,
          errors: [],
-         success: false
+         success: false,
+         open: false
       };
-      this.onAddHandler = () => {
+      this.onEditHandler = () => {
          let givenPermissions = [];
          this.state.permissions.map(permission => {
             if (permission.value === true) {
@@ -32,7 +33,7 @@ export default class AddUser extends Component {
             return null;
          });
          axios
-            .post('/roles/add-role', {
+            .post('/roles/edit-role', {
                role_name: this.state.role_name,
                description: this.state.description,
                permissions: givenPermissions
@@ -51,9 +52,14 @@ export default class AddUser extends Component {
                      description: '',
                      permissions: [],
                      errors: [],
-                     success: true
+                     success: true,
+                     open: true
                   });
-                  this.props.history.push('/management/manage-roles');
+                  this.props.history.push('/management/manage-roles', {
+                     state: {
+                        success: true
+                     }
+                  });
                }
             })
             .catch(err => console.log(err));
@@ -63,15 +69,39 @@ export default class AddUser extends Component {
       };
    }
    componentDidMount() {
-      // this.state.permissions.map(permission => {
-      //    permission.value = false;
-      // });
+      if (this.props) {
+         console.log(this.props.history.location.state.role);
+         if (this.state.role_name === '') {
+            this.setState({
+               role_name: this.props.history.location.state.role.role_name,
+               description: this.props.history.location.state.role.description
+            });
+            this.state.permissions.map(permission => {
+               this.props.history.location.state.role.permissions.map(
+                  rolePermission => {
+                     if (permission.name === rolePermission.name) {
+                        permission.value = true;
+                     }
+                     return null;
+                  }
+               );
+               return null;
+            });
+         }
+      } else {
+      }
+   }
+   componentWillUnmount() {
+      this.state.permissions.map(permission => {
+         permission.value = false;
+         return null;
+      });
    }
    render() {
       return (
          <Box style={styles.box}>
             <Box fontSize='30px' mb={3}>
-               Add Role
+               Edit Role
             </Box>
             {this.state.errors.length > 0 ? (
                this.state.errors.map((error, index) => {
@@ -186,7 +216,7 @@ export default class AddUser extends Component {
                      variant='contained'
                      color='primary'
                      size='large'
-                     onClick={this.onAddHandler}
+                     onClick={this.onEditHandler}
                   >
                      Add
                   </Button>

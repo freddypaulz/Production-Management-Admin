@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button } from '@material-ui/core';
-import Dashboard from '../Dashboard/Dashboard';
+import Dashboard from '../../Components/Dashboard/Dashboard';
 import AddEmployee from '../Employee/AddEmployee';
 import { Route } from 'react-router';
 import ManageEmployee from '../Employee/ManageEmployee';
@@ -12,7 +12,7 @@ import {
    AddRoleRoute,
    EditRoleRoute
 } from '../../Routes/Routes';
-import auth from '../Auth/auth';
+import auth from '../../Components/Auth/auth';
 
 const Management = props => {
    const dashboardList = [
