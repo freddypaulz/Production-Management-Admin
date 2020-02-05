@@ -1,70 +1,52 @@
 import React, { Component } from 'react';
 import MaterialTable from 'material-table';
+import { Box, Button } from '@material-ui/core';
 import axios from 'axios';
-import { Box, Button, Snackbar } from '@material-ui/core';
-import MUIAlert from '@material-ui/lab/Alert';
 import permissionCheck from '../../Components/Auth/permissionCheck';
-export default class ManageRole extends Component {
+
+export default class ManageUser extends Component {
    constructor(props) {
       super();
       this.EditData = {};
       this.state = {
          columns: [
             { title: 'ID', field: 'id' },
-            { title: 'Role Name', field: 'role_name' },
+            { title: 'Shift Name', field: 'shift_name' },
             { title: 'Description', field: 'description' }
-            // { title: 'Permissions', field: 'permissions' }
          ],
-         data: [],
-         open: false
+         data: []
       };
-      this.onEditHandler = (event, rowData) => {
+      this.OnEditHandler = (event, rowData) => {
          axios
-            .post('/roles/role', {
+            .post('/shifts/shift', {
                _id: rowData._id
             })
-            .then(role => {
-               this.EditData = { ...role.data };
+            .then(shift => {
+               console.log(shift);
+               this.EditData = { ...shift.data.shift[0] };
                console.log(this.EditData);
                this.props.history.push({
-                  pathname: 'manage-roles/edit-role',
+                  pathname: 'manage-shifts/edit-shift',
                   state: {
-                     role: { ...this.EditData.Role[0] }
+                     shift: this.EditData
                   }
                });
-               console.log('EditData', this.EditData.Role);
             });
       };
    }
    componentDidMount() {
-      let check = false;
-      if (permissionCheck(this.props, 'Manage Role')) {
-         axios
-            .get('/roles/roles')
-            .then(res => {
-               console.log(res.data);
-               for (let i = 0; i < res.data.Roles.length; i++) {
-                  res.data.Roles[i].id = i + 1;
-               }
-               this.setState({
-                  data: [...res.data.Roles]
-               });
-            })
-            .catch(() => {});
-      }
-
-      if (!check) {
-         check = true;
-         console.log(this.props.location.state);
-         if (this.props.location.state) {
-            console.log(this.props.history.location.state.state.success);
+      if (permissionCheck(this.props, 'Manage Shift')) {
+         axios.get('/shifts/shifts').then(res => {
+            console.log(res.data);
+            for (let i = 0; i < res.data.Shifts.length; i++) {
+               res.data.Shifts[i].id = i + 1;
+            }
             this.setState({
-               open: this.props.history.location.state.state.success
+               data: [...res.data.Shifts]
             });
-         }
+         });
       }
    }
-
    render() {
       return (
          <Box
@@ -74,7 +56,7 @@ export default class ManageRole extends Component {
             flexDirection='column'
          >
             <Box fontSize='30px' mb={3}>
-               Manage Role
+               Manage Shift
             </Box>
             <Box width='90%'>
                <Button
@@ -86,15 +68,15 @@ export default class ManageRole extends Component {
                   }}
                   size='large'
                   onClick={() => {
-                     this.props.history.push('manage-roles/add-role');
+                     this.props.history.push('manage-shifts/add-shift');
                   }}
                >
-                  Add Role
+                  Add Shift
                </Button>
             </Box>
 
             <MaterialTable
-               title='Manage User'
+               title=' '
                columns={this.state.columns}
                data={this.state.data}
                style={{ width: '90%', maxHeight: '500px', overflow: 'auto' }}
@@ -108,21 +90,21 @@ export default class ManageRole extends Component {
                actions={[
                   {
                      icon: 'edit',
-                     tooltip: 'edit Role',
+                     tooltip: 'Edit User',
                      onClick: (event, rowData) => {
-                        this.onEditHandler(event, rowData);
+                        this.OnEditHandler(event, rowData);
                      }
                   }
                ]}
                editable={{
                   onRowDelete: oldData =>
                      axios
-                        .post('/roles/delete-role', {
-                           role_name: oldData.role_name
+                        .post('/shifts/delete-shift', {
+                           shift_name: oldData.shift_name
                         })
-                        .then(Role => {
-                           console.log(Role);
-                           if (Role) {
+                        .then(Shift => {
+                           console.log(Shift);
+                           if (Shift) {
                               this.setState(prevState => {
                                  const data = [...prevState.data];
                                  data.splice(data.indexOf(oldData), 1);
@@ -132,27 +114,9 @@ export default class ManageRole extends Component {
                         })
                }}
                onRowClick={(event, rowData) => {
-                  this.onEditHandler(event, rowData);
+                  this.OnEditHandler(event, rowData);
                }}
             />
-            <Snackbar
-               open={this.state.open}
-               autoHideDuration={3000}
-               onClose={() => {
-                  this.setState({ open: false });
-               }}
-            >
-               <MUIAlert
-                  onClose={() => {
-                     this.setState({ open: false });
-                  }}
-                  severity='success'
-                  elevation={6}
-                  variant='filled'
-               >
-                  Role Updated !
-               </MUIAlert>
-            </Snackbar>
          </Box>
       );
    }

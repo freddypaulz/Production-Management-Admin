@@ -95,7 +95,8 @@ export default class Login extends Component {
                                     })
                                     .then(res => {
                                        let permissions = [];
-                                       res.data.role[0].permissions.map(
+                                       console.log(res.data);
+                                       res.data.Role[0].permissions.map(
                                           permission => {
                                              permissions.push(permission.name);
                                           }
@@ -107,6 +108,7 @@ export default class Login extends Component {
                                        this.props.history.push('/management');
                                     })
                                     .catch(err => {
+                                       console.log(err);
                                        this.setState({
                                           errors: [
                                              'Problem in user. Contact Administrator'

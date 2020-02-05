@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Roles = require('../models/Role');
-const Users = require('../models/User');
 
 router.get('/roles', (req, res, next) => {
    Roles.find({}).then(roles => {
@@ -11,7 +10,7 @@ router.get('/roles', (req, res, next) => {
 
 router.post('/role', (req, res, next) => {
    Roles.find({ _id: req.body._id }).then(role => {
-      res.send({ role });
+      res.send({ Role: role });
    });
 });
 router.post('/role-name', (req, res, next) => {
@@ -68,7 +67,7 @@ router.post('/add-role', (req, res) => {
 });
 
 router.post('/edit-role', (req, res) => {
-   const { role_name, description, permissions } = req.body;
+   const { _id, role_name, description, permissions } = req.body;
    let errors = [];
 
    if (!role_name || !permissions) {
@@ -91,11 +90,21 @@ router.post('/edit-role', (req, res) => {
    if (description.length > 200) {
       errors.push('Use 20 or less characters for Name');
    }
+   if (role_name) {
+      Roles.findOne({ role_name }).then(Role => {
+         // if (Role) {
+         //    errors.push('Role Name must be unique');
+         // }
+         if (Role._id != _id) {
+            errors.push('Role Name must be unique');
+         }
+      });
+   }
    if (errors.length > 0) {
       res.send({ errors });
    } else {
       Roles.findOneAndUpdate(
-         { role_name },
+         { _id },
          {
             role_name,
             description,
@@ -103,7 +112,7 @@ router.post('/edit-role', (req, res) => {
          }
       ).then(Role => {
          if (!Role) {
-            errors.push('Username Not found');
+            errors.push('Role Not found');
             res.send({ errors });
          } else {
             res.send({ Role, errors });

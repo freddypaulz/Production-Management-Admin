@@ -6,11 +6,17 @@ import { Route } from 'react-router';
 import ManageEmployee from '../Employee/ManageEmployee';
 import ManageUser from '../User/ManageUser';
 import ManageRole from '../Roles/ManageRole';
+import ManageShift from '../Shift/ManageShifts';
+import ManageCountries from '../Countries/ManageCountries';
 import {
    AddUserRoute,
    EditUserRoute,
    AddRoleRoute,
-   EditRoleRoute
+   EditRoleRoute,
+   AddShiftRoute,
+   EditShiftRoute,
+   AddCountryRoute,
+   EditCountryRoute
 } from '../../Routes/Routes';
 import auth from '../../Components/Auth/auth';
 
@@ -19,12 +25,12 @@ const Management = props => {
       { Name: 'Manage Employee', Path: 'manage-employee' },
       { Name: 'Manage User', Path: 'manage-users' },
       { Name: 'Manage Role', Path: 'manage-roles' },
-      { Name: 'Manage Shift', Path: 'manage-shift' },
+      { Name: 'Manage Shift', Path: 'manage-shifts' },
       { Name: 'Manage Product', Path: 'manage-products' },
       { Name: 'Manage Raw Materials', Path: 'manage-raw-materials' },
       { Name: 'Manage Vendors', Path: 'manage-vendors' },
       { Name: 'Manage Distributors', Path: 'manage-distributors' },
-      { Name: 'Manage Country', Path: 'manage-country' },
+      { Name: 'Manage Country', Path: 'manage-countries' },
       { Name: 'Manage State', Path: 'manage-state' },
       { Name: 'Manage City', Path: 'manage-city' },
       { Name: 'Manage Work Location', Path: 'manage-work-location' },
@@ -41,32 +47,30 @@ const Management = props => {
             flexDirection='column'
             alignItems='center'
             width='100%'
-            marginTop='20px'
+            marginTop='10px'
          >
             <Box
-               width='50%'
+               width='90%'
                display='flex'
                justifyContent='center'
                flexDirection='column'
             >
-               <Button
-                  variant='contained'
-                  color='primary'
-                  onClick={() => {
-                     if (auth.logout()) {
-                        props.history.push('/');
-                     }
-                  }}
-               >
-                  Logout
-               </Button>
-               {props.history.location.state ? (
-                  <Box
-                     color='red'
-                     textAlign='center'
-                     marginTop='20px'
-                     padding='10px'
+               <Box width='100%' display='flex' justifyContent='flex-end'>
+                  <Button
+                     variant='contained'
+                     color='primary'
+                     onClick={() => {
+                        if (auth.logout()) {
+                           props.history.push('/');
+                        }
+                     }}
                   >
+                     Logout
+                  </Button>
+               </Box>
+
+               {props.history.location.state ? (
+                  <Box color='red' textAlign='center'>
                      {props.history.location.state.msg}
                   </Box>
                ) : null}
@@ -87,10 +91,24 @@ const Management = props => {
                path='/management/manage-roles'
                component={ManageRole}
             />
+            <Route
+               exact
+               path='/management/manage-shifts'
+               component={ManageShift}
+            />
+            <Route
+               exact
+               path='/management/manage-countries'
+               component={ManageCountries}
+            />
             <AddUserRoute />
             <EditUserRoute />
             <AddRoleRoute />
             <EditRoleRoute />
+            <AddShiftRoute />
+            <EditShiftRoute />
+            <AddCountryRoute />
+            <EditCountryRoute />
          </Box>
       </Box>
    );

@@ -15,7 +15,8 @@ mongoose
    .connect(db, {
       useNewUrlParser: true,
       useCreateIndex: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
+      useFindAndModify: false
    })
    .then(() => {
       console.log('DB connected');
@@ -37,6 +38,8 @@ app.use(passport.session());
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 app.use('/roles', require('./routes/roles'));
+app.use('/shifts', require('./routes/shifts'));
+app.use('/countries', require('./routes/countries'));
 
 app.listen(5000, () => {
    console.log(`App listening on port ${PORT}!`);

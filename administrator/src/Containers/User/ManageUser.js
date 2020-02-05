@@ -15,6 +15,22 @@ export default class ManageUser extends Component {
          ],
          data: []
       };
+      this.OnEditHandler = (event, rowData) => {
+         axios
+            .post('/users/user', {
+               name: rowData.name
+            })
+            .then(user => {
+               this.EditData = { ...user.data.Users[0] };
+               console.log(this.EditData);
+               this.props.history.push({
+                  pathname: 'manage-users/edit-user',
+                  state: {
+                     user: this.EditData
+                  }
+               });
+            });
+      };
    }
    componentDidMount() {
       if (permissionCheck(this.props, 'Manage User')) {
@@ -75,23 +91,7 @@ export default class ManageUser extends Component {
                      icon: 'edit',
                      tooltip: 'Edit User',
                      onClick: (event, rowData) => {
-                        axios
-                           .post('/users/user', {
-                              name: rowData.name
-                           })
-                           .then(user => {
-                              this.EditData = { ...user.data.Users[0] };
-                              console.log(this.EditData);
-                              this.props.history.push({
-                                 pathname: 'manage-users/edit-user',
-                                 state: {
-                                    user: this.EditData,
-                                    view: false,
-                                    name: 'Edit',
-                                    action: 'Cancel'
-                                 }
-                              });
-                           });
+                        this.OnEditHandler(event, rowData);
                      }
                   }
                ]}
@@ -113,23 +113,7 @@ export default class ManageUser extends Component {
                         })
                }}
                onRowClick={(event, rowData) => {
-                  axios
-                     .post('/users/user', {
-                        name: rowData.name
-                     })
-                     .then(user => {
-                        this.EditData = { ...user.data.Users[0] };
-                        console.log(this.EditData);
-                        this.props.history.push({
-                           pathname: 'manage-users/edit-user',
-                           state: {
-                              user: this.EditData,
-                              view: true,
-                              name: 'View',
-                              action: 'Back'
-                           }
-                        });
-                     });
+                  this.OnEditHandler(event, rowData);
                }}
             />
          </Box>

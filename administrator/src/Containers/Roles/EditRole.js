@@ -11,12 +11,15 @@ import axios from 'axios';
 import Styles from '../../Components/styles/FormStyles';
 import Permissions from './Permissions';
 
+import permissionCheck from '../../Components/Auth/permissionCheck';
+
 const styles = Styles;
 
 export default class EditRole extends Component {
    constructor(props) {
       super();
       this.state = {
+         _id: '',
          role_name: '',
          description: '',
          permissions: Permissions,
@@ -34,6 +37,7 @@ export default class EditRole extends Component {
          });
          axios
             .post('/roles/edit-role', {
+               _id: this.state._id,
                role_name: this.state.role_name,
                description: this.state.description,
                permissions: givenPermissions
@@ -47,14 +51,18 @@ export default class EditRole extends Component {
                      success: false
                   });
                } else {
-                  this.setState({
-                     role_name: '',
-                     description: '',
-                     permissions: [],
-                     errors: [],
-                     success: true,
-                     open: true
+                  this.state.permissions.map(permission => {
+                     permission.value = false;
+                     return null;
                   });
+                  // this.setState({
+                  //    role_name: '',
+                  //    description: '',
+                  //    permissions: [],
+                  //    errors: [],
+                  //    success: true,
+                  //    open: true
+                  // });
                   this.props.history.push('/management/manage-roles', {
                      state: {
                         success: true
@@ -69,12 +77,12 @@ export default class EditRole extends Component {
       };
    }
    componentDidMount() {
-      if (this.props) {
-         console.log(this.props.history.location.state.role);
+      if (permissionCheck(this.props, 'Manage User')) {
          if (this.state.role_name === '') {
             this.setState({
                role_name: this.props.history.location.state.role.role_name,
-               description: this.props.history.location.state.role.description
+               description: this.props.history.location.state.role.description,
+               _id: this.props.history.location.state.role._id
             });
             this.state.permissions.map(permission => {
                this.props.history.location.state.role.permissions.map(
@@ -88,7 +96,6 @@ export default class EditRole extends Component {
                return null;
             });
          }
-      } else {
       }
    }
    componentWillUnmount() {
@@ -165,9 +172,8 @@ export default class EditRole extends Component {
                >
                   {this.state.permissions.map((permission, index) => {
                      return (
-                        <Box width='20%' display='flex'>
+                        <Box width='20%' display='flex' key={index}>
                            <FormControlLabel
-                              key={index}
                               control={
                                  <Checkbox
                                     checked={permission.value}
@@ -218,7 +224,7 @@ export default class EditRole extends Component {
                      size='large'
                      onClick={this.onEditHandler}
                   >
-                     Add
+                     Update
                   </Button>
                </Box>
             </Box>
