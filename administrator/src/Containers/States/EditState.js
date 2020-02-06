@@ -57,16 +57,16 @@ export default class EditShift extends Component {
             this.setState({
                countries: [...res.data.Countries]
             });
+            if (this.state.state_name === '') {
+               console.log(this.props.state);
+               this.setState({
+                  _id: this.props.state._id,
+                  state_name: this.props.state.state_name,
+                  country_id: this.props.state.country_id,
+                  description: this.props.state.description
+               });
+            }
          });
-         if (this.state.state_name === '') {
-            console.log(this.props.state);
-            this.setState({
-               _id: this.props.state._id,
-               state_name: this.props.state.state_name,
-               country_id: this.props.state.country_id,
-               description: this.props.state.description
-            });
-         }
       }
    }
    render() {

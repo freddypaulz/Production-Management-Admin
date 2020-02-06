@@ -50,7 +50,7 @@ router.post('/add-role', (req, res) => {
    } else {
       Roles.findOne({ role_name }).then(Role => {
          if (Role) {
-            errors.push('Username already taken');
+            errors.push('Role already available');
             res.send({ errors });
          } else {
             const newRole = new Roles({

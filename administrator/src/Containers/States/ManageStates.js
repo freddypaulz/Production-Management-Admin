@@ -45,24 +45,37 @@ export default class ManageStates extends Component {
             });
       };
       this.handleClose = () => {
-         axios.get('/states/states').then(res => {
-            //console.log(res.data.States[0].country_id);
-            for (let i = 0; i < res.data.States.length; i++) {
-               res.data.States[i].id = i + 1;
-               axios
-                  .post('/countries/country', {
-                     _id: res.data.States[i].country_id
-                  })
-                  .then(country => {
-                     console.log(country.data.Country[0].country_name);
-                     res.data.States[i].country_id =
-                        country.data.Country[0].country_name;
-                     this.setState({
-                        data: [...res.data.States]
+         axios
+            .get('/states/states')
+            .then(res => {
+               //console.log(res.data.States[0].country_id);
+               for (let i = 0; i < res.data.States.length; i++) {
+                  res.data.States[i].id = i + 1;
+                  axios
+                     .post('/countries/country', {
+                        _id: res.data.States[i].country_id
+                     })
+                     .then(country => {
+                        if (country.data.Country[0]) {
+                           console.log(country.data.Country[0].country_name);
+                           res.data.States[i].country_id =
+                              country.data.Country[0].country_name;
+                           this.setState({
+                              data: [...res.data.States]
+                           });
+                        } else {
+                           res.data.States[i].country_id =
+                              'problem loading country';
+                           this.setState({
+                              data: [...res.data.States]
+                           });
+                        }
                      });
-                  });
-            }
-         });
+               }
+            })
+            .catch(err => {
+               console.log('Error');
+            });
       };
    }
    componentDidMount() {

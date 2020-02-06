@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import MaterialTable from 'material-table';
-import { Box, Button } from '@material-ui/core';
+import { Box, Button, DialogContent } from '@material-ui/core';
+import Dialog from '@material-ui/core/Dialog';
 import axios from 'axios';
 import permissionCheck from '../../Components/Auth/permissionCheck';
+import AddShift from './AddShift';
+import EditShift from './EditShift';
 
 export default class ManageShift extends Component {
    constructor(props) {
@@ -14,7 +17,10 @@ export default class ManageShift extends Component {
             { title: 'Shift Name', field: 'shift_name' },
             { title: 'Description', field: 'description' }
          ],
-         data: []
+         data: [],
+
+         openAdd: false,
+         openEdit: false
       };
       this.OnEditHandler = (event, rowData) => {
          axios
@@ -25,17 +31,12 @@ export default class ManageShift extends Component {
                console.log(shift);
                this.EditData = { ...shift.data.shift[0] };
                console.log(this.EditData);
-               this.props.history.push({
-                  pathname: 'manage-shifts/edit-shift',
-                  state: {
-                     shift: this.EditData
-                  }
+               this.setState({
+                  openEdit: true
                });
             });
       };
-   }
-   componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Shift')) {
+      this.handleClose = () => {
          axios.get('/shifts/shifts').then(res => {
             console.log(res.data);
             for (let i = 0; i < res.data.Shifts.length; i++) {
@@ -45,6 +46,11 @@ export default class ManageShift extends Component {
                data: [...res.data.Shifts]
             });
          });
+      };
+   }
+   componentDidMount() {
+      if (permissionCheck(this.props, 'Manage Shift')) {
+         this.handleClose();
       }
    }
    render() {
@@ -68,7 +74,9 @@ export default class ManageShift extends Component {
                   }}
                   size='large'
                   onClick={() => {
-                     this.props.history.push('manage-shifts/add-shift');
+                     this.setState({
+                        openAdd: true
+                     });
                   }}
                >
                   Add Shift
@@ -117,6 +125,31 @@ export default class ManageShift extends Component {
                   this.OnEditHandler(event, rowData);
                }}
             />
+            <Dialog open={this.state.openAdd} maxWidth='lg' fullWidth>
+               <DialogContent style={{ padding: '20px' }}>
+                  <AddShift
+                     cancel={() => {
+                        this.setState({
+                           openAdd: false
+                        });
+                        this.handleClose();
+                     }}
+                  />
+               </DialogContent>
+            </Dialog>
+            <Dialog open={this.state.openEdit} maxWidth='lg' fullWidth>
+               <DialogContent style={{ padding: '20px' }}>
+                  <EditShift
+                     shift={this.EditData}
+                     cancel={() => {
+                        this.setState({
+                           openEdit: false
+                        });
+                        this.handleClose();
+                     }}
+                  />
+               </DialogContent>
+            </Dialog>
          </Box>
       );
    }

@@ -45,14 +45,7 @@ export default class AddUser extends Component {
                      success: false
                   });
                } else {
-                  this.setState({
-                     user_name: '',
-                     password: '',
-                     password2: '',
-                     errors: '',
-                     success: true
-                  });
-                  this.props.history.push('/management/manage-users');
+                  this.props.cancel();
                }
             })
             .catch(err => console.log(err));
@@ -184,7 +177,7 @@ export default class AddUser extends Component {
                      color='primary'
                      size='large'
                      onClick={() => {
-                        this.props.history.push('/management/manage-users');
+                        this.props.cancel();
                      }}
                   >
                      Cancel

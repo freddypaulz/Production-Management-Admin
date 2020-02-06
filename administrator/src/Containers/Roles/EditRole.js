@@ -63,11 +63,8 @@ export default class EditRole extends Component {
                   //    success: true,
                   //    open: true
                   // });
-                  this.props.history.push('/management/manage-roles', {
-                     state: {
-                        success: true
-                     }
-                  });
+                  this.props.snack();
+                  this.props.cancel();
                }
             })
             .catch(err => console.log(err));
@@ -80,19 +77,17 @@ export default class EditRole extends Component {
       if (permissionCheck(this.props, 'Manage User')) {
          if (this.state.role_name === '') {
             this.setState({
-               role_name: this.props.history.location.state.role.role_name,
-               description: this.props.history.location.state.role.description,
-               _id: this.props.history.location.state.role._id
+               role_name: this.props.role.role_name,
+               description: this.props.role.description,
+               _id: this.props.role._id
             });
             this.state.permissions.map(permission => {
-               this.props.history.location.state.role.permissions.map(
-                  rolePermission => {
-                     if (permission.name === rolePermission.name) {
-                        permission.value = true;
-                     }
-                     return null;
+               this.props.role.permissions.map(rolePermission => {
+                  if (permission.name === rolePermission.name) {
+                     permission.value = true;
                   }
-               );
+                  return null;
+               });
                return null;
             });
          }
@@ -210,7 +205,7 @@ export default class EditRole extends Component {
                      color='primary'
                      size='large'
                      onClick={() => {
-                        this.props.history.push('/management/manage-roles');
+                        this.props.cancel();
                      }}
                   >
                      Cancel

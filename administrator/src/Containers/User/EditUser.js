@@ -48,14 +48,7 @@ export default class EditUser extends Component {
                      });
                   }
                } else {
-                  this.setState({
-                     user_name: '',
-                     password: '',
-                     password2: '',
-                     errors: '',
-                     success: true
-                  });
-                  this.props.history.push('/management/manage-users');
+                  this.props.cancel();
                }
             })
             .catch(err => console.log(err));
@@ -66,8 +59,8 @@ export default class EditUser extends Component {
          axios.get('/roles/roles').then(res => {
             if (this.state.user_name === '' || this.state.role === '') {
                this.setState({
-                  user_name: this.props.history.location.state.user.name,
-                  role: this.props.history.location.state.user.role
+                  user_name: this.props.user.name,
+                  role: this.props.user.role
                });
                console.log(this.state.user_name, this.state.role);
             }
@@ -207,7 +200,7 @@ export default class EditUser extends Component {
                      color='primary'
                      size='large'
                      onClick={() => {
-                        this.props.history.push('/management/manage-users');
+                        this.props.cancel();
                      }}
                   >
                      Cancel

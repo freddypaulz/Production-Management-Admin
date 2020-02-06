@@ -46,14 +46,15 @@ export default class AddUser extends Component {
                      success: false
                   });
                } else {
-                  this.setState({
-                     role_name: '',
-                     description: '',
-                     permissions: [],
-                     errors: [],
-                     success: true
-                  });
-                  this.props.history.push('/management/manage-roles');
+                  // this.setState({
+                  //    role_name: '',
+                  //    description: '',
+                  //    permissions: [],
+                  //    errors: [],
+                  //    success: true
+                  // });
+                  this.props.cancel();
+                  this.props.snack();
                }
             })
             .catch(err => console.log(err));
@@ -66,6 +67,14 @@ export default class AddUser extends Component {
       // this.state.permissions.map(permission => {
       //    permission.value = false;
       // });
+   }
+   componentWillUnmount() {
+      this.state.permissions.map(permission => {
+         if (permission.value === true) {
+            permission.value = false;
+         }
+         return null;
+      });
    }
    render() {
       return (
@@ -135,9 +144,8 @@ export default class AddUser extends Component {
                >
                   {this.state.permissions.map((permission, index) => {
                      return (
-                        <Box width='20%' display='flex'>
+                        <Box width='20%' display='flex' key={index}>
                            <FormControlLabel
-                              key={index}
                               control={
                                  <Checkbox
                                     checked={permission.value}
@@ -174,7 +182,7 @@ export default class AddUser extends Component {
                      color='primary'
                      size='large'
                      onClick={() => {
-                        this.props.history.push('/management/manage-roles');
+                        this.props.cancel();
                      }}
                   >
                      Cancel

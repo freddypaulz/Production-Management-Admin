@@ -33,8 +33,7 @@ export default class EditShift extends Component {
                         success: false
                      });
                   } else {
-                     console.log('Hello');
-                     this.props.history.push('/management/manage-shifts');
+                     this.props.cancel();
                   }
                }
             })
@@ -45,9 +44,9 @@ export default class EditShift extends Component {
       if (permissionCheck(this.props, 'Manage User')) {
          if (this.state.shift_name === '') {
             this.setState({
-               shift_name: this.props.history.location.state.shift.shift_name,
-               description: this.props.history.location.state.shift.description,
-               _id: this.props.history.location.state.shift._id
+               shift_name: this.props.shift.shift_name,
+               description: this.props.shift.description,
+               _id: this.props.shift._id
             });
          }
       }
@@ -113,7 +112,7 @@ export default class EditShift extends Component {
                      color='primary'
                      size='large'
                      onClick={() => {
-                        this.props.history.push('/management/manage-shifts');
+                        this.props.cancel();
                      }}
                   >
                      Cancel

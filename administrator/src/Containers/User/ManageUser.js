@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import MaterialTable from 'material-table';
-import { Box, Button } from '@material-ui/core';
+import { Box, Button, DialogContent, Snackbar } from '@material-ui/core';
+import Dialog from '@material-ui/core/Dialog';
 import axios from 'axios';
 import permissionCheck from '../../Components/Auth/permissionCheck';
+import AddUser from './AddUser';
+import EditUser from './EditUser';
 
 export default class ManageUser extends Component {
    constructor(props) {
@@ -13,7 +16,10 @@ export default class ManageUser extends Component {
             { title: 'ID', field: 'id' },
             { title: 'Name', field: 'name' }
          ],
-         data: []
+         data: [],
+         openAdd: false,
+         openEdit: false,
+         msg: ''
       };
       this.OnEditHandler = (event, rowData) => {
          axios
@@ -23,19 +29,17 @@ export default class ManageUser extends Component {
             .then(user => {
                this.EditData = { ...user.data.Users[0] };
                console.log(this.EditData);
-               this.props.history.push({
-                  pathname: 'manage-users/edit-user',
-                  state: {
-                     user: this.EditData
-                  }
+               this.setState({
+                  openEdit: true
                });
             });
       };
-   }
-   componentDidMount() {
-      if (permissionCheck(this.props, 'Manage User')) {
+      this.handleClose = () => {
          axios.get('/users/users').then(res => {
-            console.log(res.data);
+            console.log(res.data.Users);
+
+            res.data.Users = res.data.Users.splice(1, res.data.Users.length);
+            console.log(res.data.Users);
             for (let i = 0; i < res.data.Users.length; i++) {
                res.data.Users[i].id = i + 1;
             }
@@ -43,6 +47,11 @@ export default class ManageUser extends Component {
                data: [...res.data.Users]
             });
          });
+      };
+   }
+   componentDidMount() {
+      if (permissionCheck(this.props, 'Manage User')) {
+         this.handleClose();
       }
    }
    componentWillUnmount() {}
@@ -67,7 +76,9 @@ export default class ManageUser extends Component {
                   }}
                   size='large'
                   onClick={() => {
-                     this.props.history.push('manage-users/add-user');
+                     this.setState({
+                        openAdd: true
+                     });
                   }}
                >
                   Add Users
@@ -116,6 +127,39 @@ export default class ManageUser extends Component {
                   this.OnEditHandler(event, rowData);
                }}
             />
+            <Dialog open={this.state.openAdd} maxWidth='lg' fullWidth>
+               <DialogContent style={{ padding: '20px' }}>
+                  <AddUser
+                     cancel={() => {
+                        this.setState({
+                           openAdd: false,
+                           msg: 'Added'
+                        });
+                        this.handleClose();
+                     }}
+                     snack={() => {
+                        this.openSnack();
+                     }}
+                  />
+               </DialogContent>
+            </Dialog>
+            <Dialog open={this.state.openEdit} maxWidth='lg' fullWidth>
+               <DialogContent style={{ padding: '20px' }}>
+                  <EditUser
+                     user={this.EditData}
+                     cancel={() => {
+                        this.setState({
+                           openEdit: false,
+                           msg: 'Updated'
+                        });
+                        this.handleClose();
+                     }}
+                     snack={() => {
+                        this.openSnack();
+                     }}
+                  />
+               </DialogContent>
+            </Dialog>
          </Box>
       );
    }

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, Button } from '@material-ui/core';
 import Dashboard from '../../Components/Dashboard/Dashboard';
-import AddEmployee from '../Employee/AddEmployee';
 import { Route } from 'react-router';
 import ManageEmployee from '../Employee/ManageEmployee';
 import ManageUser from '../User/ManageUser';
@@ -9,16 +8,7 @@ import ManageRole from '../Roles/ManageRole';
 import ManageShift from '../Shift/ManageShifts';
 import ManageStates from '../States/ManageStates';
 import ManageCountries from '../Countries/ManageCountries';
-import {
-   AddUserRoute,
-   EditUserRoute,
-   AddRoleRoute,
-   EditRoleRoute,
-   AddShiftRoute,
-   EditShiftRoute,
-   AddCountryRoute,
-   EditCountryRoute
-} from '../../Routes/Routes';
+import { Routes } from '../../Routes/Routes';
 import auth from '../../Components/Auth/auth';
 
 const Management = props => {
@@ -69,52 +59,13 @@ const Management = props => {
                      Logout
                   </Button>
                </Box>
-
                {props.history.location.state ? (
                   <Box color='red' textAlign='center'>
                      {props.history.location.state.msg}
                   </Box>
                ) : null}
             </Box>
-
-            <Route
-               path='/management/manage-employee'
-               component={ManageEmployee}
-            />
-            <Route path='/management/manage-products' component={AddEmployee} />
-            <Route
-               exact
-               path='/management/manage-users'
-               component={ManageUser}
-            />
-            <Route
-               exact
-               path='/management/manage-roles'
-               component={ManageRole}
-            />
-            <Route
-               exact
-               path='/management/manage-shifts'
-               component={ManageShift}
-            />
-            <Route
-               exact
-               path='/management/manage-countries'
-               component={ManageCountries}
-            />
-            <Route
-               exact
-               path='/management/manage-states'
-               component={ManageStates}
-            />
-            <AddUserRoute />
-            <EditUserRoute />
-            <AddRoleRoute />
-            <EditRoleRoute />
-            <AddShiftRoute />
-            <EditShiftRoute />
-            <AddCountryRoute />
-            <EditCountryRoute />
+            <Routes />
          </Box>
       </Box>
    );

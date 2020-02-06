@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import MaterialTable from 'material-table';
 import axios from 'axios';
-import { Box, Button, Snackbar } from '@material-ui/core';
+import { Box, Button, DialogContent, Snackbar } from '@material-ui/core';
+import Dialog from '@material-ui/core/Dialog';
 import MUIAlert from '@material-ui/lab/Alert';
 import permissionCheck from '../../Components/Auth/permissionCheck';
+import AddRole from './AddRole';
+import EditRole from './EditRole';
+
 export default class ManageRole extends Component {
    constructor(props) {
       super();
@@ -16,7 +20,10 @@ export default class ManageRole extends Component {
             // { title: 'Permissions', field: 'permissions' }
          ],
          data: [],
-         open: false
+         open: false,
+         openAdd: false,
+         openEdit: false,
+         msg: ''
       };
       this.onEditHandler = (event, rowData) => {
          axios
@@ -24,25 +31,19 @@ export default class ManageRole extends Component {
                _id: rowData._id
             })
             .then(role => {
-               this.EditData = { ...role.data };
-               console.log(this.EditData);
-               this.props.history.push({
-                  pathname: 'manage-roles/edit-role',
-                  state: {
-                     role: { ...this.EditData.Role[0] }
-                  }
+               this.EditData = { ...role.data.Role[0] };
+               console.log('Edit ', this.EditData);
+               this.setState({
+                  openEdit: true
                });
-               console.log('EditData', this.EditData.Role);
             });
       };
-   }
-   componentDidMount() {
-      let check = false;
-      if (permissionCheck(this.props, 'Manage Role')) {
+      this.handleClose = () => {
          axios
             .get('/roles/roles')
             .then(res => {
                console.log(res.data);
+               res.data.Roles = res.data.Roles.splice(1, res.data.Roles.length);
                for (let i = 0; i < res.data.Roles.length; i++) {
                   res.data.Roles[i].id = i + 1;
                }
@@ -51,17 +52,17 @@ export default class ManageRole extends Component {
                });
             })
             .catch(() => {});
-      }
-
-      if (!check) {
-         check = true;
-         console.log(this.props.location.state);
-         if (this.props.location.state) {
-            console.log(this.props.history.location.state.state.success);
-            this.setState({
-               open: this.props.history.location.state.state.success
-            });
-         }
+      };
+      this.openSnack = () => {
+         this.setState({
+            open: true
+         });
+      };
+   }
+   componentDidMount() {
+      let check = false;
+      if (permissionCheck(this.props, 'Manage Role')) {
+         this.handleClose();
       }
    }
 
@@ -86,7 +87,9 @@ export default class ManageRole extends Component {
                   }}
                   size='large'
                   onClick={() => {
-                     this.props.history.push('manage-roles/add-role');
+                     this.setState({
+                        openAdd: true
+                     });
                   }}
                >
                   Add Role
@@ -128,6 +131,10 @@ export default class ManageRole extends Component {
                                  data.splice(data.indexOf(oldData), 1);
                                  return { ...prevState, data };
                               });
+                              this.setState({
+                                 msg: 'Deleted'
+                              });
+                              this.openSnack();
                            }
                         })
                }}
@@ -135,6 +142,39 @@ export default class ManageRole extends Component {
                   this.onEditHandler(event, rowData);
                }}
             />
+            <Dialog open={this.state.openAdd} maxWidth='lg' fullWidth>
+               <DialogContent style={{ padding: '20px' }}>
+                  <AddRole
+                     cancel={() => {
+                        this.setState({
+                           openAdd: false,
+                           msg: 'Added'
+                        });
+                        this.handleClose();
+                     }}
+                     snack={() => {
+                        this.openSnack();
+                     }}
+                  />
+               </DialogContent>
+            </Dialog>
+            <Dialog open={this.state.openEdit} maxWidth='lg' fullWidth>
+               <DialogContent style={{ padding: '20px' }}>
+                  <EditRole
+                     role={this.EditData}
+                     cancel={() => {
+                        this.setState({
+                           openEdit: false,
+                           msg: 'Updated'
+                        });
+                        this.handleClose();
+                     }}
+                     snack={() => {
+                        this.openSnack();
+                     }}
+                  />
+               </DialogContent>
+            </Dialog>
             <Snackbar
                open={this.state.open}
                autoHideDuration={3000}
@@ -150,7 +190,7 @@ export default class ManageRole extends Component {
                   elevation={6}
                   variant='filled'
                >
-                  Role Updated !
+                  Role {this.state.msg}!
                </MUIAlert>
             </Snackbar>
          </Box>

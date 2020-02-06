@@ -1,61 +1,35 @@
 import React from 'react';
-import AddUser from '../Containers/User/AddUser';
-import EditUser from '../Containers/User/EditUser';
-import AddRole from '../Containers/Roles/AddRole';
-import EditRole from '../Containers/Roles/EditRole';
-import AddShift from '../Containers/Shift/AddShift';
-import EditShift from '../Containers/Shift/EditShift';
-import AddCountry from '../Containers/Countries/AddCountry';
-import EditCountry from '../Containers/Countries/EditCountry';
+import ManageEmployee from '../Containers/Employee/ManageEmployee';
+import ManageUser from '../Containers/User/ManageUser';
+import ManageRole from '../Containers/Roles/ManageRole';
+import ManageShift from '../Containers/Shift/ManageShifts';
+import ManageStates from '../Containers/States/ManageStates';
+import ManageCountries from '../Containers/Countries/ManageCountries';
+
 import { Route } from 'react-router-dom';
+import { Box } from '@material-ui/core';
 
-export const AddUserRoute = () => {
+export const Routes = () => {
    return (
-      <Route path='/management/manage-users/add-user' component={AddUser} />
-   );
-};
-
-export const EditUserRoute = () => {
-   return (
-      <Route path='/management/manage-users/edit-user' component={EditUser} />
-   );
-};
-export const AddRoleRoute = () => {
-   return (
-      <Route path='/management/manage-roles/add-role' component={AddRole} />
-   );
-};
-export const EditRoleRoute = () => {
-   return (
-      <Route path='/management/manage-roles/edit-role' component={EditRole} />
-   );
-};
-export const AddShiftRoute = () => {
-   return (
-      <Route path='/management/manage-shifts/add-shift' component={AddShift} />
-   );
-};
-export const EditShiftRoute = () => {
-   return (
-      <Route
-         path='/management/manage-shifts/edit-shift'
-         component={EditShift}
-      />
-   );
-};
-export const AddCountryRoute = () => {
-   return (
-      <Route
-         path='/management/manage-countries/add-country'
-         component={AddCountry}
-      />
-   );
-};
-export const EditCountryRoute = () => {
-   return (
-      <Route
-         path='/management/manage-countries/edit-country'
-         component={EditCountry}
-      />
+      <Box style={{ width: '100%' }}>
+         <Route path='/management/manage-employee' component={ManageEmployee} />
+         <Route exact path='/management/manage-users' component={ManageUser} />
+         <Route exact path='/management/manage-roles' component={ManageRole} />
+         <Route
+            exact
+            path='/management/manage-shifts'
+            component={ManageShift}
+         />
+         <Route
+            exact
+            path='/management/manage-countries'
+            component={ManageCountries}
+         />
+         <Route
+            exact
+            path='/management/manage-states'
+            component={ManageStates}
+         />
+      </Box>
    );
 };

@@ -30,7 +30,7 @@ export default class AddUser extends Component {
                      success: false
                   });
                } else {
-                  this.props.history.push('/management/manage-shifts');
+                  this.props.cancel();
                }
             })
             .catch(err => console.log(err));
@@ -101,7 +101,7 @@ export default class AddUser extends Component {
                      color='primary'
                      size='large'
                      onClick={() => {
-                        this.props.history.push('/management/manage-shifts');
+                        this.props.cancel();
                      }}
                   >
                      Cancel
