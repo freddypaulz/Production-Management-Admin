@@ -1,6 +1,3 @@
-import { Redirect } from 'react-router-dom';
-import React from 'react';
-
 const permissionCheck = (props, component) => {
    const permissions = JSON.parse(sessionStorage.getItem('permissions'));
    console.log(permissions);

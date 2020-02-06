@@ -4,7 +4,6 @@ import { PaperBoard } from '../../Components/PaperBoard/PaperBoard';
 import axios from 'axios';
 import Styles from '../../Components/styles/FormStyles';
 import permissionCheck from '../../Components/Auth/permissionCheck';
-import { render } from 'ejs';
 
 const styles = Styles;
 export default class EditShift extends Component {

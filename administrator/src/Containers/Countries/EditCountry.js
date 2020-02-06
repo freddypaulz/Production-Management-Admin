@@ -4,7 +4,6 @@ import { PaperBoard } from '../../Components/PaperBoard/PaperBoard';
 import axios from 'axios';
 import Styles from '../../Components/styles/FormStyles';
 import permissionCheck from '../../Components/Auth/permissionCheck';
-import { render } from 'ejs';
 
 const styles = Styles;
 export default class EditCountry extends Component {
@@ -34,7 +33,7 @@ export default class EditCountry extends Component {
                         success: false
                      });
                   } else {
-                     this.props.history.push('/management/manage-shifts');
+                     this.props.cancel();
                   }
                }
             })
@@ -43,13 +42,12 @@ export default class EditCountry extends Component {
    }
    componentDidMount() {
       if (permissionCheck(this.props, 'Manage Country')) {
+         console.log(this.props);
          if (this.state.country_name === '') {
             this.setState({
-               country_name: this.props.history.location.state.country
-                  .country_name,
-               description: this.props.history.location.state.country
-                  .description,
-               _id: this.props.history.location.state.country._id
+               country_name: this.props.country.country_name,
+               description: this.props.country.description,
+               _id: this.props.country._id
             });
          }
       }
@@ -115,7 +113,7 @@ export default class EditCountry extends Component {
                      color='primary'
                      size='large'
                      onClick={() => {
-                        this.props.history.push('/management/manage-countries');
+                        this.props.cancel();
                      }}
                   >
                      Cancel

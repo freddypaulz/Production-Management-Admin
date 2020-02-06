@@ -71,11 +71,9 @@ router.post('/edit-country', (req, res) => {
       errors.push('Use 20 or less characters for description');
    }
    if (country_name) {
-      Countries.find({ country_name }).then(Country => {
-         if (Country) {
-            if (Country._id != _id) {
-               errors.push('Country Name must be unique');
-            }
+      Countries.find({ country_name }, { _id: 1 }).then(res => {
+         if (res[0]._id != _id) {
+            errors.push('Country Name must be unique');
          }
       });
    }

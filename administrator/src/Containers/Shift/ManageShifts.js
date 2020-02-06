@@ -4,7 +4,7 @@ import { Box, Button } from '@material-ui/core';
 import axios from 'axios';
 import permissionCheck from '../../Components/Auth/permissionCheck';
 
-export default class ManageUser extends Component {
+export default class ManageShift extends Component {
    constructor(props) {
       super();
       this.EditData = {};

@@ -3,36 +3,40 @@ import MaterialTable from 'material-table';
 import { Box, Button, DialogContent } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import axios from 'axios';
+import AddState from './AddState';
+import EditState from './EditState';
 import permissionCheck from '../../Components/Auth/permissionCheck';
-import AddCountry from './AddCountry';
-import EditCountry from './EditCountry';
-export default class ManageUser extends Component {
+
+export default class ManageStates extends Component {
    constructor(props) {
       super();
       this.EditData = {};
       this.state = {
          columns: [
             { title: 'ID', field: 'id' },
-            { title: 'Country Name', field: 'country_name' },
+            { title: 'State Name', field: 'state_name' },
+            { title: 'Country ID', field: 'country_id' },
             { title: 'Description', field: 'description' }
          ],
          data: [],
          openAdd: false,
-         openEdit: false
+         openEdit: false,
+         samp: 'hello'
       };
       this.OnEditHandler = (event, rowData) => {
+         console.log(rowData._id);
          axios
-            .post('/countries/country', {
+            .post('/states/state', {
                _id: rowData._id
             })
-            .then(country => {
-               //console.log(country);
-               this.EditData = { ...country.data.Country[0] };
-               console.log(this.EditData);
+            .then(state => {
+               console.log(state);
+               this.EditData = { ...state.data.state };
+               console.log(this.EditData[0]);
                // this.props.history.push({
-               //    pathname: 'manage-countries/edit-country',
+               //    pathname: 'manage-shifts/edit-shift',
                //    state: {
-               //       country: this.EditData
+               //       shift: this.EditData
                //    }
                // });
                this.setState({
@@ -41,19 +45,28 @@ export default class ManageUser extends Component {
             });
       };
       this.handleClose = () => {
-         axios.get('/countries/countries').then(res => {
-            console.log(res.data);
-            for (let i = 0; i < res.data.Countries.length; i++) {
-               res.data.Countries[i].id = i + 1;
+         axios.get('/states/states').then(res => {
+            //console.log(res.data.States[0].country_id);
+            for (let i = 0; i < res.data.States.length; i++) {
+               res.data.States[i].id = i + 1;
+               axios
+                  .post('/countries/country', {
+                     _id: res.data.States[i].country_id
+                  })
+                  .then(country => {
+                     console.log(country.data.Country[0].country_name);
+                     res.data.States[i].country_id =
+                        country.data.Country[0].country_name;
+                     this.setState({
+                        data: [...res.data.States]
+                     });
+                  });
             }
-            this.setState({
-               data: [...res.data.Countries]
-            });
          });
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Country')) {
+      if (permissionCheck(this.props, 'Manage State')) {
          this.handleClose();
       }
    }
@@ -66,7 +79,7 @@ export default class ManageUser extends Component {
             flexDirection='column'
          >
             <Box fontSize='30px' mb={3}>
-               Manage Countries
+               Manage State
             </Box>
             <Box width='90%'>
                <Button
@@ -83,7 +96,7 @@ export default class ManageUser extends Component {
                      });
                   }}
                >
-                  Add Countries
+                  Add State
                </Button>
             </Box>
 
@@ -111,12 +124,12 @@ export default class ManageUser extends Component {
                editable={{
                   onRowDelete: oldData =>
                      axios
-                        .post('/countries/delete-country', {
-                           country_name: oldData.country_name
+                        .post('/states/delete-state', {
+                           state_name: oldData.state_name
                         })
-                        .then(Country => {
-                           console.log(Country);
-                           if (Country) {
+                        .then(res => {
+                           console.log(res);
+                           if (res) {
                               this.setState(prevState => {
                                  const data = [...prevState.data];
                                  data.splice(data.indexOf(oldData), 1);
@@ -129,9 +142,10 @@ export default class ManageUser extends Component {
                   this.OnEditHandler(event, rowData);
                }}
             />
+
             <Dialog open={this.state.openAdd} maxWidth='lg' fullWidth>
                <DialogContent style={{ padding: '20px' }}>
-                  <AddCountry
+                  <AddState
                      cancel={() => {
                         this.setState({
                            openAdd: false
@@ -143,8 +157,8 @@ export default class ManageUser extends Component {
             </Dialog>
             <Dialog open={this.state.openEdit} maxWidth='lg' fullWidth>
                <DialogContent style={{ padding: '20px' }}>
-                  <EditCountry
-                     country={this.EditData}
+                  <EditState
+                     state={this.EditData[0]}
                      cancel={() => {
                         this.setState({
                            openEdit: false

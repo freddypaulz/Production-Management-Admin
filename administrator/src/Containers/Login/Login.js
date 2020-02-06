@@ -99,6 +99,7 @@ export default class Login extends Component {
                                        res.data.Role[0].permissions.map(
                                           permission => {
                                              permissions.push(permission.name);
+                                             return null;
                                           }
                                        );
                                        sessionStorage.setItem(
