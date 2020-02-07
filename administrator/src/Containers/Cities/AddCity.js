@@ -48,7 +48,7 @@ export default class AddUser extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage State')) {
+      if (permissionCheck(this.props, 'Add City')) {
          axios.get('/states/states').then(res => {
             this.setState({
                states: [...res.data.States]

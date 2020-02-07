@@ -111,26 +111,37 @@ router.post('/edit-user', (req, res) => {
       });
    } else {
       // hash password
-      bcrypt.genSalt(10, (err, salt) => {
-         bcrypt.hash(password, salt, (err, hash) => {
-            if (err) throw err;
-            EncryptPass = hash;
-            console.log(EncryptPass);
+      if (password !== '') {
+         bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(password, salt, (err, hash) => {
+               if (err) throw err;
+               EncryptPass = hash;
+               console.log(EncryptPass);
 
-            //Update
-            Users.findOneAndUpdate(
-               { name },
-               { name, password: EncryptPass, role }
-            ).then(User => {
-               if (!User) {
-                  errors.push('Username Not Found');
-                  res.send({ errors });
-               } else {
-                  return res.send(User);
-               }
+               //Update
+               Users.findOneAndUpdate(
+                  { name },
+                  { name, password: EncryptPass, role }
+               ).then(User => {
+                  if (!User) {
+                     errors.push('Username Not Found');
+                     res.send({ errors });
+                  } else {
+                     return res.send(User);
+                  }
+               });
             });
          });
-      });
+      } else {
+         Users.findOneAndUpdate({ name }, { name, role }).then(User => {
+            if (!User) {
+               errors.push('Username Not Found');
+               res.send({ errors });
+            } else {
+               return res.send(User);
+            }
+         });
+      }
    }
 });
 
