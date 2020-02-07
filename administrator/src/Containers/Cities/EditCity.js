@@ -14,35 +14,38 @@ import Styles from '../../Components/styles/FormStyles';
 import permissionCheck from '../../Components/Auth/permissionCheck';
 
 const styles = Styles;
-export default class AddUser extends Component {
+export default class EditShift extends Component {
    constructor(props) {
       super();
       this.state = {
+         _id: '',
          city_name: '',
          state_id: '',
          description: '',
          errors: [],
          success: false,
-         states: [],
-         Countries: []
+         states: []
       };
-      this.onAddHandler = () => {
+      this.onEditHandler = () => {
          axios
-            .post('/cities/add-city', {
+            .post('/cities/edit-city', {
+               _id: this.state._id,
                city_name: this.state.city_name,
                state_id: this.state.state_id,
                description: this.state.description
             })
             .then(res => {
                console.log(res);
-               if (res.data.errors.length > 0) {
-                  console.log(res.data.errors);
-                  this.setState({
-                     errors: [...res.data.errors],
-                     success: false
-                  });
-               } else {
-                  this.props.cancel();
+               if (res.data.errors) {
+                  if (res.data.errors.length > 0) {
+                     console.log(res.data.errors);
+                     this.setState({
+                        errors: [...res.data.errors],
+                        success: false
+                     });
+                  } else {
+                     this.props.cancel();
+                  }
                }
             })
             .catch(err => console.log(err));
@@ -50,10 +53,18 @@ export default class AddUser extends Component {
    }
    componentDidMount() {
       if (permissionCheck(this.props, 'Manage City')) {
-         axios.get('/countries/countries').then(res => {
+         axios.get('/states/states').then(res => {
             this.setState({
-               Countries: [...res.data.Countries]
+               states: [...res.data.States]
             });
+            if (this.state.city_name === '') {
+               this.setState({
+                  _id: this.props.city._id,
+                  city_name: this.props.city.city_name,
+                  state_id: this.props.city.state_id,
+                  description: this.props.city.description
+               });
+            }
          });
       }
    }
@@ -61,7 +72,7 @@ export default class AddUser extends Component {
       return (
          <Box style={styles.box}>
             <Box fontSize='30px' mb={3}>
-               Add City
+               Edit City
             </Box>
             {this.state.errors.length > 0 ? (
                this.state.errors.map((error, index) => {
@@ -81,12 +92,12 @@ export default class AddUser extends Component {
                   <TextField
                      fullWidth
                      required
-                     value={this.state.state_name}
+                     value={this.state.city_name}
                      variant='outlined'
-                     label='State Name'
+                     label='City Name'
                      type='text'
                      onChange={event => {
-                        this.setState({ state_name: event.target.value });
+                        this.setState({ city_name: event.target.value });
                      }}
                   ></TextField>
                </Box>
@@ -98,24 +109,24 @@ export default class AddUser extends Component {
                         paddingRight: '2px'
                      }}
                   >
-                     Select Country
+                     Select State
                   </InputLabel>
                   <Select
                      style={styles.box_field}
                      required
                      //variant='outlined'
-                     value={this.state.country_id}
+                     value={this.state.state_id}
                      onChange={event => {
                         console.log(event.target.value);
                         this.setState({
-                           country_id: event.target.value
+                           state_id: event.target.value
                         });
                      }}
                   >
-                     {this.state.Countries.map((country, index) => {
+                     {this.state.states.map((state, index) => {
                         return (
-                           <MenuItem selected key={index} value={country._id}>
-                              {country.country_name}
+                           <MenuItem selected key={index} value={state._id}>
+                              {state.state_name}
                            </MenuItem>
                         );
                      })}
@@ -161,9 +172,9 @@ export default class AddUser extends Component {
                      variant='contained'
                      color='primary'
                      size='large'
-                     onClick={this.onAddHandler}
+                     onClick={this.onEditHandler}
                   >
-                     Add
+                     Update
                   </Button>
                </Box>
             </Box>

@@ -75,27 +75,29 @@ router.post('/edit-state', (req, res) => {
    }
    if (state_name) {
       States.find({ state_name }).then(states => {
-         if (states[0]._id != _id) {
-            errors.push('State Name must be unique');
+         if (typeof states[0] !== 'undefined') {
+            if (states[0]._id != _id) {
+               errors.push('State Name must be unique');
+            }
          }
-      });
-   }
-   if (errors.length > 0) {
-      return res.send({ errors });
-   } else {
-      States.findOneAndUpdate(
-         { _id },
-         {
-            state_name,
-            country_id,
-            description
-         }
-      ).then(State => {
-         if (!State) {
-            errors.push('state Not found');
+         if (errors.length > 0) {
             return res.send({ errors });
          } else {
-            return res.send({ State, errors });
+            States.findOneAndUpdate(
+               { _id },
+               {
+                  state_name,
+                  country_id,
+                  description
+               }
+            ).then(State => {
+               if (!State) {
+                  errors.push('state Not found');
+                  return res.send({ errors });
+               } else {
+                  return res.send({ State, errors });
+               }
+            });
          }
       });
    }

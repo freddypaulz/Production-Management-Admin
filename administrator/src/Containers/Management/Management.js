@@ -1,13 +1,6 @@
 import React from 'react';
 import { Box, Button } from '@material-ui/core';
 import Dashboard from '../../Components/Dashboard/Dashboard';
-import { Route } from 'react-router';
-import ManageEmployee from '../Employee/ManageEmployee';
-import ManageUser from '../User/ManageUser';
-import ManageRole from '../Roles/ManageRole';
-import ManageShift from '../Shift/ManageShifts';
-import ManageStates from '../States/ManageStates';
-import ManageCountries from '../Countries/ManageCountries';
 import { Routes } from '../../Routes/Routes';
 import auth from '../../Components/Auth/auth';
 
@@ -23,7 +16,7 @@ const Management = props => {
       { Name: 'Manage Distributors', Path: 'manage-distributors' },
       { Name: 'Manage Country', Path: 'manage-countries' },
       { Name: 'Manage State', Path: 'manage-states' },
-      { Name: 'Manage City', Path: 'manage-city' },
+      { Name: 'Manage City', Path: 'manage-cities' },
       { Name: 'Manage Work Location', Path: 'manage-work-location' },
       { Name: 'Manage Measuring Unit', Path: 'manage-measuring-unit' },
       { Name: 'Manage Material Type', Path: 'manage-material-type' },

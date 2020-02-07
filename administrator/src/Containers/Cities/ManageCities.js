@@ -3,42 +3,35 @@ import MaterialTable from 'material-table';
 import { Box, Button, DialogContent } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import axios from 'axios';
-import AddState from './AddState';
-import EditState from './EditState';
+import AddCity from './AddCity';
+import EditCity from './EditCity';
 import permissionCheck from '../../Components/Auth/permissionCheck';
 
-export default class ManageStates extends Component {
+export default class ManageCities extends Component {
    constructor(props) {
       super();
       this.EditData = {};
       this.state = {
          columns: [
             { title: 'ID', field: 'id' },
-            { title: 'State Name', field: 'state_name' },
-            { title: 'Country Name', field: 'country_id' },
+            { title: 'City Name', field: 'city_name' },
+            { title: 'State Name', field: 'state_id' },
             { title: 'Description', field: 'description' }
          ],
          data: [],
          openAdd: false,
-         openEdit: false,
-         samp: 'hello'
+         openEdit: false
       };
       this.OnEditHandler = (event, rowData) => {
          console.log(rowData._id);
          axios
-            .post('/states/state', {
+            .post('/cities/city', {
                _id: rowData._id
             })
-            .then(state => {
-               console.log(state);
-               this.EditData = { ...state.data.state };
+            .then(city => {
+               console.log(city);
+               this.EditData = { ...city.data.city };
                console.log(this.EditData[0]);
-               // this.props.history.push({
-               //    pathname: 'manage-shifts/edit-shift',
-               //    state: {
-               //       shift: this.EditData
-               //    }
-               // });
                this.setState({
                   openEdit: true
                });
@@ -46,28 +39,29 @@ export default class ManageStates extends Component {
       };
       this.handleClose = () => {
          axios
-            .get('/states/states')
+            .get('/cities/cities')
             .then(res => {
                //console.log(res.data.States[0].country_id);
-               for (let i = 0; i < res.data.States.length; i++) {
-                  res.data.States[i].id = i + 1;
+               for (let i = 0; i < res.data.Cities.length; i++) {
+                  res.data.Cities[i].id = i + 1;
                   axios
-                     .post('/countries/country', {
-                        _id: res.data.States[i].country_id
+                     .post('/states/state', {
+                        _id: res.data.Cities[i].state_id
                      })
-                     .then(country => {
-                        if (country.data.Country[0]) {
-                           console.log(country.data.Country[0].country_name);
-                           res.data.States[i].country_id =
-                              country.data.Country[0].country_name;
+                     .then(state => {
+                        console.log(state);
+                        if (state.data.state[0]) {
+                           console.log(state.data.state[0].state_name);
+                           res.data.Cities[i].state_id =
+                              state.data.state[0].state_name;
                            this.setState({
-                              data: [...res.data.States]
+                              data: [...res.data.Cities]
                            });
                         } else {
-                           res.data.States[i].country_id =
-                              'problem loading country';
+                           res.data.Cities[i].state_id =
+                              'problem loading state';
                            this.setState({
-                              data: [...res.data.States]
+                              data: [...res.data.Cities]
                            });
                         }
                      });
@@ -79,7 +73,7 @@ export default class ManageStates extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage State')) {
+      if (permissionCheck(this.props, 'Manage City')) {
          this.handleClose();
       }
    }
@@ -92,7 +86,7 @@ export default class ManageStates extends Component {
             flexDirection='column'
          >
             <Box fontSize='30px' mb={3}>
-               Manage State
+               Manage City
             </Box>
             <Box width='90%'>
                <Button
@@ -109,7 +103,7 @@ export default class ManageStates extends Component {
                      });
                   }}
                >
-                  Add State
+                  Add City
                </Button>
             </Box>
 
@@ -137,8 +131,8 @@ export default class ManageStates extends Component {
                editable={{
                   onRowDelete: oldData =>
                      axios
-                        .post('/states/delete-state', {
-                           state_name: oldData.state_name
+                        .post('/cities/delete-city', {
+                           _id: oldData._id
                         })
                         .then(res => {
                            console.log(res);
@@ -158,7 +152,7 @@ export default class ManageStates extends Component {
 
             <Dialog open={this.state.openAdd} maxWidth='lg' fullWidth>
                <DialogContent style={{ padding: '20px' }}>
-                  <AddState
+                  <AddCity
                      cancel={() => {
                         this.setState({
                            openAdd: false
@@ -170,8 +164,8 @@ export default class ManageStates extends Component {
             </Dialog>
             <Dialog open={this.state.openEdit} maxWidth='lg' fullWidth>
                <DialogContent style={{ padding: '20px' }}>
-                  <EditState
-                     state={this.EditData[0]}
+                  <EditCity
+                     city={this.EditData[0]}
                      cancel={() => {
                         this.setState({
                            openEdit: false

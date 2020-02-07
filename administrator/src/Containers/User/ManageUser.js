@@ -14,7 +14,8 @@ export default class ManageUser extends Component {
       this.state = {
          columns: [
             { title: 'ID', field: 'id' },
-            { title: 'Name', field: 'name' }
+            { title: 'Name', field: 'name' },
+            { title: 'Role', field: 'role' }
          ],
          data: [],
          openAdd: false,
@@ -42,6 +43,24 @@ export default class ManageUser extends Component {
             console.log(res.data.Users);
             for (let i = 0; i < res.data.Users.length; i++) {
                res.data.Users[i].id = i + 1;
+               axios
+                  .post('/roles/role', {
+                     _id: res.data.Users[i].role
+                  })
+                  .then(role => {
+                     if (role.data.Role[0]) {
+                        console.log('role: ', role.data.Role[0].role_name);
+                        res.data.Users[i].role = role.data.Role[0].role_name;
+                        this.setState({
+                           data: [...res.data.Users]
+                        });
+                     } else {
+                        res.data.Users[i].role = 'problem loading role';
+                        this.setState({
+                           data: [...res.data.Users]
+                        });
+                     }
+                  });
             }
             this.setState({
                data: [...res.data.Users]

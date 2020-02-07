@@ -72,27 +72,30 @@ router.post('/edit-shift', (req, res) => {
       errors.push('Use 20 or less characters for description');
    }
    if (shift_name) {
-      Shifts.findOne({ shift_name }).then(Shift => {
-         if (Shift._id != _id) {
-            errors.push('Shift Name must be unique');
+      Shifts.find({ shift_name }).then(Shift => {
+         if (typeof Shift[0] !== 'undefined') {
+            if (Shift[0]._id != _id) {
+               errors.push('Shift Name must be unique');
+            }
          }
-      });
-   }
-   if (errors.length > 0) {
-      res.send({ errors });
-   } else {
-      Shifts.findOneAndUpdate(
-         { _id },
-         {
-            shift_name,
-            description
-         }
-      ).then(Shift => {
-         if (!Shift) {
-            errors.push('Shift Not found');
+
+         if (errors.length > 0) {
             res.send({ errors });
          } else {
-            res.send({ Shift, errors });
+            Shifts.findOneAndUpdate(
+               { _id },
+               {
+                  shift_name,
+                  description
+               }
+            ).then(Shift => {
+               if (!Shift) {
+                  errors.push('Shift Not found');
+                  res.send({ errors });
+               } else {
+                  res.send({ Shift, errors });
+               }
+            });
          }
       });
    }

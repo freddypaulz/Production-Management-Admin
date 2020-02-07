@@ -71,27 +71,30 @@ router.post('/edit-country', (req, res) => {
       errors.push('Use 20 or less characters for description');
    }
    if (country_name) {
-      Countries.find({ country_name }, { _id: 1 }).then(res => {
-         if (res[0]._id != _id) {
-            errors.push('Country Name must be unique');
+      Countries.find({ country_name }, { _id: 1 }).then(country => {
+         if (typeof country[0] !== 'undefined') {
+            if (country[0]._id != _id) {
+               errors.push('Country Name must be unique');
+            }
          }
-      });
-   }
-   if (errors.length > 0) {
-      res.send({ errors });
-   } else {
-      Countries.findOneAndUpdate(
-         { _id },
-         {
-            country_name,
-            description
-         }
-      ).then(Country => {
-         if (!Country) {
-            errors.push('Country Not found');
+
+         if (errors.length > 0) {
             res.send({ errors });
          } else {
-            res.send({ Country, errors });
+            Countries.findOneAndUpdate(
+               { _id },
+               {
+                  country_name,
+                  description
+               }
+            ).then(Country => {
+               if (!Country) {
+                  errors.push('Country Not found');
+                  res.send({ errors });
+               } else {
+                  res.send({ Country, errors });
+               }
+            });
          }
       });
    }

@@ -5,6 +5,7 @@ import ManageRole from '../Containers/Roles/ManageRole';
 import ManageShift from '../Containers/Shift/ManageShifts';
 import ManageStates from '../Containers/States/ManageStates';
 import ManageCountries from '../Containers/Countries/ManageCountries';
+import ManageCities from '../Containers/Cities/ManageCities';
 
 import { Route } from 'react-router-dom';
 import { Box } from '@material-ui/core';
@@ -29,6 +30,11 @@ export const Routes = () => {
             exact
             path='/management/manage-states'
             component={ManageStates}
+         />
+         <Route
+            exact
+            path='/management/manage-cities'
+            component={ManageCities}
          />
       </Box>
    );

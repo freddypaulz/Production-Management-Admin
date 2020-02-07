@@ -31,7 +31,7 @@ export default class EditUser extends Component {
       };
       this.onEditHandler = () => {
          axios
-            .post('/users/update-user', {
+            .post('/users/edit-user', {
                name: this.state.user_name,
                password: this.state.password,
                password2: this.state.password2,

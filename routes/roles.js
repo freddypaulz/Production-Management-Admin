@@ -91,31 +91,30 @@ router.post('/edit-role', (req, res) => {
       errors.push('Use 20 or less characters for Name');
    }
    if (role_name) {
-      Roles.findOne({ role_name }).then(Role => {
-         // if (Role) {
-         //    errors.push('Role Name must be unique');
-         // }
-         if (Role._id != _id) {
-            errors.push('Role Name must be unique');
+      Roles.find({ role_name }).then(Role => {
+         if (typeof Role[0] !== 'undefined') {
+            if (Role[0]._id != _id) {
+               errors.push('Role Name must be unique');
+            }
          }
-      });
-   }
-   if (errors.length > 0) {
-      res.send({ errors });
-   } else {
-      Roles.findOneAndUpdate(
-         { _id },
-         {
-            role_name,
-            description,
-            permissions
-         }
-      ).then(Role => {
-         if (!Role) {
-            errors.push('Role Not found');
+         if (errors.length > 0) {
             res.send({ errors });
          } else {
-            res.send({ Role, errors });
+            Roles.findOneAndUpdate(
+               { _id },
+               {
+                  role_name,
+                  description,
+                  permissions
+               }
+            ).then(Role => {
+               if (!Role) {
+                  errors.push('Role Not found');
+                  res.send({ errors });
+               } else {
+                  res.send({ Role, errors });
+               }
+            });
          }
       });
    }

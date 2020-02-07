@@ -23,8 +23,7 @@ export default class AddUser extends Component {
          description: '',
          errors: [],
          success: false,
-         states: [],
-         Countries: []
+         states: []
       };
       this.onAddHandler = () => {
          axios
@@ -49,10 +48,10 @@ export default class AddUser extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage City')) {
-         axios.get('/countries/countries').then(res => {
+      if (permissionCheck(this.props, 'Manage State')) {
+         axios.get('/states/states').then(res => {
             this.setState({
-               Countries: [...res.data.Countries]
+               states: [...res.data.States]
             });
          });
       }
@@ -81,12 +80,12 @@ export default class AddUser extends Component {
                   <TextField
                      fullWidth
                      required
-                     value={this.state.state_name}
+                     value={this.state.city_name}
                      variant='outlined'
-                     label='State Name'
+                     label='City Name'
                      type='text'
                      onChange={event => {
-                        this.setState({ state_name: event.target.value });
+                        this.setState({ city_name: event.target.value });
                      }}
                   ></TextField>
                </Box>
@@ -98,24 +97,24 @@ export default class AddUser extends Component {
                         paddingRight: '2px'
                      }}
                   >
-                     Select Country
+                     Select State
                   </InputLabel>
                   <Select
                      style={styles.box_field}
                      required
                      //variant='outlined'
-                     value={this.state.country_id}
+                     value={this.state.state_id}
                      onChange={event => {
                         console.log(event.target.value);
                         this.setState({
-                           country_id: event.target.value
+                           state_id: event.target.value
                         });
                      }}
                   >
-                     {this.state.Countries.map((country, index) => {
+                     {this.state.states.map((state, index) => {
                         return (
-                           <MenuItem selected key={index} value={country._id}>
-                              {country.country_name}
+                           <MenuItem selected key={index} value={state._id}>
+                              {state.state_name}
                            </MenuItem>
                         );
                      })}

@@ -18,7 +18,7 @@ router.post('/login', (req, res, next) => {
 });
 
 router.get('/users', (req, res, next) => {
-   Users.find({}, { name: 1, _id: 0 }).then(user => {
+   Users.find({}).then(user => {
       res.send({ Users: user });
    });
 });
@@ -88,23 +88,22 @@ router.post('/add-user', (req, res) => {
       });
    }
 });
-router.post('/update-user', (req, res) => {
+router.post('/edit-user', (req, res) => {
    let { name, password, password2, role } = req.body;
    let EncryptPass = '';
 
    let errors = [];
-   if (!name || !password || !password2 || !role) {
+   if (!name || !role) {
       errors.push('Enter all required fields');
    }
-
-   if (password.length < 8) {
-      errors.push('Password must be above 7 characters');
-      console.log(password2, password);
-   }
-   if (password !== password2) {
-      errors.push('Passwords does not match');
-   } else {
-      //console.log(EncryptPass);
+   if (password || password2) {
+      if (password.length < 8) {
+         errors.push('Password must be above 7 characters');
+         console.log(password2, password);
+      }
+      if (password !== password2) {
+         errors.push('Passwords does not match');
+      }
    }
    if (errors.length > 0) {
       res.send({
