@@ -18,8 +18,8 @@ export default class AddUser extends Component {
    constructor(props) {
       super();
       this.state = {
-         city_name: '',
-         state_id: '',
+         state_name: '',
+         country_id: '',
          description: '',
          errors: [],
          success: false,
@@ -28,9 +28,9 @@ export default class AddUser extends Component {
       };
       this.onAddHandler = () => {
          axios
-            .post('/cities/add-city', {
-               city_name: this.state.city_name,
-               state_id: this.state.state_id,
+            .post('/states/add-state', {
+               state_name: this.state.state_name,
+               country_id: this.state.country_id,
                description: this.state.description
             })
             .then(res => {
@@ -49,7 +49,7 @@ export default class AddUser extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage City')) {
+      if (permissionCheck(this.props, 'Manage State')) {
          axios.get('/countries/countries').then(res => {
             this.setState({
                Countries: [...res.data.Countries]
@@ -61,7 +61,7 @@ export default class AddUser extends Component {
       return (
          <Box style={styles.box}>
             <Box fontSize='30px' mb={3}>
-               Add City
+               Add State
             </Box>
             {this.state.errors.length > 0 ? (
                this.state.errors.map((error, index) => {
