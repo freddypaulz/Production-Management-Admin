@@ -6,6 +6,7 @@ import ManageShift from '../Containers/Shift/ManageShifts';
 import ManageStates from '../Containers/States/ManageStates';
 import ManageCountries from '../Containers/Countries/ManageCountries';
 import ManageCities from '../Containers/Cities/ManageCities';
+import ManageMeasuringUnits from '../Containers/MeasuringUnits/ManageMeasuringUnits';
 
 import { Route } from 'react-router-dom';
 import { Box } from '@material-ui/core';
@@ -35,6 +36,11 @@ export const Routes = () => {
             exact
             path='/management/manage-cities'
             component={ManageCities}
+         />
+         <Route
+            exact
+            path='/management/manage-measuring-units'
+            component={ManageMeasuringUnits}
          />
       </Box>
    );

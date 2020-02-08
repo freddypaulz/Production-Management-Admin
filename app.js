@@ -42,6 +42,7 @@ app.use('/shifts', require('./routes/shifts'));
 app.use('/countries', require('./routes/countries'));
 app.use('/states', require('./routes/states'));
 app.use('/cities', require('./routes/cities'));
+app.use('/measuring-units', require('./routes/measuringUnit'));
 
 app.listen(5000, () => {
    console.log(`App listening on port ${PORT}!`);
