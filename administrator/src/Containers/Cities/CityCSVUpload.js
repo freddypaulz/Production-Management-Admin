@@ -16,26 +16,25 @@ export default class CityCSVUpload extends Component {
             axios
                .post('/states/state-name', { state_name: city[1] })
                .then(State => {
-                  city[1] = State.data.State[0]._id;
                   console.log(city);
-                  // console.log(State);
-                  // axios
-                  //    .post('/cities/add-city', {
-                  //       city_name: city[0],
-                  //       state_id: State.data.State[0]._id,
-                  //       description: city[2]
-                  //    })
-                  //    .then(res => {
-                  //       console.log(res);
-                  //       if (res.data.errors.length > 0) {
-                  //          console.log(res.data.errors);
-                  //          this.setState({
-                  //             errors: [...res.data.errors],
-                  //             success: false
-                  //          });
-                  //       }
-                  //    })
-                  //    .catch(err => console.log(err));
+                  console.log(State);
+                  axios
+                     .post('/cities/add-city', {
+                        city_name: city[0],
+                        state_id: State.data.State[0]._id,
+                        description: city[2]
+                     })
+                     .then(res => {
+                        console.log(res);
+                        if (res.data.errors.length > 0) {
+                           console.log(res.data.errors);
+                           this.setState({
+                              errors: [...res.data.errors],
+                              success: false
+                           });
+                        }
+                     })
+                     .catch(err => console.log(err));
                })
                .catch(err => {
                   console.log(err);
