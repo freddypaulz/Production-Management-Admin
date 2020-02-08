@@ -5,6 +5,7 @@ import Dialog from '@material-ui/core/Dialog';
 import axios from 'axios';
 import AddCity from './AddCity';
 import EditCity from './EditCity';
+import CityCSVUpload from './CityCSVUpload';
 import permissionCheck from '../../Components/Auth/permissionCheck';
 
 export default class ManageCities extends Component {
@@ -20,7 +21,8 @@ export default class ManageCities extends Component {
          ],
          data: [],
          openAdd: false,
-         openEdit: false
+         openEdit: false,
+         openUploadCSV: false
       };
       this.OnEditHandler = (event, rowData) => {
          console.log(rowData._id);
@@ -88,7 +90,24 @@ export default class ManageCities extends Component {
             <Box fontSize='30px' mb={3}>
                Manage City
             </Box>
-            <Box width='90%'>
+            <Box width='90%' display='flex' flexDirection='row'>
+               <Button
+                  variant='contained'
+                  color='primary'
+                  style={{
+                     marginBottom: '20px',
+                     display: 'flex',
+                     marginRight: '10px'
+                  }}
+                  size='large'
+                  onClick={() => {
+                     this.setState({
+                        openAdd: true
+                     });
+                  }}
+               >
+                  Add City
+               </Button>
                <Button
                   variant='contained'
                   color='primary'
@@ -99,11 +118,11 @@ export default class ManageCities extends Component {
                   size='large'
                   onClick={() => {
                      this.setState({
-                        openAdd: true
+                        openUploadCSV: true
                      });
                   }}
                >
-                  Add City
+                  Upload CSV
                </Button>
             </Box>
 
@@ -169,6 +188,18 @@ export default class ManageCities extends Component {
                      cancel={() => {
                         this.setState({
                            openEdit: false
+                        });
+                        this.handleClose();
+                     }}
+                  />
+               </DialogContent>
+            </Dialog>
+            <Dialog open={this.state.openUploadCSV} maxWidth='sm' fullWidth>
+               <DialogContent style={{ padding: '20px' }}>
+                  <CityCSVUpload
+                     cancel={() => {
+                        this.setState({
+                           openUploadCSV: false
                         });
                         this.handleClose();
                      }}

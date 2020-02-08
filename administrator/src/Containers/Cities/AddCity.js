@@ -6,7 +6,8 @@ import {
    FormControl,
    InputLabel,
    Select,
-   MenuItem
+   MenuItem,
+   Divider
 } from '@material-ui/core';
 import { PaperBoard } from '../../Components/PaperBoard/PaperBoard';
 import axios from 'axios';
@@ -23,7 +24,8 @@ export default class AddUser extends Component {
          description: '',
          errors: [],
          success: false,
-         states: []
+         states: [],
+         bulk_upload: []
       };
       this.onAddHandler = () => {
          axios
@@ -41,14 +43,14 @@ export default class AddUser extends Component {
                      success: false
                   });
                } else {
-                  this.props.cancel();
+                  //this.props.cancel();
                }
             })
             .catch(err => console.log(err));
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Add City')) {
+      if (permissionCheck(this.props, 'Manage City')) {
          axios.get('/states/states').then(res => {
             this.setState({
                states: [...res.data.States]
@@ -134,6 +136,8 @@ export default class AddUser extends Component {
                      }}
                   ></TextField>
                </Box>
+               <Divider />
+               <Box></Box>
             </PaperBoard>
             <Box
                display=' flex'
