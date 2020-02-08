@@ -3,7 +3,7 @@ import CSVReader from 'react-csv-reader';
 import { Box, Button } from '@material-ui/core';
 import axios from 'axios';
 
-export default class CityCSVUpload extends Component {
+export default class StateCSVUpload extends Component {
    constructor(props) {
       super();
       this.state = {
@@ -11,18 +11,17 @@ export default class CityCSVUpload extends Component {
       };
       this.onBulkAddHandler = () => {
          let i = 0;
-         this.state.bulk_upload.map(city => {
-            console.log(city[1]);
+         this.state.bulk_upload.map(state => {
+            console.log(state[1]);
             axios
-               .post('/states/state-name', { state_name: city[1] })
-               .then(State => {
-                  console.log(city);
-                  console.log(State);
+               .post('/countries/country-name', { country_name: state[1] })
+               .then(Country => {
+                  console.log(Country);
                   axios
-                     .post('/cities/add-city', {
-                        city_name: city[0],
-                        state_id: State.data.State[0]._id,
-                        description: city[2]
+                     .post('/states/add-state', {
+                        state_name: state[0],
+                        country_id: Country.data.Country[0]._id,
+                        description: state[2]
                      })
                      .then(res => {
                         console.log(res);
@@ -49,7 +48,7 @@ export default class CityCSVUpload extends Component {
       return (
          <Box display='flex' flexDirection='column'>
             <Box fontSize='30px' fontWeight='bold'>
-               City CSV upload
+               State CSV upload
             </Box>
             <Box display='flex'>
                <Box display='flex' flex='2' alignItems='center'>

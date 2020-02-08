@@ -3,44 +3,34 @@ import CSVReader from 'react-csv-reader';
 import { Box, Button } from '@material-ui/core';
 import axios from 'axios';
 
-export default class CityCSVUpload extends Component {
+export default class StateCSVUpload extends Component {
    constructor(props) {
       super();
       this.state = {
          bulk_upload: []
       };
       this.onBulkAddHandler = () => {
-         let i = 0;
-         this.state.bulk_upload.map(city => {
-            console.log(city[1]);
+         this.state.bulk_upload.map(state => {
+            console.log(state[0]);
             axios
-               .post('/states/state-name', { state_name: city[1] })
-               .then(State => {
-                  console.log(city);
-                  console.log(State);
-                  axios
-                     .post('/cities/add-city', {
-                        city_name: city[0],
-                        state_id: State.data.State[0]._id,
-                        description: city[2]
-                     })
-                     .then(res => {
-                        console.log(res);
-                        if (res.data.errors.length > 0) {
-                           console.log(res.data.errors);
-                           this.setState({
-                              errors: [...res.data.errors],
-                              success: false
-                           });
-                        }
-                     })
-                     .catch(err => console.log(err));
+               .post('/countries/add-country', {
+                  country_name: state[0],
+                  description: state[1]
+               })
+               .then(res => {
+                  console.log(res);
+                  if (res.data.errors.length > 0) {
+                     console.log(res.data.errors);
+                     this.setState({
+                        errors: [...res.data.errors],
+                        success: false
+                     });
+                  }
                })
                .catch(err => {
                   console.log(err);
-                  this.props.cancel();
                });
-            i++;
+            this.props.cancel();
             return null;
          });
       };
@@ -49,7 +39,7 @@ export default class CityCSVUpload extends Component {
       return (
          <Box display='flex' flexDirection='column'>
             <Box fontSize='30px' fontWeight='bold'>
-               City CSV upload
+               Country CSV upload
             </Box>
             <Box display='flex'>
                <Box display='flex' flex='2' alignItems='center'>
@@ -59,7 +49,6 @@ export default class CityCSVUpload extends Component {
                         let max = data.length - 2;
                         console.log(max);
                         data = data.splice(1, max);
-                        data.push('EOF');
                         this.setState({
                            bulk_upload: [...data]
                         });

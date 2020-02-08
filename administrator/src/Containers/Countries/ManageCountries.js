@@ -6,6 +6,7 @@ import axios from 'axios';
 import permissionCheck from '../../Components/Auth/permissionCheck';
 import AddCountry from './AddCountry';
 import EditCountry from './EditCountry';
+import CountryCSVUpload from './CountryCSVUpload';
 export default class ManageUser extends Component {
    constructor(props) {
       super();
@@ -18,7 +19,8 @@ export default class ManageUser extends Component {
          ],
          data: [],
          openAdd: false,
-         openEdit: false
+         openEdit: false,
+         openUploadCSV: false
       };
       this.OnEditHandler = (event, rowData) => {
          axios
@@ -42,7 +44,7 @@ export default class ManageUser extends Component {
       };
       this.handleClose = () => {
          axios.get('/countries/countries').then(res => {
-            console.log(res.data);
+            console.log(res.data.Countries);
             for (let i = 0; i < res.data.Countries.length; i++) {
                res.data.Countries[i].id = i + 1;
             }
@@ -68,7 +70,24 @@ export default class ManageUser extends Component {
             <Box fontSize='30px' mb={3}>
                Manage Countries
             </Box>
-            <Box width='90%'>
+            <Box width='90%' display='flex' flexDirection='row'>
+               <Button
+                  variant='contained'
+                  color='primary'
+                  style={{
+                     marginBottom: '20px',
+                     display: 'flex',
+                     marginRight: '10px'
+                  }}
+                  size='large'
+                  onClick={() => {
+                     this.setState({
+                        openAdd: true
+                     });
+                  }}
+               >
+                  Add Countries
+               </Button>
                <Button
                   variant='contained'
                   color='primary'
@@ -79,11 +98,11 @@ export default class ManageUser extends Component {
                   size='large'
                   onClick={() => {
                      this.setState({
-                        openAdd: true
+                        openUploadCSV: true
                      });
                   }}
                >
-                  Add Countries
+                  Upload CSV
                </Button>
             </Box>
 
@@ -148,6 +167,18 @@ export default class ManageUser extends Component {
                      cancel={() => {
                         this.setState({
                            openEdit: false
+                        });
+                        this.handleClose();
+                     }}
+                  />
+               </DialogContent>
+            </Dialog>
+            <Dialog open={this.state.openUploadCSV} maxWidth='sm' fullWidth>
+               <DialogContent style={{ padding: '20px' }}>
+                  <CountryCSVUpload
+                     cancel={() => {
+                        this.setState({
+                           openUploadCSV: false
                         });
                         this.handleClose();
                      }}

@@ -5,6 +5,7 @@ import Dialog from '@material-ui/core/Dialog';
 import axios from 'axios';
 import AddState from './AddState';
 import EditState from './EditState';
+import StateCSVUpload from './StateCSVUpload';
 import permissionCheck from '../../Components/Auth/permissionCheck';
 
 export default class ManageStates extends Component {
@@ -21,6 +22,7 @@ export default class ManageStates extends Component {
          data: [],
          openAdd: false,
          openEdit: false,
+         openUploadCSV: false,
          samp: 'hello'
       };
       this.OnEditHandler = (event, rowData) => {
@@ -33,12 +35,6 @@ export default class ManageStates extends Component {
                console.log(state);
                this.EditData = { ...state.data.state };
                console.log(this.EditData[0]);
-               // this.props.history.push({
-               //    pathname: 'manage-shifts/edit-shift',
-               //    state: {
-               //       shift: this.EditData
-               //    }
-               // });
                this.setState({
                   openEdit: true
                });
@@ -94,7 +90,24 @@ export default class ManageStates extends Component {
             <Box fontSize='30px' mb={3}>
                Manage State
             </Box>
-            <Box width='90%'>
+            <Box width='90%' display='flex' flexDirection='row'>
+               <Button
+                  variant='contained'
+                  color='primary'
+                  style={{
+                     marginBottom: '20px',
+                     display: 'flex',
+                     marginRight: '10px'
+                  }}
+                  size='large'
+                  onClick={() => {
+                     this.setState({
+                        openAdd: true
+                     });
+                  }}
+               >
+                  Add State
+               </Button>
                <Button
                   variant='contained'
                   color='primary'
@@ -105,11 +118,11 @@ export default class ManageStates extends Component {
                   size='large'
                   onClick={() => {
                      this.setState({
-                        openAdd: true
+                        openUploadCSV: true
                      });
                   }}
                >
-                  Add State
+                  Upload CSV
                </Button>
             </Box>
 
@@ -175,6 +188,18 @@ export default class ManageStates extends Component {
                      cancel={() => {
                         this.setState({
                            openEdit: false
+                        });
+                        this.handleClose();
+                     }}
+                  />
+               </DialogContent>
+            </Dialog>
+            <Dialog open={this.state.openUploadCSV} maxWidth='sm' fullWidth>
+               <DialogContent style={{ padding: '20px' }}>
+                  <StateCSVUpload
+                     cancel={() => {
+                        this.setState({
+                           openUploadCSV: false
                         });
                         this.handleClose();
                      }}
