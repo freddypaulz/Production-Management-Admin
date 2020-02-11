@@ -4,17 +4,17 @@ import { Box, Button, DialogContent } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import axios from 'axios';
 import permissionCheck from '../../Components/Auth/permissionCheck';
-import AddCountry from './AddCountry';
-import EditCountry from './EditCountry';
-import CountryCSVUpload from './CountryCSVUpload';
-export default class ManageCountries extends Component {
+import AddMaterialType from './AddMaterialType';
+import EditMaterialType from './EditMaterialType';
+// import CountryCSVUpload from './CountryCSVUpload';
+export default class ManageMaterialTypes extends Component {
    constructor(props) {
       super();
       this.EditData = {};
       this.state = {
          columns: [
             { title: 'ID', field: 'id' },
-            { title: 'Country Name', field: 'country_name' },
+            { title: 'Material Type Name', field: 'material_type_name' },
             { title: 'Description', field: 'description' }
          ],
          data: [],
@@ -24,38 +24,31 @@ export default class ManageCountries extends Component {
       };
       this.OnEditHandler = (event, rowData) => {
          axios
-            .post('/countries/country', {
+            .post('/material-types/material-type', {
                _id: rowData._id
             })
-            .then(country => {
-               //console.log(country);
-               this.EditData = { ...country.data.Country[0] };
+            .then(res => {
+               this.EditData = { ...res.data.MaterialType[0] };
                console.log(this.EditData);
-               // this.props.history.push({
-               //    pathname: 'manage-countries/edit-country',
-               //    state: {
-               //       country: this.EditData
-               //    }
-               // });
                this.setState({
                   openEdit: true
                });
             });
       };
       this.handleClose = () => {
-         axios.get('/countries/countries').then(res => {
-            console.log(res.data.Countries);
-            for (let i = 0; i < res.data.Countries.length; i++) {
-               res.data.Countries[i].id = i + 1;
+         axios.get('/material-types/material-types').then(res => {
+            console.log(res.data.MaterialTypes);
+            for (let i = 0; i < res.data.MaterialTypes.length; i++) {
+               res.data.MaterialTypes[i].id = i + 1;
             }
             this.setState({
-               data: [...res.data.Countries]
+               data: [...res.data.MaterialTypes]
             });
          });
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Country')) {
+      if (permissionCheck(this.props, 'Manage Material Type')) {
          this.handleClose();
       }
    }
@@ -68,7 +61,7 @@ export default class ManageCountries extends Component {
             flexDirection='column'
          >
             <Box fontSize='30px' mb={3}>
-               Manage Countries
+               Manage Material Types
             </Box>
             <Box width='90%' display='flex' flexDirection='row'>
                <Button
@@ -86,9 +79,9 @@ export default class ManageCountries extends Component {
                      });
                   }}
                >
-                  Add Countries
+                  Add
                </Button>
-               <Button
+               {/* <Button
                   variant='contained'
                   color='primary'
                   style={{
@@ -103,7 +96,7 @@ export default class ManageCountries extends Component {
                   }}
                >
                   Upload CSV
-               </Button>
+               </Button> */}
             </Box>
 
             <MaterialTable
@@ -130,12 +123,12 @@ export default class ManageCountries extends Component {
                editable={{
                   onRowDelete: oldData =>
                      axios
-                        .post('/countries/delete-country', {
-                           country_name: oldData.country_name
+                        .post('/material-types/delete-material-type', {
+                           material_type_name: oldData.material_type_name
                         })
-                        .then(Country => {
-                           console.log(Country);
-                           if (Country) {
+                        .then(MaterialType => {
+                           console.log(MaterialType);
+                           if (MaterialType) {
                               this.setState(prevState => {
                                  const data = [...prevState.data];
                                  data.splice(data.indexOf(oldData), 1);
@@ -150,7 +143,7 @@ export default class ManageCountries extends Component {
             />
             <Dialog open={this.state.openAdd} maxWidth='lg' fullWidth>
                <DialogContent style={{ padding: '20px' }}>
-                  <AddCountry
+                  <AddMaterialType
                      cancel={() => {
                         this.setState({
                            openAdd: false
@@ -162,8 +155,8 @@ export default class ManageCountries extends Component {
             </Dialog>
             <Dialog open={this.state.openEdit} maxWidth='lg' fullWidth>
                <DialogContent style={{ padding: '20px' }}>
-                  <EditCountry
-                     country={this.EditData}
+                  <EditMaterialType
+                     MaterialType={this.EditData}
                      cancel={() => {
                         this.setState({
                            openEdit: false
@@ -173,7 +166,7 @@ export default class ManageCountries extends Component {
                   />
                </DialogContent>
             </Dialog>
-            <Dialog open={this.state.openUploadCSV} maxWidth='sm' fullWidth>
+            {/* <Dialog open={this.state.openUploadCSV} maxWidth='sm' fullWidth>
                <DialogContent style={{ padding: '20px' }}>
                   <CountryCSVUpload
                      cancel={() => {
@@ -184,7 +177,7 @@ export default class ManageCountries extends Component {
                      }}
                   />
                </DialogContent>
-            </Dialog>
+            </Dialog> */}
          </Box>
       );
    }

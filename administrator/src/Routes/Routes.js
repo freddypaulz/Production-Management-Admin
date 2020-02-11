@@ -7,6 +7,8 @@ import ManageStates from '../Containers/States/ManageStates';
 import ManageCountries from '../Containers/Countries/ManageCountries';
 import ManageCities from '../Containers/Cities/ManageCities';
 import ManageMeasuringUnits from '../Containers/MeasuringUnits/ManageMeasuringUnits';
+import ManageMaterialTypes from '../Containers/MaterialTypes/ManageMaterialTypes';
+import ManageRawMaterials from '../Containers/RawMaterials/ManageRawMaterials';
 
 import { Route } from 'react-router-dom';
 import { Box } from '@material-ui/core';
@@ -41,6 +43,16 @@ export const Routes = () => {
             exact
             path='/management/manage-measuring-units'
             component={ManageMeasuringUnits}
+         />
+         <Route
+            exact
+            path='/management/manage-material-types'
+            component={ManageMaterialTypes}
+         />
+         <Route
+            exact
+            path='/management/manage-raw-materials'
+            component={ManageRawMaterials}
          />
       </Box>
    );

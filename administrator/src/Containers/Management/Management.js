@@ -19,7 +19,7 @@ const Management = props => {
       { Name: 'Manage City', Path: 'manage-cities' },
       { Name: 'Manage Work Location', Path: 'manage-work-location' },
       { Name: 'Manage Measuring Unit', Path: 'manage-measuring-units' },
-      { Name: 'Manage Material Type', Path: 'manage-material-type' },
+      { Name: 'Manage Material Type', Path: 'manage-material-types' },
       { Name: 'Manage Department', Path: 'manage-department' },
       { Name: 'Manage Production Unit', Path: 'manage-production-unit' }
    ];

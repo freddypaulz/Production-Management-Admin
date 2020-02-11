@@ -43,6 +43,8 @@ app.use('/countries', require('./routes/countries'));
 app.use('/states', require('./routes/states'));
 app.use('/cities', require('./routes/cities'));
 app.use('/measuring-units', require('./routes/measuringUnit'));
+app.use('/material-types', require('./routes/materialTypes'));
+app.use('/raw-materials', require('./routes/rawMaterials'));
 
 app.listen(5000, () => {
    console.log(`App listening on port ${PORT}!`);

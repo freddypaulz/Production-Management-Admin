@@ -1,12 +1,20 @@
 const mongoose = require('mongoose');
 
-const CitySchema = mongoose.Schema({
-   city_name: {
+const RawMaterialSchema = mongoose.Schema({
+   raw_material_name: {
       type: String,
       required: true,
       maxlength: [20, 'cannot exceed 20 characters']
    },
-   state_id: {
+   raw_material_code: {
+      type: String,
+      required: true
+   },
+   raw_material_type: {
+      type: String,
+      required: true
+   },
+   raw_material_measuring_unit: {
       type: String,
       required: true
    },
@@ -20,6 +28,6 @@ const CitySchema = mongoose.Schema({
    }
 });
 
-const City = mongoose.model('City', CitySchema);
+const RawMaterials = mongoose.model('RawMaterials', RawMaterialSchema);
 
-module.exports = City;
+module.exports = RawMaterials;
