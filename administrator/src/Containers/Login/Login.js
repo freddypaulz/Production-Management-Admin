@@ -19,6 +19,13 @@ const styles = {
 export default class Login extends Component {
    componentDidMount() {
       auth.logout();
+      if (this.props.history.location.state) {
+         if (this.props.history.location.state.Errors[0]) {
+            this.setState({
+               errors: this.props.history.location.state.Errors
+            });
+         }
+      }
    }
    constructor(props) {
       super(props);
@@ -29,6 +36,7 @@ export default class Login extends Component {
          errors: []
       };
    }
+
    render() {
       return (
          <Box

@@ -6,7 +6,7 @@ import auth from '../../Components/Auth/auth';
 
 const Management = props => {
    const dashboardList = [
-      { Name: 'Manage Employee', Path: 'manage-employee' },
+      { Name: 'Manage Employee', Path: 'manage-employees' },
       { Name: 'Manage User', Path: 'manage-users' },
       { Name: 'Manage Role', Path: 'manage-roles' },
       { Name: 'Manage Shift', Path: 'manage-shifts' },
@@ -17,11 +17,11 @@ const Management = props => {
       { Name: 'Manage Country', Path: 'manage-countries' },
       { Name: 'Manage State', Path: 'manage-states' },
       { Name: 'Manage City', Path: 'manage-cities' },
-      { Name: 'Manage Work Location', Path: 'manage-work-location' },
+      { Name: 'Manage Work Locations', Path: 'manage-work-locations' },
       { Name: 'Manage Measuring Unit', Path: 'manage-measuring-units' },
       { Name: 'Manage Material Type', Path: 'manage-material-types' },
-      { Name: 'Manage Department', Path: 'manage-department' },
-      { Name: 'Manage Production Unit', Path: 'manage-production-unit' }
+      { Name: 'Manage Department', Path: 'manage-departments' },
+      { Name: 'Manage Production Unit', Path: 'manage-production-units' }
    ];
    return (
       <Box display='flex'>

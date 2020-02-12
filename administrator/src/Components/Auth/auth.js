@@ -14,9 +14,7 @@ class auth extends React.Component {
    };
 
    isAuthenticated() {
-      // console.log(sessionStorage.getItem('authenticated'));
       return sessionStorage.getItem('authenticated');
-      //return true;
    }
 }
 

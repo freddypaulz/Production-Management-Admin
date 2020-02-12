@@ -15,7 +15,8 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
                      to={{
                         pathname: '/',
                         state: {
-                           from: props.location
+                           from: props.location,
+                           Errors: ['Please Login to get access']
                         }
                      }}
                   />
