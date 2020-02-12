@@ -11,6 +11,8 @@ import ManageMaterialTypes from '../Containers/MaterialTypes/ManageMaterialTypes
 import ManageRawMaterials from '../Containers/RawMaterials/ManageRawMaterials';
 import ManageWorkLocations from '../Containers/WorkLocations/ManageWorkLocations';
 import ManageProductionUnits from '../Containers/ProductionUnits/ManageProductionUnits';
+import ManageProducts from '../Containers/Products/ManageProducts';
+import ManageDepartments from '../Containers/Departments/ManageDepartments';
 
 import { Route } from 'react-router-dom';
 import { Box } from '@material-ui/core';
@@ -63,8 +65,18 @@ export const Routes = () => {
          />
          <Route
             exact
+            path='/management/manage-products'
+            component={ManageProducts}
+         />
+         <Route
+            exact
             path='/management/manage-production-units'
             component={ManageProductionUnits}
+         />
+         <Route
+            exact
+            path='/management/manage-departments'
+            component={ManageDepartments}
          />
       </Box>
    );

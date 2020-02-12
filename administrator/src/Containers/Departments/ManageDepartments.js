@@ -4,31 +4,29 @@ import { Box, Button, DialogContent } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import axios from 'axios';
 import permissionCheck from '../../Components/Auth/permissionCheck';
-import AddMeasuringUnit from './AddMeasuringUnit';
-import EditMeasuringUnit from './EditMeasuringUnit';
-export default class ManageMeasuringUnits extends Component {
+import AddDepartment from './AddDepartment';
+import EditDepartment from './EditDepartment';
+export default class ManageDepartments extends Component {
    constructor(props) {
       super();
       this.EditData = {};
       this.state = {
          columns: [
             { title: 'ID', field: 'id' },
-            { title: 'Measuring Unit Name', field: 'measuring_unit_name' },
+            { title: 'Department Name', field: 'department_name' },
             { title: 'Description', field: 'description' }
          ],
          data: [],
          openAdd: false,
-         openEdit: false,
-         openUploadCSV: false
+         openEdit: false
       };
       this.OnEditHandler = (event, rowData) => {
          axios
-            .post('/measuring-units/measuring-unit', {
+            .post('/departments/department', {
                _id: rowData._id
             })
-            .then(res => {
-               console.log(res);
-               this.EditData = { ...res.data.MeasuringUnit[0] };
+            .then(Department => {
+               this.EditData = { ...Department.data.Department[0] };
                console.log(this.EditData);
                this.setState({
                   openEdit: true
@@ -36,19 +34,19 @@ export default class ManageMeasuringUnits extends Component {
             });
       };
       this.handleClose = () => {
-         axios.get('/measuring-units/measuring-units').then(res => {
-            console.log(res.data.MeasuringUnits);
-            for (let i = 0; i < res.data.MeasuringUnits.length; i++) {
-               res.data.MeasuringUnits[i].id = i + 1;
+         axios.get('/departments/departments').then(res => {
+            console.log(res.data.Departments);
+            for (let i = 0; i < res.data.Departments.length; i++) {
+               res.data.Departments[i].id = i + 1;
             }
             this.setState({
-               data: [...res.data.MeasuringUnits]
+               data: [...res.data.Departments]
             });
          });
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Measuring Unit')) {
+      if (permissionCheck(this.props, 'Manage Department')) {
          this.handleClose();
       }
    }
@@ -61,7 +59,7 @@ export default class ManageMeasuringUnits extends Component {
             flexDirection='column'
          >
             <Box fontSize='30px' mb={3}>
-               Manage Measuring Units
+               Manage Departments
             </Box>
             <Box width='90%' display='flex' flexDirection='row'>
                <Button
@@ -98,7 +96,7 @@ export default class ManageMeasuringUnits extends Component {
                actions={[
                   {
                      icon: 'edit',
-                     tooltip: 'Edit User',
+                     tooltip: 'Edit',
                      onClick: (event, rowData) => {
                         this.OnEditHandler(event, rowData);
                      }
@@ -107,12 +105,12 @@ export default class ManageMeasuringUnits extends Component {
                editable={{
                   onRowDelete: oldData =>
                      axios
-                        .post('/measuring-units/delete-measuring-unit', {
-                           measuring_unit_name: oldData.measuring_unit_name
+                        .post('/departments/delete-department', {
+                           department_name: oldData.department_name
                         })
-                        .then(res => {
-                           console.log(res);
-                           if (res) {
+                        .then(Department => {
+                           console.log(Department);
+                           if (Department) {
                               this.setState(prevState => {
                                  const data = [...prevState.data];
                                  data.splice(data.indexOf(oldData), 1);
@@ -127,7 +125,7 @@ export default class ManageMeasuringUnits extends Component {
             />
             <Dialog open={this.state.openAdd} maxWidth='lg' fullWidth>
                <DialogContent style={{ padding: '20px' }}>
-                  <AddMeasuringUnit
+                  <AddDepartment
                      cancel={() => {
                         this.setState({
                            openAdd: false
@@ -139,8 +137,9 @@ export default class ManageMeasuringUnits extends Component {
             </Dialog>
             <Dialog open={this.state.openEdit} maxWidth='lg' fullWidth>
                <DialogContent style={{ padding: '20px' }}>
-                  <EditMeasuringUnit
-                     MeasuringUnit={this.EditData}
+                  <EditDepartment
+                     Department={this.EditData}
+                     props={this.props}
                      cancel={() => {
                         this.setState({
                            openEdit: false

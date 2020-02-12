@@ -11,7 +11,7 @@ export const Datepick = props => {
       new Date('02-14-1997')
    );
    const handleDateChange = date => {
-      setSelectedDate(date);
+      props.setDate(date);
    };
    const req = props.Req;
 
@@ -23,13 +23,17 @@ export const Datepick = props => {
                label={props.Name}
                format='DD/MM/YYYY'
                onChange={handleDateChange}
-               value={selectedDate}
+               value={props.value}
                KeyboardButtonProps={{
                   'aria-label': 'change date'
                }}
                fullWidth
-               variant='inline'
-               style={{ marginRight: props.marginRight, marginTop: '7px' }}
+               inputVariant='outlined'
+               style={{
+                  marginRight: props.marginRight,
+                  marginTop: '0px',
+                  marginBottom: props.marginBottom
+               }}
                required
             />
          ) : (
@@ -38,13 +42,17 @@ export const Datepick = props => {
                label={props.Name}
                format='DD/MM/YYYY'
                onChange={handleDateChange}
-               value={selectedDate}
+               value={props.value}
                KeyboardButtonProps={{
                   'aria-label': 'change date'
                }}
                fullWidth
-               variant='inline'
-               style={{ marginRight: props.marginRight, marginTop: '7px' }}
+               inputVariant='outlined'
+               style={{
+                  marginRight: props.marginRight,
+                  marginTop: '0px',
+                  marginBottom: props.marginBottom
+               }}
             />
          )}
       </MuiPickersUtilsProvider>

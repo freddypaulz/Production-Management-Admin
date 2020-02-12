@@ -3,21 +3,22 @@ import MaterialTable from 'material-table';
 import { Box, Button, DialogContent } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import axios from 'axios';
-import AddRawMaterial from './AddRawMaterial';
-import EditRawMaterial from './EditRawMaterial';
+import AddProduct from './AddProduct';
+import EditProduct from './EditProduct';
 import permissionCheck from '../../Components/Auth/permissionCheck';
 
-export default class ManageRawMaterials extends Component {
+export default class ManageProducts extends Component {
    constructor(props) {
       super();
       this.EditData = {};
       this.state = {
          columns: [
             { title: 'ID', field: 'id' },
-            { title: 'Raw Material Name', field: 'raw_material_name' },
-            { title: 'Raw Material code', field: 'raw_material_code' },
-            { title: 'Raw Material type', field: 'raw_material_type' },
-            { title: 'Measuring Unit', field: 'raw_material_measuring_unit' },
+            { title: 'Product Name', field: 'product_name' },
+            { title: 'Product code', field: 'product_code' },
+            { title: 'Product price', field: 'product_price' },
+            { title: 'Measuring Unit', field: 'product_measuring_unit' },
+            // { title: 'Registration Date', field: 'product_registration_date' },
             { title: 'Description', field: 'description' }
          ],
          data: [],
@@ -27,12 +28,12 @@ export default class ManageRawMaterials extends Component {
       this.OnEditHandler = (event, rowData) => {
          console.log(rowData._id);
          axios
-            .post('/raw-materials/raw-material', {
+            .post('/products/product', {
                _id: rowData._id
             })
             .then(res => {
                console.log(res);
-               this.EditData = { ...res.data.RawMaterial };
+               this.EditData = { ...res.data.Product };
                console.log(this.EditData[0]);
                this.setState({
                   openEdit: true
@@ -41,39 +42,14 @@ export default class ManageRawMaterials extends Component {
       };
       this.handleClose = () => {
          axios
-            .get('/raw-materials/raw-materials')
+            .get('/products/products')
             .then(res => {
                //console.log(res.data.States[0].country_id);
-               for (let i = 0; i < res.data.RawMaterials.length; i++) {
-                  res.data.RawMaterials[i].id = i + 1;
-                  axios
-                     .post('/material-types/material-type', {
-                        _id: res.data.RawMaterials[i].raw_material_type
-                     })
-                     .then(MaterialType => {
-                        console.log(MaterialType);
-                        if (MaterialType.data.MaterialType[0]) {
-                           console.log(
-                              MaterialType.data.MaterialType[0]
-                                 .material_type_name
-                           );
-                           res.data.RawMaterials[i].raw_material_type =
-                              MaterialType.data.MaterialType[0].material_type_name;
-                           this.setState({
-                              data: [...res.data.RawMaterials]
-                           });
-                        } else {
-                           res.data.RawMaterials[i].material_type =
-                              'problem loading Material Type';
-                           this.setState({
-                              data: [...res.data.RawMaterials]
-                           });
-                        }
-                     });
+               for (let i = 0; i < res.data.Products.length; i++) {
+                  res.data.Products[i].id = i + 1;
                   axios
                      .post('/measuring-units/measuring-unit', {
-                        _id:
-                           res.data.RawMaterials[i].raw_material_measuring_unit
+                        _id: res.data.Products[i].product_measuring_unit
                      })
                      .then(MeasuringUnit => {
                         console.log(MeasuringUnit);
@@ -82,20 +58,16 @@ export default class ManageRawMaterials extends Component {
                               MeasuringUnit.data.MeasuringUnit[0]
                                  .measuring_unit_name
                            );
-                           res.data.RawMaterials[
-                              i
-                           ].raw_material_measuring_unit =
+                           res.data.Products[i].product_measuring_unit =
                               MeasuringUnit.data.MeasuringUnit[0].measuring_unit_name;
                            this.setState({
-                              data: [...res.data.RawMaterials]
+                              data: [...res.data.Products]
                            });
                         } else {
-                           res.data.RawMaterials[
-                              i
-                           ].raw_material_measuring_unit =
-                              'problem loading measuring unit';
+                           res.data.Products[i].product_measuring_unit =
+                              'problem loading Measuring Unit';
                            this.setState({
-                              data: [...res.data.RawMaterial]
+                              data: [...res.data.Products]
                            });
                         }
                      });
@@ -107,7 +79,7 @@ export default class ManageRawMaterials extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Raw Materials')) {
+      if (permissionCheck(this.props, 'Manage Product')) {
          this.handleClose();
       }
    }
@@ -120,7 +92,7 @@ export default class ManageRawMaterials extends Component {
             flexDirection='column'
          >
             <Box fontSize='30px' mb={3}>
-               Manage Raw Materials
+               Manage Products
             </Box>
             <Box width='90%' display='flex' flexDirection='row'>
                <Button
@@ -166,7 +138,7 @@ export default class ManageRawMaterials extends Component {
                editable={{
                   onRowDelete: oldData =>
                      axios
-                        .post('/raw-materials/delete-raw-material', {
+                        .post('/products/delete-product', {
                            _id: oldData._id
                         })
                         .then(res => {
@@ -187,7 +159,7 @@ export default class ManageRawMaterials extends Component {
 
             <Dialog open={this.state.openAdd} maxWidth='lg' fullWidth>
                <DialogContent style={{ padding: '20px' }}>
-                  <AddRawMaterial
+                  <AddProduct
                      cancel={() => {
                         this.setState({
                            openAdd: false
@@ -199,8 +171,8 @@ export default class ManageRawMaterials extends Component {
             </Dialog>
             <Dialog open={this.state.openEdit} maxWidth='lg' fullWidth>
                <DialogContent style={{ padding: '20px' }}>
-                  <EditRawMaterial
-                     RawMaterial={this.EditData[0]}
+                  <EditProduct
+                     Product={this.EditData[0]}
                      cancel={() => {
                         this.setState({
                            openEdit: false
