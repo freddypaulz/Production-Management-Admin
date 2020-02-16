@@ -14,6 +14,11 @@ router.post('/state', (req, res, next) => {
       res.send({ state });
    });
 });
+router.post('/state-country', (req, res, next) => {
+   States.find({ country_id: req.body.country_id }).then(state => {
+      res.send({ state });
+   });
+});
 
 router.post('/state-name', (req, res, next) => {
    States.find({ state_name: req.body.state_name }).then(state => {

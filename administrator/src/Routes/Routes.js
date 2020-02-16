@@ -13,6 +13,8 @@ import ManageWorkLocations from '../Containers/WorkLocations/ManageWorkLocations
 import ManageProductionUnits from '../Containers/ProductionUnits/ManageProductionUnits';
 import ManageProducts from '../Containers/Products/ManageProducts';
 import ManageDepartments from '../Containers/Departments/ManageDepartments';
+import ManageVendors from '../Containers/Vendors/ManageVendors';
+import ManageDistributors from '../Containers/Distributors/ManageDistributor';
 
 import { Route } from 'react-router-dom';
 import { Box } from '@material-ui/core';
@@ -77,6 +79,16 @@ export const Routes = () => {
             exact
             path='/management/manage-departments'
             component={ManageDepartments}
+         />
+         <Route
+            exact
+            path='/management/manage-vendors'
+            component={ManageVendors}
+         />
+         <Route
+            exact
+            path='/management/manage-distributors'
+            component={ManageDistributors}
          />
       </Box>
    );

@@ -4,6 +4,7 @@ import { PaperBoard } from '../../Components/PaperBoard/PaperBoard';
 import axios from 'axios';
 import Styles from '../../Components/styles/FormStyles';
 import permissionCheck from '../../Components/Auth/permissionCheck';
+import errorCheck from './MeasuringUnitValidation';
 
 const styles = Styles;
 export default class AddMeasuringUnit extends Component {
@@ -13,8 +14,13 @@ export default class AddMeasuringUnit extends Component {
          measuring_unit_name: '',
          description: '',
          errors: [],
-         success: false
+         fieldError: {
+            measuring_unit_name: { status: false, msg: '' },
+            description: { status: false, msg: '' }
+         },
+         isValid: false
       };
+
       this.onAddHandler = () => {
          axios
             .post('/measuring-units/add-measuring-unit', {
@@ -26,8 +32,7 @@ export default class AddMeasuringUnit extends Component {
                if (res.data.errors.length > 0) {
                   console.log(res.data.errors);
                   this.setState({
-                     errors: [...res.data.errors],
-                     success: false
+                     errors: [...res.data.errors]
                   });
                } else {
                   this.props.cancel();
@@ -38,6 +43,9 @@ export default class AddMeasuringUnit extends Component {
    }
    componentDidMount() {
       if (permissionCheck(this.props, 'Manage Measuring Unit')) {
+         this.setState({
+            isValid: false
+         });
       }
    }
    render() {
@@ -46,22 +54,23 @@ export default class AddMeasuringUnit extends Component {
             <Box fontSize='30px' mb={3}>
                Add Measuring Unit
             </Box>
-            {this.state.errors.length > 0 ? (
-               this.state.errors.map((error, index) => {
-                  return (
-                     <Box style={styles.box_msg} bgcolor='#f73067' key={index}>
-                        {error}
-                     </Box>
-                  );
-               })
-            ) : this.state.success === true ? (
-               <Box bgcolor='#3df45b' style={styles.box_msg}>
-                  Registration Successful
-               </Box>
-            ) : null}
+            {this.state.errors.length > 0
+               ? this.state.errors.map((error, index) => {
+                    return (
+                       <Box
+                          style={styles.box_msg}
+                          bgcolor='#f73067'
+                          key={index}
+                       >
+                          {error}
+                       </Box>
+                    );
+                 })
+               : null}
             <PaperBoard>
                <Box style={styles.box_field}>
                   <TextField
+                     name='measuring_unit_name'
                      fullWidth
                      required
                      value={this.state.measuring_unit_name}
@@ -72,12 +81,23 @@ export default class AddMeasuringUnit extends Component {
                         this.setState({
                            measuring_unit_name: event.target.value
                         });
+                        const { status, msg, isValid } = errorCheck(event);
+                        this.setState(prevState => {
+                           prevState.fieldError.measuring_unit_name.status = status;
+                           prevState.fieldError.measuring_unit_name.msg = msg;
+                           prevState.isValid = isValid;
+                        });
                      }}
+                     error={this.state.fieldError.measuring_unit_name.status}
+                     helperText={this.state.fieldError.measuring_unit_name.msg}
                   ></TextField>
                </Box>
 
                <Box style={styles.box_field}>
                   <TextField
+                     name='description'
+                     multiline
+                     rowsMax={4}
                      fullWidth
                      required
                      value={this.state.description}
@@ -85,8 +105,18 @@ export default class AddMeasuringUnit extends Component {
                      label='Description'
                      type='text'
                      onChange={event => {
-                        this.setState({ description: event.target.value });
+                        this.setState({
+                           description: event.target.value
+                        });
+                        const { status, msg, isValid } = errorCheck(event);
+                        this.setState(prevState => {
+                           prevState.fieldError.description.status = status;
+                           prevState.fieldError.description.msg = msg;
+                           prevState.isValid = isValid;
+                        });
                      }}
+                     error={this.state.fieldError.description.status}
+                     helperText={this.state.fieldError.description.msg}
                   ></TextField>
                </Box>
             </PaperBoard>
@@ -115,6 +145,7 @@ export default class AddMeasuringUnit extends Component {
                      variant='contained'
                      color='primary'
                      size='large'
+                     disabled={!this.state.isValid}
                      onClick={this.onAddHandler}
                   >
                      Add

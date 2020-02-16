@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
       alignItems: 'center'
    },
    fixedHeight: {
-      maxHeight: '30vw',
+      maxHeight: '29.5vw',
       minWidth: '300px',
       minHeight: '100px'
    }

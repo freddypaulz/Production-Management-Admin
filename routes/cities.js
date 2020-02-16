@@ -13,6 +13,11 @@ router.post('/city', (req, res, next) => {
       res.send({ city });
    });
 });
+router.post('/city-state', (req, res, next) => {
+   Cities.find({ state_id: req.body.state_id }).then(city => {
+      res.send({ city });
+   });
+});
 
 router.post('/city-name', (req, res, next) => {
    Cities.find({ city_name: req.body.city_name }).then(city => {

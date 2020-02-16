@@ -43,7 +43,7 @@ export default class AddUser extends Component {
                      success: false
                   });
                } else {
-                  //this.props.cancel();
+                  this.props.cancel();
                }
             })
             .catch(err => console.log(err));

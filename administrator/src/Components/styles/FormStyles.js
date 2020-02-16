@@ -4,7 +4,7 @@ const styles = {
       width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
-      marginBottom: '20px'
+      marginBottom: '10px'
    },
    box: {
       width: '100%',

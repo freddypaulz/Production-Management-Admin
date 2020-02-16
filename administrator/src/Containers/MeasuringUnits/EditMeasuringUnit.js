@@ -4,9 +4,10 @@ import { PaperBoard } from '../../Components/PaperBoard/PaperBoard';
 import axios from 'axios';
 import Styles from '../../Components/styles/FormStyles';
 import permissionCheck from '../../Components/Auth/permissionCheck';
+import errorCheck from './MeasuringUnitValidation';
 
 const styles = Styles;
-export default class EditCountry extends Component {
+export default class EditMeasuringUnit extends Component {
    constructor(props) {
       super();
       this.state = {
@@ -14,7 +15,11 @@ export default class EditCountry extends Component {
          measuring_unit_name: '',
          description: '',
          errors: [],
-         success: false
+         fieldError: {
+            measuring_unit_name: { status: false, msg: '' },
+            description: { status: false, msg: '' }
+         },
+         isValid: false
       };
       this.onEditHandler = () => {
          axios
@@ -29,8 +34,8 @@ export default class EditCountry extends Component {
                   if (res.data.errors.length > 0) {
                      console.log(res.data.errors);
                      this.setState({
-                        errors: [...res.data.errors],
-                        success: false
+                        isValid: false,
+                        errors: [...res.data.errors]
                      });
                   } else {
                      this.props.cancel();
@@ -75,6 +80,7 @@ export default class EditCountry extends Component {
             <PaperBoard>
                <Box style={styles.box_field}>
                   <TextField
+                     name='measuring_unit_name'
                      fullWidth
                      required
                      value={this.state.measuring_unit_name}
@@ -85,12 +91,22 @@ export default class EditCountry extends Component {
                         this.setState({
                            measuring_unit_name: event.target.value
                         });
+                        const { status, msg, isValid } = errorCheck(event);
+                        console.log(status, msg);
+                        this.setState(prevState => {
+                           prevState.fieldError.measuring_unit_name.status = status;
+                           prevState.fieldError.measuring_unit_name.msg = msg;
+                           prevState.isValid = isValid;
+                        });
                      }}
+                     error={this.state.fieldError.measuring_unit_name.status}
+                     helperText={this.state.fieldError.measuring_unit_name.msg}
                   ></TextField>
                </Box>
 
                <Box style={styles.box_field}>
                   <TextField
+                     name='description'
                      fullWidth
                      required
                      value={this.state.description}
@@ -99,7 +115,15 @@ export default class EditCountry extends Component {
                      type='text'
                      onChange={event => {
                         this.setState({ description: event.target.value });
+                        const { status, msg, isValid } = errorCheck(event);
+                        this.setState(prevState => {
+                           prevState.fieldError.description.status = status;
+                           prevState.fieldError.description.msg = msg;
+                           prevState.isValid = isValid;
+                        });
                      }}
+                     error={this.state.fieldError.description.status}
+                     helperText={this.state.fieldError.description.msg}
                   ></TextField>
                </Box>
             </PaperBoard>
@@ -128,6 +152,7 @@ export default class EditCountry extends Component {
                      variant='contained'
                      color='primary'
                      size='large'
+                     disabled={!this.state.isValid}
                      onClick={this.onEditHandler}
                   >
                      Update
