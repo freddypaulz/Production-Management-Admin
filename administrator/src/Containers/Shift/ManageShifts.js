@@ -49,7 +49,7 @@ export default class ManageShift extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Shift')) {
+      if (permissionCheck(this.props, 'Manage Shifts')) {
          this.handleClose();
       }
    }

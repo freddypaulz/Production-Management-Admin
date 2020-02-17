@@ -55,7 +55,7 @@ export default class EditUser extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage User')) {
+      if (permissionCheck(this.props, 'Manage Users')) {
          axios.get('/roles/roles').then(res => {
             if (this.state.user_name === '' || this.state.role === '') {
                this.setState({

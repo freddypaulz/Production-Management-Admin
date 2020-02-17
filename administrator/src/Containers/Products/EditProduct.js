@@ -57,7 +57,7 @@ export default class EditProduct extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Product')) {
+      if (permissionCheck(this.props, 'Manage Products')) {
          axios.get('/measuring-units/measuring-units').then(res => {
             console.log(res);
             this.setState({

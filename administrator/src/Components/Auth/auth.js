@@ -5,7 +5,7 @@ class auth extends React.Component {
    }
    login = value => {
       console.log(value);
-      sessionStorage.setItem('authenticated', true);
+      sessionStorage.setItem('authenticated', value);
    };
 
    logout = () => {

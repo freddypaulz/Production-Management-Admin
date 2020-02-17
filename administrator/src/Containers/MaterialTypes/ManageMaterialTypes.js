@@ -48,7 +48,7 @@ export default class ManageMaterialTypes extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Material Type')) {
+      if (permissionCheck(this.props, 'Manage Material Types')) {
          this.handleClose();
       }
    }

@@ -42,7 +42,7 @@ export default class AddDepartment extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Department')) {
+      if (permissionCheck(this.props, 'Manage Departments')) {
       }
    }
    render() {

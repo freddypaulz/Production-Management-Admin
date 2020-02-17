@@ -3,79 +3,50 @@ import MaterialTable from 'material-table';
 import { Box, Button, DialogContent } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import axios from 'axios';
-import AddCity from './AddCity';
-import EditCity from './EditCity';
-import CityCSVUpload from './CityCSVUpload';
 import permissionCheck from '../../Components/Auth/permissionCheck';
-
-export default class ManageCities extends Component {
+import AddDesignation from './AddDesignation';
+import EditDesignation from './EditDesignation';
+export default class ManageDesignations extends Component {
    constructor(props) {
       super();
       this.EditData = {};
       this.state = {
          columns: [
             { title: 'ID', field: 'id' },
-            { title: 'City Name', field: 'city_name' },
-            { title: 'State Name', field: 'state_id' },
+            { title: 'Designation Name', field: 'designation_name' },
             { title: 'Description', field: 'description' }
          ],
          data: [],
          openAdd: false,
-         openEdit: false,
-         openUploadCSV: false
+         openEdit: false
       };
       this.OnEditHandler = (event, rowData) => {
-         console.log(rowData._id);
          axios
-            .post('/cities/city', {
+            .post('/designations/designation', {
                _id: rowData._id
             })
-            .then(city => {
-               console.log(city);
-               this.EditData = { ...city.data.city };
-               console.log(this.EditData[0]);
+            .then(Designation => {
+               this.EditData = { ...Designation.data.Designation[0] };
+               console.log(this.EditData);
                this.setState({
                   openEdit: true
                });
             });
       };
       this.handleClose = () => {
-         axios
-            .get('/cities/cities')
-            .then(res => {
-               //console.log(res.data.States[0].country_id);
-               for (let i = 0; i < res.data.Cities.length; i++) {
-                  res.data.Cities[i].id = i + 1;
-                  axios
-                     .post('/states/state', {
-                        _id: res.data.Cities[i].state_id
-                     })
-                     .then(state => {
-                        console.log(state);
-                        if (state.data.state[0]) {
-                           console.log(state.data.state[0].state_name);
-                           res.data.Cities[i].state_id =
-                              state.data.state[0].state_name;
-                           this.setState({
-                              data: [...res.data.Cities]
-                           });
-                        } else {
-                           res.data.Cities[i].state_id =
-                              'problem loading state';
-                           this.setState({
-                              data: [...res.data.Cities]
-                           });
-                        }
-                     });
-               }
-            })
-            .catch(err => {
-               console.log('Error');
+         axios.get('/designations/designations').then(res => {
+            console.log(res.data.Designations);
+            for (let i = 0; i < res.data.Designations.length; i++) {
+               res.data.Designations[i].id = i + 1;
+            }
+            this.setState({
+               data: [...res.data.Designations]
             });
+         });
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Cities')) {
+      if (permissionCheck(this.props, 'Manage Designations')) {
          this.handleClose();
       }
    }
@@ -88,7 +59,7 @@ export default class ManageCities extends Component {
             flexDirection='column'
          >
             <Box fontSize='30px' mb={3}>
-               Manage City
+               Manage Designations
             </Box>
             <Box width='90%' display='flex' flexDirection='row'>
                <Button
@@ -106,23 +77,7 @@ export default class ManageCities extends Component {
                      });
                   }}
                >
-                  Add City
-               </Button>
-               <Button
-                  variant='contained'
-                  color='primary'
-                  style={{
-                     marginBottom: '20px',
-                     display: 'flex'
-                  }}
-                  size='large'
-                  onClick={() => {
-                     this.setState({
-                        openUploadCSV: true
-                     });
-                  }}
-               >
-                  Upload CSV
+                  Add
                </Button>
             </Box>
 
@@ -141,7 +96,7 @@ export default class ManageCities extends Component {
                actions={[
                   {
                      icon: 'edit',
-                     tooltip: 'Edit User',
+                     tooltip: 'Edit',
                      onClick: (event, rowData) => {
                         this.OnEditHandler(event, rowData);
                      }
@@ -150,12 +105,12 @@ export default class ManageCities extends Component {
                editable={{
                   onRowDelete: oldData =>
                      axios
-                        .post('/cities/delete-city', {
-                           _id: oldData._id
+                        .post('/designations/delete-designation', {
+                           designation_name: oldData.designation_name
                         })
-                        .then(res => {
-                           console.log(res);
-                           if (res) {
+                        .then(Designation => {
+                           console.log(Designation);
+                           if (Designation) {
                               this.setState(prevState => {
                                  const data = [...prevState.data];
                                  data.splice(data.indexOf(oldData), 1);
@@ -168,10 +123,9 @@ export default class ManageCities extends Component {
                   this.OnEditHandler(event, rowData);
                }}
             />
-
             <Dialog open={this.state.openAdd} maxWidth='lg' fullWidth>
                <DialogContent style={{ padding: '20px' }}>
-                  <AddCity
+                  <AddDesignation
                      cancel={() => {
                         this.setState({
                            openAdd: false
@@ -183,23 +137,12 @@ export default class ManageCities extends Component {
             </Dialog>
             <Dialog open={this.state.openEdit} maxWidth='lg' fullWidth>
                <DialogContent style={{ padding: '20px' }}>
-                  <EditCity
-                     city={this.EditData[0]}
+                  <EditDesignation
+                     Designation={this.EditData}
+                     props={this.props}
                      cancel={() => {
                         this.setState({
                            openEdit: false
-                        });
-                        this.handleClose();
-                     }}
-                  />
-               </DialogContent>
-            </Dialog>
-            <Dialog open={this.state.openUploadCSV} maxWidth='sm' fullWidth>
-               <DialogContent style={{ padding: '20px' }}>
-                  <CityCSVUpload
-                     cancel={() => {
-                        this.setState({
-                           openUploadCSV: false
                         });
                         this.handleClose();
                      }}

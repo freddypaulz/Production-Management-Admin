@@ -39,7 +39,7 @@ export default class EditWorkLocation extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Work Location')) {
+      if (permissionCheck(this.props, 'Manage Work Locations')) {
          console.log(this.props);
          if (this.state.work_location_name === '') {
             this.setState({

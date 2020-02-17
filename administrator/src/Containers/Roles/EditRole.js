@@ -10,7 +10,6 @@ import { PaperBoard } from '../../Components/PaperBoard/PaperBoard';
 import axios from 'axios';
 import Styles from '../../Components/styles/FormStyles';
 import Permissions from './Permissions';
-
 import permissionCheck from '../../Components/Auth/permissionCheck';
 
 const styles = Styles;
@@ -74,7 +73,7 @@ export default class EditRole extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage User')) {
+      if (permissionCheck(this.props, 'Manage Roles')) {
          if (this.state.role_name === '') {
             this.setState({
                role_name: this.props.role.role_name,

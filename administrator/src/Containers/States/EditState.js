@@ -52,7 +52,7 @@ export default class EditShift extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage State')) {
+      if (permissionCheck(this.props, 'Manage States')) {
          axios.get('/countries/countries').then(res => {
             this.setState({
                countries: [...res.data.Countries]

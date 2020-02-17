@@ -41,7 +41,7 @@ export default class EditShift extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage User')) {
+      if (permissionCheck(this.props, 'Manage Shifts')) {
          if (this.state.shift_name === '') {
             this.setState({
                shift_name: this.props.shift.shift_name,

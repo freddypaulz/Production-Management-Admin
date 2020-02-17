@@ -43,7 +43,7 @@ export default class ManageRole extends Component {
             .get('/roles/roles')
             .then(res => {
                console.log(res.data);
-               res.data.Roles = res.data.Roles.splice(1, res.data.Roles.length);
+               //res.data.Roles = res.data.Roles.splice(1, res.data.Roles.length);
                for (let i = 0; i < res.data.Roles.length; i++) {
                   res.data.Roles[i].id = i + 1;
                }
@@ -61,7 +61,7 @@ export default class ManageRole extends Component {
    }
    componentDidMount() {
       let check = false;
-      if (permissionCheck(this.props, 'Manage Role')) {
+      if (permissionCheck(this.props, 'Manage Roles')) {
          this.handleClose();
       }
    }

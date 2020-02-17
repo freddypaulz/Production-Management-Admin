@@ -19,6 +19,7 @@ export const Datepick = props => {
       <MuiPickersUtilsProvider utils={MomentUtils}>
          {req === 'true' ? (
             <KeyboardDatePicker
+               size='small'
                id={`date-picker-dialog${props.id}`}
                label={props.Name}
                format='DD/MM/YYYY'

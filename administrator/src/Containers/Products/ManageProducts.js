@@ -79,7 +79,7 @@ export default class ManageProducts extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Product')) {
+      if (permissionCheck(this.props, 'Manage Products')) {
          this.handleClose();
       }
    }

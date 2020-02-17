@@ -46,7 +46,7 @@ export default class EditMeasuringUnit extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Measuring Unit')) {
+      if (permissionCheck(this.props, 'Manage Measuring Units')) {
          console.log(this.props);
          if (this.state.measuring_unit_name === '') {
             this.setState({

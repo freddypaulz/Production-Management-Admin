@@ -55,7 +55,7 @@ export default class ManageCountries extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Country')) {
+      if (permissionCheck(this.props, 'Manage Countries')) {
          this.handleClose();
       }
    }

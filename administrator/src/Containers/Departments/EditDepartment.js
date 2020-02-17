@@ -46,7 +46,7 @@ export default class EditDepartment extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props.props, 'Manage Department')) {
+      if (permissionCheck(this.props.props, 'Manage Departments')) {
          console.log(this.props);
          if (this.state.department_name === '') {
             this.setState({

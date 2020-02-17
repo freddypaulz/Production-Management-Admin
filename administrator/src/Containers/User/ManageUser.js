@@ -39,7 +39,7 @@ export default class ManageUser extends Component {
          axios.get('/users/users').then(res => {
             console.log(res.data.Users);
 
-            res.data.Users = res.data.Users.splice(1, res.data.Users.length);
+            // res.data.Users = res.data.Users.splice(1, res.data.Users.length);
             console.log(res.data.Users);
             for (let i = 0; i < res.data.Users.length; i++) {
                res.data.Users[i].id = i + 1;
@@ -69,7 +69,7 @@ export default class ManageUser extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage User')) {
+      if (permissionCheck(this.props, 'Manage Users')) {
          this.handleClose();
       }
    }

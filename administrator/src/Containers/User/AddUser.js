@@ -52,7 +52,7 @@ export default class AddUser extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage User')) {
+      if (permissionCheck(this.props, 'Manage Users')) {
          axios.get('/roles/roles').then(res => {
             console.log(res.data.Roles);
             this.setState({ Roles: res.data.Roles });

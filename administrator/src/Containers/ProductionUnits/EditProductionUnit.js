@@ -39,7 +39,7 @@ export default class EditProductionUnit extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props.props, 'Manage Production Unit')) {
+      if (permissionCheck(this.props.props, 'Manage Production Units')) {
          console.log(this.props);
          if (this.state.production_unit_name === '') {
             this.setState({

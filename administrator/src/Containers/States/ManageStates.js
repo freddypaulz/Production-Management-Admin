@@ -75,7 +75,7 @@ export default class ManageStates extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage State')) {
+      if (permissionCheck(this.props, 'Manage States')) {
          this.handleClose();
       }
    }

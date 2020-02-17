@@ -41,7 +41,7 @@ export default class EditMaterialType extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Material Type')) {
+      if (permissionCheck(this.props, 'Manage Material Types')) {
          console.log(this.props);
          if (this.state.material_type_name === '') {
             this.setState({

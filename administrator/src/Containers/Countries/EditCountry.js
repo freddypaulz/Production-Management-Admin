@@ -41,7 +41,7 @@ export default class EditCountry extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Country')) {
+      if (permissionCheck(this.props, 'Manage Countries')) {
          console.log(this.props);
          if (this.state.country_name === '') {
             this.setState({

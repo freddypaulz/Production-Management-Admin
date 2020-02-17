@@ -47,7 +47,7 @@ export default class ManageWorkLocations extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Work Location')) {
+      if (permissionCheck(this.props, 'Manage Work Locations')) {
          this.handleClose();
       }
    }

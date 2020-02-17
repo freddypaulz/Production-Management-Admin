@@ -46,7 +46,7 @@ export default class ManageProductionUnit extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Production Unit')) {
+      if (permissionCheck(this.props, 'Manage Production Units')) {
          this.handleClose();
       }
    }

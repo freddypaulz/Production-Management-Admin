@@ -10,6 +10,7 @@ import { PaperBoard } from '../../Components/PaperBoard/PaperBoard';
 import axios from 'axios';
 import Styles from '../../Components/styles/FormStyles';
 import Permissions from './Permissions';
+import permissionCheck from '../../Components/Auth/permissionCheck';
 
 const styles = Styles;
 
@@ -64,6 +65,8 @@ export default class AddUser extends Component {
       };
    }
    componentDidMount() {
+      if (permissionCheck(this.props, 'Manage Roles')) {
+      }
       // this.state.permissions.map(permission => {
       //    permission.value = false;
       // });

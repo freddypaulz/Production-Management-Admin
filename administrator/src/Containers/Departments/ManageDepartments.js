@@ -46,7 +46,7 @@ export default class ManageDepartments extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Department')) {
+      if (permissionCheck(this.props, 'Manage Departments')) {
          this.handleClose();
       }
    }

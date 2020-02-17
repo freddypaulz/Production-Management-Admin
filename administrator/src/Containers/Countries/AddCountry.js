@@ -37,7 +37,7 @@ export default class AddCountry extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Country')) {
+      if (permissionCheck(this.props, 'Manage Countries')) {
       }
    }
    render() {

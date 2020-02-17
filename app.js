@@ -52,6 +52,8 @@ app.use('/products', require('./routes/products'));
 app.use('/departments', require('./routes/departments'));
 app.use('/vendors', require('./routes/vendors'));
 app.use('/distributors', require('./routes/distributors'));
+app.use('/employees', require('./routes/employees'));
+app.use('/designations', require('./routes/designations'));
 
 app.listen(5000, () => {
    console.log(`App listening on port ${PORT}!`);

@@ -42,7 +42,7 @@ export default class AddMeasuringUnit extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Measuring Unit')) {
+      if (permissionCheck(this.props, 'Manage Measuring Units')) {
          this.setState({
             isValid: false
          });

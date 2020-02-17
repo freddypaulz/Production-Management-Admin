@@ -6,22 +6,23 @@ import auth from '../../Components/Auth/auth';
 
 const Management = props => {
    const dashboardList = [
-      { Name: 'Manage Employee', Path: 'manage-employees' },
-      { Name: 'Manage User', Path: 'manage-users' },
-      { Name: 'Manage Role', Path: 'manage-roles' },
-      { Name: 'Manage Shift', Path: 'manage-shifts' },
-      { Name: 'Manage Product', Path: 'manage-products' },
+      { Name: 'Manage Employees', Path: 'manage-employees' },
+      { Name: 'Manage Users', Path: 'manage-users' },
+      { Name: 'Manage Roles', Path: 'manage-roles' },
+      { Name: 'Manage Shifts', Path: 'manage-shifts' },
+      { Name: 'Manage Products', Path: 'manage-products' },
       { Name: 'Manage Raw Materials', Path: 'manage-raw-materials' },
       { Name: 'Manage Vendors', Path: 'manage-vendors' },
       { Name: 'Manage Distributors', Path: 'manage-distributors' },
-      { Name: 'Manage Country', Path: 'manage-countries' },
-      { Name: 'Manage State', Path: 'manage-states' },
-      { Name: 'Manage City', Path: 'manage-cities' },
+      { Name: 'Manage Countries', Path: 'manage-countries' },
+      { Name: 'Manage States', Path: 'manage-states' },
+      { Name: 'Manage Cities', Path: 'manage-cities' },
       { Name: 'Manage Work Locations', Path: 'manage-work-locations' },
-      { Name: 'Manage Measuring Unit', Path: 'manage-measuring-units' },
-      { Name: 'Manage Material Type', Path: 'manage-material-types' },
-      { Name: 'Manage Department', Path: 'manage-departments' },
-      { Name: 'Manage Production Unit', Path: 'manage-production-units' }
+      { Name: 'Manage Measuring Units', Path: 'manage-measuring-units' },
+      { Name: 'Manage Material Types', Path: 'manage-material-types' },
+      { Name: 'Manage Departments', Path: 'manage-departments' },
+      { Name: 'Manage Production Units', Path: 'manage-production-units' },
+      { Name: 'Manage Designations', Path: 'manage-designations' }
    ];
    return (
       <Box display='flex'>

@@ -3,36 +3,40 @@ import MaterialTable from 'material-table';
 import { Box, Button, DialogContent } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import axios from 'axios';
-import AddCity from './AddCity';
-import EditCity from './EditCity';
-import CityCSVUpload from './CityCSVUpload';
+import AddEmployee from './AddEmployee';
+import EditEmployee from './EditEmployee';
 import permissionCheck from '../../Components/Auth/permissionCheck';
 
-export default class ManageCities extends Component {
+export default class ManageEmployees extends Component {
    constructor(props) {
       super();
       this.EditData = {};
       this.state = {
          columns: [
             { title: 'ID', field: 'id' },
-            { title: 'City Name', field: 'city_name' },
-            { title: 'State Name', field: 'state_id' },
-            { title: 'Description', field: 'description' }
+            { title: 'Employee First Name', field: 'employee_first_name' },
+            { title: 'Employee Last Name', field: 'employee_last_name' },
+            { title: 'Employee ID', field: 'employee_id' },
+            { title: 'Employee Designation', field: 'employee_designation' },
+            {
+               title: 'Employee Work Location',
+               field: 'employee_work_location'
+            },
+            { title: 'Employee shift', field: 'employee_shift' }
          ],
          data: [],
          openAdd: false,
-         openEdit: false,
-         openUploadCSV: false
+         openEdit: false
       };
       this.OnEditHandler = (event, rowData) => {
          console.log(rowData._id);
          axios
-            .post('/cities/city', {
+            .post('/employees/employee', {
                _id: rowData._id
             })
-            .then(city => {
-               console.log(city);
-               this.EditData = { ...city.data.city };
+            .then(res => {
+               console.log(res);
+               this.EditData = { ...res.data.Employee };
                console.log(this.EditData[0]);
                this.setState({
                   openEdit: true
@@ -41,33 +45,83 @@ export default class ManageCities extends Component {
       };
       this.handleClose = () => {
          axios
-            .get('/cities/cities')
+            .get('/employees/employees')
             .then(res => {
                //console.log(res.data.States[0].country_id);
-               for (let i = 0; i < res.data.Cities.length; i++) {
-                  res.data.Cities[i].id = i + 1;
+               for (let i = 0; i < res.data.Employees.length; i++) {
+                  res.data.Employees[i].id = i + 1;
                   axios
-                     .post('/states/state', {
-                        _id: res.data.Cities[i].state_id
+                     .post('/work-locations/work-location', {
+                        _id: res.data.Employees[i].employee_work_location
                      })
-                     .then(state => {
-                        console.log(state);
-                        if (state.data.state[0]) {
-                           console.log(state.data.state[0].state_name);
-                           res.data.Cities[i].state_id =
-                              state.data.state[0].state_name;
+                     .then(WorkLocation => {
+                        console.log(WorkLocation);
+                        if (WorkLocation.data.WorkLocation[0]) {
+                           console.log(
+                              WorkLocation.data.WorkLocation[0]
+                                 .work_location_name
+                           );
+                           res.data.Employees[i].employee_work_location =
+                              WorkLocation.data.WorkLocation[0].work_location_name;
                            this.setState({
-                              data: [...res.data.Cities]
+                              data: [...res.data.Employees]
                            });
                         } else {
-                           res.data.Cities[i].state_id =
-                              'problem loading state';
+                           res.data.Employees[i].work_location =
+                              'problem loading Work Location';
                            this.setState({
-                              data: [...res.data.Cities]
+                              data: [...res.data.Employees]
+                           });
+                        }
+                     });
+                  axios
+                     .post('/shifts/shift', {
+                        _id: res.data.Employees[i].employee_shift
+                     })
+                     .then(Shift => {
+                        console.log(Shift);
+                        if (Shift.data.shift[0]) {
+                           console.log(Shift.data.shift[0].shift_name);
+                           res.data.Employees[i].employee_shift =
+                              Shift.data.shift[0].shift_name;
+                           this.setState({
+                              data: [...res.data.Employees]
+                           });
+                        } else {
+                           res.data.Employees[i].shift =
+                              'problem loading Shift';
+                           this.setState({
+                              data: [...res.data.Employees]
+                           });
+                        }
+                     });
+                  axios
+                     .post('/designations/designation', {
+                        _id: res.data.Employees[i].employee_designation
+                     })
+                     .then(Designation => {
+                        console.log(Designation);
+                        if (Designation.data.Designation) {
+                           console.log(
+                              Designation.data.Designation[0].designation_name
+                           );
+                           res.data.Employees[i].employee_designation =
+                              Designation.data.Designation[0].designation_name;
+                           this.setState({
+                              data: [...res.data.Employees]
+                           });
+                        } else {
+                           res.data.Employees[i].designation =
+                              'problem loading Designation';
+                           this.setState({
+                              data: [...res.data.Employees]
                            });
                         }
                      });
                }
+               this.setState({
+                  data: [...res.data.Employees]
+               });
             })
             .catch(err => {
                console.log('Error');
@@ -75,7 +129,7 @@ export default class ManageCities extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Cities')) {
+      if (permissionCheck(this.props, 'Manage Employees')) {
          this.handleClose();
       }
    }
@@ -88,7 +142,7 @@ export default class ManageCities extends Component {
             flexDirection='column'
          >
             <Box fontSize='30px' mb={3}>
-               Manage City
+               Manage Employees
             </Box>
             <Box width='90%' display='flex' flexDirection='row'>
                <Button
@@ -106,23 +160,7 @@ export default class ManageCities extends Component {
                      });
                   }}
                >
-                  Add City
-               </Button>
-               <Button
-                  variant='contained'
-                  color='primary'
-                  style={{
-                     marginBottom: '20px',
-                     display: 'flex'
-                  }}
-                  size='large'
-                  onClick={() => {
-                     this.setState({
-                        openUploadCSV: true
-                     });
-                  }}
-               >
-                  Upload CSV
+                  Add
                </Button>
             </Box>
 
@@ -141,7 +179,7 @@ export default class ManageCities extends Component {
                actions={[
                   {
                      icon: 'edit',
-                     tooltip: 'Edit User',
+                     tooltip: 'Edit',
                      onClick: (event, rowData) => {
                         this.OnEditHandler(event, rowData);
                      }
@@ -150,7 +188,7 @@ export default class ManageCities extends Component {
                editable={{
                   onRowDelete: oldData =>
                      axios
-                        .post('/cities/delete-city', {
+                        .post('/employees/delete-employee', {
                            _id: oldData._id
                         })
                         .then(res => {
@@ -171,7 +209,7 @@ export default class ManageCities extends Component {
 
             <Dialog open={this.state.openAdd} maxWidth='lg' fullWidth>
                <DialogContent style={{ padding: '20px' }}>
-                  <AddCity
+                  <AddEmployee
                      cancel={() => {
                         this.setState({
                            openAdd: false
@@ -183,23 +221,11 @@ export default class ManageCities extends Component {
             </Dialog>
             <Dialog open={this.state.openEdit} maxWidth='lg' fullWidth>
                <DialogContent style={{ padding: '20px' }}>
-                  <EditCity
-                     city={this.EditData[0]}
+                  <EditEmployee
+                     Employee={this.EditData[0]}
                      cancel={() => {
                         this.setState({
                            openEdit: false
-                        });
-                        this.handleClose();
-                     }}
-                  />
-               </DialogContent>
-            </Dialog>
-            <Dialog open={this.state.openUploadCSV} maxWidth='sm' fullWidth>
-               <DialogContent style={{ padding: '20px' }}>
-                  <CityCSVUpload
-                     cancel={() => {
-                        this.setState({
-                           openUploadCSV: false
                         });
                         this.handleClose();
                      }}

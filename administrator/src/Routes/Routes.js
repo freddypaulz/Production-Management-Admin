@@ -1,5 +1,5 @@
 import React from 'react';
-import ManageEmployee from '../Containers/Employee/ManageEmployee';
+import ManageEmployees from '../Containers/Employees/ManageEmployees';
 import ManageUser from '../Containers/User/ManageUser';
 import ManageRole from '../Containers/Roles/ManageRole';
 import ManageShift from '../Containers/Shift/ManageShifts';
@@ -15,6 +15,7 @@ import ManageProducts from '../Containers/Products/ManageProducts';
 import ManageDepartments from '../Containers/Departments/ManageDepartments';
 import ManageVendors from '../Containers/Vendors/ManageVendors';
 import ManageDistributors from '../Containers/Distributors/ManageDistributor';
+import ManageDesignations from '../Containers/Designations/ManageDesignations';
 
 import { Route } from 'react-router-dom';
 import { Box } from '@material-ui/core';
@@ -22,7 +23,10 @@ import { Box } from '@material-ui/core';
 export const Routes = () => {
    return (
       <Box style={{ width: '100%' }}>
-         <Route path='/management/manage-employee' component={ManageEmployee} />
+         <Route
+            path='/management/manage-employees'
+            component={ManageEmployees}
+         />
          <Route exact path='/management/manage-users' component={ManageUser} />
          <Route exact path='/management/manage-roles' component={ManageRole} />
          <Route
@@ -89,6 +93,11 @@ export const Routes = () => {
             exact
             path='/management/manage-distributors'
             component={ManageDistributors}
+         />
+         <Route
+            exact
+            path='/management/manage-designations'
+            component={ManageDesignations}
          />
       </Box>
    );

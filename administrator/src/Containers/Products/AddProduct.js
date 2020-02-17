@@ -56,7 +56,7 @@ export default class AddProducts extends Component {
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Product')) {
+      if (permissionCheck(this.props, 'Manage Products')) {
          axios.get('/measuring-units/measuring-units').then(res => {
             console.log(res);
             this.setState({
@@ -90,10 +90,10 @@ export default class AddProducts extends Component {
                      <TextField
                         fullWidth
                         required
-                        value={this.state.product_name}
                         variant='outlined'
                         label='Product Name'
                         type='text'
+                        value={this.state.product_name}
                         onChange={event => {
                            this.setState({
                               product_name: event.target.value
@@ -136,7 +136,7 @@ export default class AddProducts extends Component {
                   id='1'
                   Name='Product Registration Date'
                   Req='true'
-                  marginBottom={'20px'}
+                  marginBottom={'10px'}
                   value={this.state.product_registration_date}
                   setDate={date => {
                      this.setState({
