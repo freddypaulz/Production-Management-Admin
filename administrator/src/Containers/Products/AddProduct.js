@@ -24,7 +24,7 @@ export default class AddProducts extends Component {
          product_code: '',
          product_price: '',
          product_measuring_unit: '',
-         product_registration_date: new Date(),
+         product_registration_date: null,
          description: '',
          errors: [],
          success: false,
@@ -137,6 +137,8 @@ export default class AddProducts extends Component {
                   Name='Product Registration Date'
                   Req='true'
                   marginBottom={'10px'}
+                  minDate='01/01/1990'
+                  maxDate={new Date()}
                   value={this.state.product_registration_date}
                   setDate={date => {
                      this.setState({

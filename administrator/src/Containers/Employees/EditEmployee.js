@@ -23,7 +23,7 @@ export default class EditEmployee extends Component {
          employee_first_name: '',
          employee_middle_name: '',
          employee_last_name: '',
-         employee_dob: new Date(),
+         employee_dob: null,
          employee_age: '',
          employee_gender: '',
          employee_mobile_no: '',
@@ -36,7 +36,7 @@ export default class EditEmployee extends Component {
          employee_city: '',
          employee_postal_code: '',
          employee_id: '',
-         employee_date_of_joinig: new Date(),
+         employee_date_of_joinig: null,
          employee_designation: '',
          employee_salary: '',
          employee_work_location: '',
@@ -311,9 +311,14 @@ export default class EditEmployee extends Component {
                      Req='true'
                      marginRight={'10px'}
                      value={this.state.employee_dob}
+                     minDate={new Date() - 1000 * 60 * 60 * 24 * 365.25 * 60}
+                     maxDate={new Date() - 1000 * 60 * 60 * 24 * 365.25 * 18}
                      setDate={date => {
-                        this.setState({
-                           employee_dob: date
+                        this.setState({});
+                        this.setState(preState => {
+                           preState.employee_dob = date;
+                           preState.employee_age =
+                              this.state.employee_dob - new Date();
                         });
                      }}
                   />
@@ -324,10 +329,11 @@ export default class EditEmployee extends Component {
                         variant='outlined'
                         label='Age'
                         type='number'
+                        disabled={true}
                         value={this.state.employee_age}
                         onChange={event => {
                            this.setState({
-                              employee_age: event.target.value
+                              employee_age: this.state.employee_dob - new Date()
                            });
                         }}
                      ></TextField>
@@ -627,6 +633,8 @@ export default class EditEmployee extends Component {
                      Name='Date Of Joining'
                      Req='true'
                      value={this.state.employee_date_of_joinig}
+                     minDate='01/01/1990'
+                     maxDate={new Date()}
                      setDate={date => {
                         this.setState({
                            employee_date_of_joinig: date

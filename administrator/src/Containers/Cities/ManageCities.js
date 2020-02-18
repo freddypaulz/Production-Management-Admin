@@ -127,10 +127,15 @@ export default class ManageCities extends Component {
             </Box>
 
             <MaterialTable
+               fixed
                title=' '
                columns={this.state.columns}
                data={this.state.data}
-               style={{ width: '90%', maxHeight: '500px', overflow: 'auto' }}
+               style={{
+                  width: '90%',
+                  maxHeight: '500px',
+                  overflow: 'auto'
+               }}
                options={{
                   sorting: true,
                   headerStyle: {
