@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import MaterialTable from 'material-table';
-import { Box, Button, DialogContent, Snackbar } from '@material-ui/core';
+import { Box, Button, DialogContent } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import axios from 'axios';
 import permissionCheck from '../../Components/Auth/permissionCheck';
@@ -105,7 +105,7 @@ export default class ManageUser extends Component {
             </Box>
 
             <MaterialTable
-               title='Manage User'
+               title=''
                columns={this.state.columns}
                data={this.state.data}
                style={{ width: '90%', maxHeight: '500px', overflow: 'auto' }}

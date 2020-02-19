@@ -6,8 +6,7 @@ import {
    FormControl,
    InputLabel,
    Select,
-   MenuItem,
-   Fab
+   MenuItem
 } from '@material-ui/core';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';

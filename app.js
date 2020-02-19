@@ -45,7 +45,6 @@ app.use('/cities', require('./routes/cities'));
 app.use('/measuring-units', require('./routes/measuringUnit'));
 app.use('/material-types', require('./routes/materialTypes'));
 app.use('/raw-materials', require('./routes/rawMaterials'));
-app.use('/request-details', require('./routes/Other/requestDetails'));
 app.use('/work-locations', require('./routes/workLocations'));
 app.use('/production-units', require('./routes/productionUnits'));
 app.use('/products', require('./routes/products'));
@@ -54,6 +53,7 @@ app.use('/vendors', require('./routes/vendors'));
 app.use('/distributors', require('./routes/distributors'));
 app.use('/employees', require('./routes/employees'));
 app.use('/designations', require('./routes/designations'));
+app.use('/request-details', require('./routes/requests/requestDetails'));
 
 app.listen(5000, () => {
    console.log(`App listening on port ${PORT}!`);

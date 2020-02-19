@@ -6,8 +6,7 @@ import {
    FormControl,
    InputLabel,
    Select,
-   MenuItem,
-   Divider
+   MenuItem
 } from '@material-ui/core';
 import { PaperBoard } from '../../Components/PaperBoard/PaperBoard';
 import axios from 'axios';

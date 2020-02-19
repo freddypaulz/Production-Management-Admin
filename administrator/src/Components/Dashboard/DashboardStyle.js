@@ -10,6 +10,7 @@ export const useStyles = makeStyles(theme => ({
       flexDirection: 'column',
       alignItems: 'left',
       maxHeight: '100vh',
+      minHeight: '100vh',
       overflow: 'auto'
    },
 

@@ -10,7 +10,6 @@ export default class StateCSVUpload extends Component {
          bulk_upload: []
       };
       this.onBulkAddHandler = () => {
-         let i = 0;
          this.state.bulk_upload.map(state => {
             console.log(state[1]);
             axios
@@ -39,7 +38,6 @@ export default class StateCSVUpload extends Component {
                   console.log(err);
                   this.props.cancel();
                });
-            i++;
             return null;
          });
       };

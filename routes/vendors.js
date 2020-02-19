@@ -9,9 +9,13 @@ router.get('/vendors', (req, res, next) => {
 });
 
 router.post('/vendor', (req, res) => {
-   Vendors.find({ _id: req.body._id }).then(Vendor => {
-      res.send({ Vendor });
-   });
+   Vendors.find({ _id: req.body._id })
+      .then(Vendor => {
+         res.send({ Vendor });
+      })
+      .catch(err => {
+         res.send('Problem Loading vendor');
+      });
 });
 
 router.post('/vendor-name', (req, res) => {

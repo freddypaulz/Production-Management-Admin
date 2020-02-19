@@ -10,7 +10,6 @@ export default class CityCSVUpload extends Component {
          bulk_upload: []
       };
       this.onBulkAddHandler = () => {
-         let i = 0;
          this.state.bulk_upload.map(city => {
             console.log(city[1]);
             axios
@@ -40,7 +39,6 @@ export default class CityCSVUpload extends Component {
                   console.log(err);
                   this.props.cancel();
                });
-            i++;
             return null;
          });
       };

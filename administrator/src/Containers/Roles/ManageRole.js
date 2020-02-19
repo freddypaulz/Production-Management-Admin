@@ -60,7 +60,6 @@ export default class ManageRole extends Component {
       };
    }
    componentDidMount() {
-      let check = false;
       if (permissionCheck(this.props, 'Manage Roles')) {
          this.handleClose();
       }
@@ -97,7 +96,7 @@ export default class ManageRole extends Component {
             </Box>
 
             <MaterialTable
-               title='Manage User'
+               title=''
                columns={this.state.columns}
                data={this.state.data}
                style={{ width: '90%', maxHeight: '500px', overflow: 'auto' }}

@@ -64,10 +64,11 @@ export default class EditDistributor extends Component {
       };
       this.onEditHandler = () => {
          this.state.distributor_point_of_contacts.map((poc, index) => {
-            const { name, designation, mobile_no, sec_mobile_no } = poc;
+            const { name, mobile_no } = poc;
             if (!name && !mobile_no) {
                this.state.distributor_point_of_contacts.splice(index, 1);
             }
+            return null;
          });
          console.log(this.state.distributor_point_of_contacts);
          axios

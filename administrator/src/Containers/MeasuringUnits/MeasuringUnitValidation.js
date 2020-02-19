@@ -29,6 +29,9 @@ const errorCheck = event => {
          }
          break;
       }
+      default: {
+         break;
+      }
    }
    return { status, msg, isValid };
 };

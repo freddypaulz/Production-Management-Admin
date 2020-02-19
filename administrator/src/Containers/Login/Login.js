@@ -114,7 +114,7 @@ export default class Login extends Component {
                                           'permissions',
                                           JSON.stringify(permissions)
                                        );
-                                       this.props.history.push('/management');
+                                       this.props.history.push('/home');
                                     })
                                     .catch(err => {
                                        console.log(err);

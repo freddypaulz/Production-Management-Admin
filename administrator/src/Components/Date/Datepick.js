@@ -7,7 +7,7 @@ import {
 import MomentUtils from '@date-io/moment';
 
 export const Datepick = props => {
-   const [state, setState] = React.useState({});
+   // const [state, setState] = React.useState({});
    const handleDateChange = date => {
       props.setDate(date);
    };

@@ -24,12 +24,21 @@ export default class ManageCities extends Component {
          openEdit: false,
          openUploadCSV: false
       };
+      this.CancelToken = axios.CancelToken;
+      this.source = this.CancelToken.source();
+
       this.OnEditHandler = (event, rowData) => {
          console.log(rowData._id);
          axios
-            .post('/cities/city', {
-               _id: rowData._id
-            })
+            .post(
+               '/cities/city',
+               {
+                  _id: rowData._id
+               },
+               {
+                  cancelToken: this.source.token
+               }
+            )
             .then(city => {
                console.log(city);
                this.EditData = { ...city.data.city };
@@ -41,15 +50,23 @@ export default class ManageCities extends Component {
       };
       this.handleClose = () => {
          axios
-            .get('/cities/cities')
+            .get('/cities/cities', {
+               cancelToken: this.source.token
+            })
             .then(res => {
                //console.log(res.data.States[0].country_id);
                for (let i = 0; i < res.data.Cities.length; i++) {
                   res.data.Cities[i].id = i + 1;
                   axios
-                     .post('/states/state', {
-                        _id: res.data.Cities[i].state_id
-                     })
+                     .post(
+                        '/states/state',
+                        {
+                           _id: res.data.Cities[i].state_id
+                        },
+                        {
+                           cancelToken: this.source.token
+                        }
+                     )
                      .then(state => {
                         console.log(state);
                         if (state.data.state[0]) {
@@ -66,6 +83,9 @@ export default class ManageCities extends Component {
                               data: [...res.data.Cities]
                            });
                         }
+                     })
+                     .catch(err => {
+                        console.log(err);
                      });
                }
             })
@@ -78,6 +98,9 @@ export default class ManageCities extends Component {
       if (permissionCheck(this.props, 'Manage Cities')) {
          this.handleClose();
       }
+   }
+   componentWillUnmount() {
+      this.source.cancel('axios call aborted');
    }
    render() {
       return (

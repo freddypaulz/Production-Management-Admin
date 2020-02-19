@@ -1,38 +1,25 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Box, Button } from '@material-ui/core';
 import Dashboard from '../../Components/Dashboard/Dashboard';
-import { Routes } from '../../Routes/Routes';
 import auth from '../../Components/Auth/auth';
-class Management extends React.Component {
+import { Route } from 'react-router-dom';
+import ManagePurchase from './Purchase/ManagePurchase';
+
+export default class Requests extends Component {
    constructor(props) {
-      super();
-      this.state = {
-         dashboardItems: []
-      };
-      this.permissions = JSON.parse(sessionStorage.getItem('permissions'));
+      super(props);
+      this.dashboardList = [
+         { Name: 'Purchase', Path: 'purchase' },
+         { Name: 'Finance', Path: 'finance' }
+      ];
    }
-   componentDidMount() {
-      console.log(this.permissions);
-      this.permissions.map(permission => {
-         let path = permission.toLowerCase().replace(/ /g, '-');
-         console.log(path);
-         this.setState({});
-         this.setState(prevState => {
-            prevState.dashboardItems.push({
-               Name: permission,
-               Path: path
-            });
-         });
-         return null;
-      });
-      console.log(this.state.dashboardItems, this.dashboardList);
-   }
+
    render() {
       return (
          <Box display='flex'>
             <Dashboard
-               items={this.state.dashboardItems}
-               componentName='home/management'
+               items={this.dashboardList}
+               componentName='home/requests'
             />
             <Box
                display='flex'
@@ -70,17 +57,20 @@ class Management extends React.Component {
                         Logout
                      </Button>
                   </Box>
-                  {this.props.history.location.state ? (
+                  {/* {this.props.history.location.state ? (
                      <Box color='red' textAlign='center'>
                         {this.props.history.location.state.msg}
                      </Box>
-                  ) : null}
+                  ) : null} */}
                </Box>
-               <Routes />
+               {/* Routes */}
+               <Route
+                  exact
+                  path='/home/requests/purchase'
+                  component={ManagePurchase}
+               />
             </Box>
          </Box>
       );
    }
 }
-
-export default Management;

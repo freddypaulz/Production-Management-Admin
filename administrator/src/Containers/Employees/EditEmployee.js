@@ -426,7 +426,6 @@ export default class EditEmployee extends Component {
                <Box style={styles.box}>
                   <TextField
                      size='small'
-                     size='small'
                      fullWidth
                      required
                      value={this.state.employee_address}
