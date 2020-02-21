@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Box, Button } from '@material-ui/core';
 import Dashboard from '../../Components/Dashboard/Dashboard';
 import auth from '../../Components/Auth/auth';
-import { Route } from 'react-router-dom';
 
 export default class Home extends Component {
    constructor(props) {

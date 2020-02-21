@@ -14,7 +14,7 @@ export const useStyles = makeStyles(theme => ({
       transition: 'all .2s',
       '&:hover': {
          cursor: 'pointer',
-         maxWidth: '20vw',
+         maxWidth: '15vw',
          transition: 'all .2s'
       }
    },

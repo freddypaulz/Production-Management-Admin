@@ -19,7 +19,7 @@ export default function Dashboard(props) {
       }
    };
    const [state, setState] = useState({
-      dashboard: '20vw'
+      dashboard: '15vw'
    });
    return (
       <Box display='flex'>
@@ -30,10 +30,39 @@ export default function Dashboard(props) {
             className={classes.boxOutProp}
          >
             <Box className={classes.position}>
-               <Box fontSize='30px' display='flex' justifyContent='flex-start'>
-                  DASHBOARD
-               </Box>
                <Box
+                  display='flex'
+                  flexDirection='row'
+                  width='100vw'
+                  // bgcolor='red'
+                  justifyContent='space-between'
+               >
+                  <Box
+                     fontSize='30px'
+                     //  bgcolor='blue'
+                     marginLeft='5px'
+                  >
+                     DASHBOARD
+                  </Box>
+                  <Box
+                     display='flex'
+                     // bgcolor='brown'
+                  >
+                     <ArrowBackIosIcon
+                        style={{
+                           fontSize: '30px',
+                           padding: '5px',
+                           paddingRight: '0px'
+                        }}
+                        onClick={() => {
+                           setState({
+                              dashboard: '.1px'
+                           });
+                        }}
+                     />
+                  </Box>
+               </Box>
+               {/* <Box
                   marginLeft='75px'
                   bgcolor='red'
                   display='flex'
@@ -51,7 +80,7 @@ export default function Dashboard(props) {
                         });
                      }}
                   />
-               </Box>
+               </Box> */}
             </Box>
             <Divider />
             {props.items.map((item, index) => {
