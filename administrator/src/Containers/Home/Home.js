@@ -9,7 +9,8 @@ export default class Home extends Component {
       super(props);
       this.dashboardList = [
          { Name: 'Management', Path: 'management' },
-         { Name: 'Requests', Path: 'requests' }
+         { Name: 'Requests', Path: 'requests/finance' },
+         { Name: 'Reports', Path: 'reports' }
       ];
    }
 

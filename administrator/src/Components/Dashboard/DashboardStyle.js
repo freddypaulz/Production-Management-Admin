@@ -5,13 +5,18 @@ export const useStyles = makeStyles(theme => ({
       color: '#000',
       backgroundColor: '#f5f6fc',
       padding: 0,
-      minWidth: '20vw',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'left',
       maxHeight: '100vh',
       minHeight: '100vh',
-      overflow: 'auto'
+      overflow: 'auto',
+      transition: 'all .2s',
+      '&:hover': {
+         cursor: 'pointer',
+         maxWidth: '20vw',
+         transition: 'all .2s'
+      }
    },
 
    boxInProp: {
@@ -32,10 +37,10 @@ export const useStyles = makeStyles(theme => ({
       position: 'sticky',
       backgroundColor: '#3f51b5',
       color: 'white',
-      padding: 20,
+      padding: 10,
       top: 0,
-      justifyContent: 'center',
       fontWeight: 'bold',
-      flexDirection: 'row'
+      flexDirection: 'row',
+      width: '92.5%'
    }
 }));

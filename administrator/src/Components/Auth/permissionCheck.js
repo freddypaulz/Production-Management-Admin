@@ -7,14 +7,13 @@ const permissionCheck = (props, component) => {
    console.log(typeof checkPermission);
    if (typeof checkPermission === 'undefined') {
       props.history.push({
-         pathname: 'home/management',
+         pathname: '/home/management',
          state: {
             msg: 'Permission not Granted. Contact Administrator'
          }
       });
       return false;
    } else {
-      console.log('Permitted');
       return true;
    }
 };

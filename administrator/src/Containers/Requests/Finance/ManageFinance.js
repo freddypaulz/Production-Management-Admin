@@ -11,7 +11,7 @@ import Axios from 'axios';
 import PurchaseForm from './PurchaseForm';
 import Alert from '@material-ui/lab/Alert';
 
-export default class ManagePurchase extends Component {
+export default class ManageFinance extends Component {
    constructor(props) {
       super();
       this.state = {
@@ -50,34 +50,32 @@ export default class ManagePurchase extends Component {
       Axios.get('/request-details')
          .then(res => res.data)
          .then(RequestDetails => {
-            if (this.props.load) {
-               RequestDetails.map(RequestDetail => {
-                  //if (RequestDetail.Status === 'ForwardedToAdmin') {
-                  console.log('hello');
-                  Axios.post('/vendors/vendor', {
-                     _id: RequestDetail.Vendor
-                  })
-                     .then(res => {
-                        RequestDetail.Vendor_name =
-                           res.data.Vendor[0].vendor_name;
-                        req.push(RequestDetail);
-                        console.log(req);
-                        this.setState({
-                           data: [...req]
-                        });
+            RequestDetails.map(RequestDetail => {
+               if (this.props.load) {
+                  if (RequestDetail.Status !== 'Completed') {
+                     console.log('hello');
+                     Axios.post('/vendors/vendor', {
+                        _id: RequestDetail.Vendor
                      })
-                     .catch(err => {
-                        RequestDetail.Vendor = 'Problem loading vendor';
-                        req.push(RequestDetail);
-                        console.log(req);
-                        this.setState({
-                           data: [...req]
+                        .then(res => {
+                           RequestDetail.Vendor_name =
+                              res.data.Vendor[0].vendor_name;
+                           req.push(RequestDetail);
+                           console.log(req);
+                           this.setState({
+                              data: [...req]
+                           });
+                        })
+                        .catch(err => {
+                           RequestDetail.Vendor = 'Problem loading vendor';
+                           req.push(RequestDetail);
+                           console.log(req);
+                           this.setState({
+                              data: [...req]
+                           });
                         });
-                     });
-                  //}
-               });
-            } else {
-               RequestDetails.map(RequestDetail => {
+                  }
+               } else {
                   if (RequestDetail.Status === 'ForwardedToAdmin') {
                      console.log('hello');
                      Axios.post('/vendors/vendor', {
@@ -104,8 +102,8 @@ export default class ManagePurchase extends Component {
                   this.setState({
                      data: [...req]
                   });
-               });
-            }
+               }
+            });
          });
    }
 
@@ -223,7 +221,7 @@ export default class ManagePurchase extends Component {
             <Dialog maxWidth='lg' open={this.state.openHistory} fullWidth>
                <DialogContent style={{ padding: '20px' }}>
                   <Box>
-                     <ManagePurchase load={true} />
+                     <ManageFinance load={true} />
                      <Box
                         width='95%'
                         display='flex'

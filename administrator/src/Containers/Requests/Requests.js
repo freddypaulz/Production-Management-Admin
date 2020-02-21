@@ -3,15 +3,12 @@ import { Box, Button } from '@material-ui/core';
 import Dashboard from '../../Components/Dashboard/Dashboard';
 import auth from '../../Components/Auth/auth';
 import { Route } from 'react-router-dom';
-import ManagePurchase from './Purchase/ManagePurchase';
+import ManagePurchase from './Finance/ManageFinance';
 
 export default class Requests extends Component {
    constructor(props) {
       super(props);
-      this.dashboardList = [
-         { Name: 'Purchase', Path: 'purchase' },
-         { Name: 'Finance', Path: 'finance' }
-      ];
+      this.dashboardList = [{ Name: 'Finance', Path: 'finance' }];
    }
 
    render() {
@@ -66,7 +63,7 @@ export default class Requests extends Component {
                {/* Routes */}
                <Route
                   exact
-                  path='/home/requests/purchase'
+                  path='/home/requests/finance'
                   component={ManagePurchase}
                />
             </Box>
