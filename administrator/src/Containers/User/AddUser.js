@@ -9,8 +9,6 @@ import {
    InputLabel
 } from '@material-ui/core';
 import { PaperBoard } from '../../Components/PaperBoard/PaperBoard';
-import AccountBoxOutlinedIcon from '@material-ui/icons/AccountBoxOutlined';
-import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import axios from 'axios';
 import Styles from '../../Components/styles/FormStyles';
 import permissionCheck from '../../Components/Auth/permissionCheck';
@@ -20,17 +18,20 @@ export default class AddUser extends Component {
    constructor(props) {
       super();
       this.state = {
+         employee_id: '',
          user_name: '',
          password: '',
          password2: '',
          role: '',
          errors: [],
          success: false,
-         Roles: []
+         Roles: [],
+         Employees: []
       };
       this.onAddHandler = () => {
          axios
             .post('/users/add-user', {
+               employee_id: this.state.employee_id,
                name: this.state.user_name,
                password: this.state.password,
                password2: this.state.password2,
@@ -53,9 +54,13 @@ export default class AddUser extends Component {
    }
    componentDidMount() {
       if (permissionCheck(this.props, 'Manage Users')) {
+         axios.get('/employees/employees').then(res => {
+            console.log(res.data.Employees);
+            this.setState({ Employees: [...res.data.Employees] });
+         });
          axios.get('/roles/roles').then(res => {
             console.log(res.data.Roles);
-            this.setState({ Roles: res.data.Roles });
+            this.setState({ Roles: [...res.data.Roles] });
          });
       }
    }
@@ -65,28 +70,57 @@ export default class AddUser extends Component {
             <Box fontSize='30px' mb={3}>
                Add User
             </Box>
-            {this.state.errors.length > 0 ? (
-               this.state.errors.map((error, index) => {
-                  return (
-                     <Box style={styles.box_msg} bgcolor='#f73067' key={index}>
-                        {error}
-                     </Box>
-                  );
-               })
-            ) : this.state.success === true ? (
-               <Box bgcolor='#3df45b' style={styles.box_msg}>
-                  Registration Successful
-               </Box>
-            ) : (
-               <Box></Box>
-            )}
+            {this.state.errors.length > 0
+               ? this.state.errors.map((error, index) => {
+                    return (
+                       <Box
+                          style={styles.box_msg}
+                          bgcolor='#f73067'
+                          key={index}
+                       >
+                          {error}
+                       </Box>
+                    );
+                 })
+               : null}
             <PaperBoard>
                <Box style={styles.box_field}>
-                  <AccountBoxOutlinedIcon
-                     style={styles.icons}
-                     color='primary'
-                  ></AccountBoxOutlinedIcon>
-
+                  <FormControl required variant='outlined' fullWidth>
+                     <InputLabel
+                        style={{
+                           backgroundColor: 'white',
+                           paddingLeft: '2px',
+                           paddingRight: '2px'
+                        }}
+                     >
+                        Select Employee
+                     </InputLabel>
+                     <Select
+                        required
+                        //variant='outlined'
+                        value={this.state.employee_id}
+                        onChange={event => {
+                           console.log(event.target.value);
+                           this.setState({
+                              employee_id: event.target.value
+                           });
+                        }}
+                     >
+                        {this.state.Employees.map((Employee, index) => {
+                           return (
+                              <MenuItem
+                                 selected
+                                 key={index}
+                                 value={Employee._id}
+                              >
+                                 {Employee.employee_first_name}
+                              </MenuItem>
+                           );
+                        })}
+                     </Select>
+                  </FormControl>
+               </Box>
+               <Box style={styles.box_field}>
                   <TextField
                      fullWidth
                      required
@@ -100,7 +134,6 @@ export default class AddUser extends Component {
                   ></TextField>
                </Box>
                <Box style={styles.box_field}>
-                  <VpnKeyIcon style={styles.icons} color='primary'></VpnKeyIcon>
                   <TextField
                      fullWidth
                      required
@@ -114,7 +147,6 @@ export default class AddUser extends Component {
                   ></TextField>
                </Box>
                <Box style={styles.box_field}>
-                  <VpnKeyIcon style={styles.icons} color='primary'></VpnKeyIcon>
                   <TextField
                      fullWidth
                      required
@@ -128,10 +160,6 @@ export default class AddUser extends Component {
                   ></TextField>
                </Box>
                <Box style={styles.box_field}>
-                  <AccountBoxOutlinedIcon
-                     style={styles.icons}
-                     color='primary'
-                  ></AccountBoxOutlinedIcon>
                   <FormControl required variant='outlined' fullWidth>
                      <InputLabel
                         style={{

@@ -9,8 +9,6 @@ import {
    InputLabel
 } from '@material-ui/core';
 import { PaperBoard } from '../../Components/PaperBoard/PaperBoard';
-import AccountBoxOutlinedIcon from '@material-ui/icons/AccountBoxOutlined';
-import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import axios from 'axios';
 import Styles from '../../Components/styles/FormStyles';
 import permissionCheck from '../../Components/Auth/permissionCheck';
@@ -21,13 +19,15 @@ export default class EditUser extends Component {
    constructor(props) {
       super();
       this.state = {
+         employee_id: '',
          user_name: '',
          password: '',
          password2: '',
          errors: [],
          success: false,
          role: '',
-         Roles: []
+         Roles: [],
+         Employees: []
       };
       this.onEditHandler = () => {
          axios
@@ -57,15 +57,19 @@ export default class EditUser extends Component {
    componentDidMount() {
       if (permissionCheck(this.props, 'Manage Users')) {
          axios.get('/roles/roles').then(res => {
-            if (this.state.user_name === '' || this.state.role === '') {
-               this.setState({
-                  user_name: this.props.user.name,
-                  role: this.props.user.role
-               });
-               console.log(this.state.user_name, this.state.role);
-            }
+            //if (this.state.user_name === '' || this.state.role === '') {
+
+            //}
             this.setState({ Roles: res.data.Roles });
-            console.log(this.state.Roles);
+         });
+         axios.get('/employees/employees').then(res => {
+            console.log(res.data.Employees);
+            this.setState({ Employees: [...res.data.Employees] });
+            this.setState({
+               employee_id: this.props.user.employee_id,
+               user_name: this.props.user.name,
+               role: this.props.user.role
+            });
          });
       }
    }
@@ -92,12 +96,44 @@ export default class EditUser extends Component {
             )}
             <PaperBoard>
                <Box style={styles.box_field}>
-                  <AccountBoxOutlinedIcon
-                     style={styles.icons}
-                     color='primary'
-                  ></AccountBoxOutlinedIcon>
-
+                  <FormControl disabled required variant='outlined' fullWidth>
+                     <InputLabel
+                        style={{
+                           backgroundColor: 'white',
+                           paddingLeft: '2px',
+                           paddingRight: '2px'
+                        }}
+                     >
+                        Select Employee
+                     </InputLabel>
+                     <Select
+                        required
+                        //variant='outlined'
+                        value={this.state.employee_id}
+                        onChange={event => {
+                           console.log(event.target.value);
+                           this.setState({
+                              employee_id: event.target.value
+                           });
+                        }}
+                     >
+                        {this.state.Employees.map((Employee, index) => {
+                           return (
+                              <MenuItem
+                                 selected
+                                 key={index}
+                                 value={Employee._id}
+                              >
+                                 {Employee.employee_first_name}
+                              </MenuItem>
+                           );
+                        })}
+                     </Select>
+                  </FormControl>
+               </Box>
+               <Box style={styles.box_field}>
                   <TextField
+                     disabled
                      fullWidth
                      required
                      value={this.state.user_name}
@@ -111,10 +147,6 @@ export default class EditUser extends Component {
                </Box>
                <Box style={{ width: '100%' }}>
                   <Box style={styles.box_field}>
-                     <VpnKeyIcon
-                        style={styles.icons}
-                        color='primary'
-                     ></VpnKeyIcon>
                      <TextField
                         fullWidth
                         required
@@ -129,10 +161,6 @@ export default class EditUser extends Component {
                   </Box>
 
                   <Box style={styles.box_field}>
-                     <VpnKeyIcon
-                        style={styles.icons}
-                        color='primary'
-                     ></VpnKeyIcon>
                      <TextField
                         fullWidth
                         required
@@ -148,10 +176,6 @@ export default class EditUser extends Component {
                </Box>
 
                <Box style={styles.box_field}>
-                  <AccountBoxOutlinedIcon
-                     style={styles.icons}
-                     color='primary'
-                  ></AccountBoxOutlinedIcon>
                   <FormControl variant='outlined' fullWidth>
                      <InputLabel
                         style={{

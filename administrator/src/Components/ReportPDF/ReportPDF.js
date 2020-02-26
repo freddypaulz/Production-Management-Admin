@@ -56,7 +56,7 @@ export const ReportPDF = props => (
                   <TableCell style={{ padding: '5' }}>Status</TableCell>
                   <TableCell style={{ padding: '5' }}>Vendor</TableCell>
                   <TableCell style={{ padding: '5' }}>Total Price</TableCell>
-                  <TableCell style={{ padding: '5' }}>Employee Name</TableCell>
+                  <TableCell style={{ padding: '5' }}>Created By</TableCell>
                   <TableCell style={{ padding: '5' }}>Designation</TableCell>
                   <TableCell style={{ padding: '5' }}>Date</TableCell>
                </TableHeader>

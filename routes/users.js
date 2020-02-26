@@ -31,7 +31,7 @@ router.post('/user', (req, res, next) => {
 });
 
 router.post('/delete-user', (req, res, next) => {
-   Users.findOneAndDelete({ name: req.body.name }).then(user => {
+   Users.findOneAndDelete({ _id: req.body._id }).then(user => {
       res.send(user);
    });
 });
@@ -41,11 +41,11 @@ router.get('/add-user', (req, res) => {
 });
 
 router.post('/add-user', (req, res) => {
-   const { name, password, password2, role } = req.body;
+   const { employee_id, name, password, password2, role } = req.body;
    let errors = [];
    console.log(req.body);
    console.log('Data: ', name, password, password2);
-   if (!name || !password || !password2 || !role) {
+   if (!employee_id || !name || !password || !password2 || !role) {
       errors.push('Enter all required fields');
    }
 
@@ -66,24 +66,31 @@ router.post('/add-user', (req, res) => {
             errors.push('Username already taken');
             res.send({ errors });
          } else {
-            const newUser = new Users({
-               name,
-               password,
-               role
-            });
-
-            //hash password
-            bcrypt.genSalt(10, (err, salt) => {
-               bcrypt.hash(newUser.password, salt, (err, hash) => {
-                  if (err) throw err;
-                  newUser.password = hash;
-
-                  newUser.save().then(user => {
-                     //console.log(user);
+            Users.findOne({ employee_id }).then(User => {
+               if (User) {
+                  errors.push('Employee already registered');
+                  res.send({ errors });
+               } else {
+                  const newUser = new Users({
+                     employee_id,
+                     name,
+                     password,
+                     role
                   });
-               });
+                  //hash password
+                  bcrypt.genSalt(10, (err, salt) => {
+                     bcrypt.hash(newUser.password, salt, (err, hash) => {
+                        if (err) throw err;
+                        newUser.password = hash;
+
+                        newUser.save().then(user => {
+                           //console.log(user);
+                        });
+                     });
+                  });
+                  return res.send({ errors });
+               }
             });
-            return res.send({ errors });
          }
       });
    }

@@ -14,6 +14,7 @@ export default class ManageUser extends Component {
       this.state = {
          columns: [
             { title: 'ID', field: 'id' },
+            { title: 'Employee ID', field: 'employee_id' },
             { title: 'Name', field: 'name' },
             { title: 'Role', field: 'role' }
          ],
@@ -29,7 +30,7 @@ export default class ManageUser extends Component {
             })
             .then(user => {
                this.EditData = { ...user.data.Users[0] };
-               console.log(this.EditData);
+               console.log('Edit Data', this.EditData);
                this.setState({
                   openEdit: true
                });
@@ -61,6 +62,29 @@ export default class ManageUser extends Component {
                         });
                      }
                   });
+               axios
+                  .post('/employees/employee', {
+                     _id: res.data.Users[i].employee_id
+                  })
+                  .then(employee => {
+                     if (employee.data.Employee[0]) {
+                        console.log(
+                           'employee: ',
+                           employee.data.Employee[0].employee_id
+                        );
+                        res.data.Users[i].employee_id =
+                           employee.data.Employee[0].employee_id;
+                        this.setState({
+                           data: [...res.data.Users]
+                        });
+                     } else {
+                        res.data.Users[i].employee_id =
+                           'problem loading Employee ID';
+                        this.setState({
+                           data: [...res.data.Users]
+                        });
+                     }
+                  });
             }
             this.setState({
                data: [...res.data.Users]
@@ -73,7 +97,6 @@ export default class ManageUser extends Component {
          this.handleClose();
       }
    }
-   componentWillUnmount() {}
    render() {
       return (
          <Box
@@ -129,7 +152,7 @@ export default class ManageUser extends Component {
                   onRowDelete: oldData =>
                      axios
                         .post('/users/delete-user', {
-                           name: oldData.name
+                           _id: oldData._id
                         })
                         .then(User => {
                            console.log(User);

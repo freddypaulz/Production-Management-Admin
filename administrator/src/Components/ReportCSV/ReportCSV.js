@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CSVLink, CSVDownload } from 'react-csv';
+import { CSVLink } from 'react-csv';
 
 export default class ReportCSV extends Component {
    constructor(props) {
@@ -13,7 +13,7 @@ export default class ReportCSV extends Component {
          { label: 'Status', key: 'Status' },
          { label: 'Vendor', key: 'Vendor' },
          { label: 'Total Price', key: 'Total_Price' },
-         { label: 'Employee Name', key: 'Employee' },
+         { label: 'Created By', key: 'Employee' },
          { label: 'Designation', key: 'Role' },
          { label: 'Date', key: 'date' }
       ];
