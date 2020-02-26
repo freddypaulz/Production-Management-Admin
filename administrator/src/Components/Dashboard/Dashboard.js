@@ -18,14 +18,13 @@ export default function Dashboard(props) {
          color: '#3f51b5'
       }
    };
-   const [state, setState] = useState({
-      dashboard: '15vw'
-   });
+   // const [state, setState] = useState({
+   //    dashboard: '15vw'
+   // });
    return (
       <Box display='flex'>
          <Box
-            // minWidth='20vw'
-            maxWidth={state.dashboard}
+            maxWidth={props.width}
             component='div'
             className={classes.boxOutProp}
          >
@@ -44,43 +43,7 @@ export default function Dashboard(props) {
                   >
                      DASHBOARD
                   </Box>
-                  <Box
-                     display='flex'
-                     // bgcolor='brown'
-                  >
-                     <ArrowBackIosIcon
-                        style={{
-                           fontSize: '30px',
-                           padding: '5px',
-                           paddingRight: '0px'
-                        }}
-                        onClick={() => {
-                           setState({
-                              dashboard: '.1px'
-                           });
-                        }}
-                     />
-                  </Box>
                </Box>
-               {/* <Box
-                  marginLeft='75px'
-                  bgcolor='red'
-                  display='flex'
-                  padding='5px'
-                  paddingRight='0px'
-                  textAlign='flex-end'
-               >
-                  <ArrowBackIosIcon
-                     style={{
-                        fontSize: '30px'
-                     }}
-                     onClick={() => {
-                        setState({
-                           dashboard: '.1px'
-                        });
-                     }}
-                  />
-               </Box> */}
             </Box>
             <Divider />
             {props.items.map((item, index) => {
@@ -100,7 +63,7 @@ export default function Dashboard(props) {
                );
             })}
          </Box>
-         {state.dashboard === '1px' ? (
+         {props.dashboard === '.1px' ? (
             <Box
                style={{
                   color: 'black',
@@ -110,11 +73,11 @@ export default function Dashboard(props) {
             >
                <MenuRoundedIcon
                   style={{ fontSize: '40px' }}
-                  onClick={() => {
-                     setState({
-                        dashboard: '20vw'
-                     });
-                  }}
+                  // onClick={() => {
+                  //    setState({
+                  //       dashboard: '15vw'
+                  //    });
+                  // }}
                />
             </Box>
          ) : null}

@@ -8,13 +8,13 @@ export const useStyles = makeStyles(theme => ({
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'left',
-      maxHeight: '100vh',
-      minHeight: '100vh',
+      maxHeight: '90vh',
+      minHeight: '90vh',
       overflow: 'auto',
       transition: 'all .2s',
       '&:hover': {
          cursor: 'pointer',
-         maxWidth: '15vw',
+         maxWidth: '17vw',
          transition: 'all .2s'
       }
    },
@@ -35,8 +35,9 @@ export const useStyles = makeStyles(theme => ({
    position: {
       display: 'flex',
       position: 'sticky',
-      backgroundColor: '#3f51b5',
-      color: 'white',
+      backgroundColor: '#f5f6fc',
+      // backgroundColor: '#3f51b5',
+      color: 'black',
       padding: 10,
       top: 0,
       fontWeight: 'bold',
