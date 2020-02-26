@@ -52,7 +52,7 @@ class Management extends React.Component {
       return (
          <Box>
             <AppBar
-               name='Home'
+               name='Management'
                logout={this.logout}
                home={this.home}
                dashboardMax={this.dashboardMax}

@@ -94,6 +94,10 @@ export default class Login extends Component {
                            })
                            .then(res => {
                               if (res.data.name === this.state.user_name) {
+                                 sessionStorage.setItem(
+                                    'User Name',
+                                    res.data.name
+                                 );
                                  auth.login(
                                     res.data.name === this.state.user_name
                                  );

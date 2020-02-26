@@ -44,7 +44,7 @@ export default class Home extends Component {
       return (
          <Box>
             <AppBar
-               name='Home'
+               name='Reports'
                logout={this.logout}
                home={this.home}
                dashboardMax={this.dashboardMax}

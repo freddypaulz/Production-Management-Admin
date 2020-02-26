@@ -10,6 +10,10 @@ import IconButton from '@material-ui/core/IconButton';
 import AppsIcon from '@material-ui/icons/Apps';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Fade from '@material-ui/core/Fade';
+import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import T from './T.png';
 
 const useStyles = makeStyles(theme => ({
    root: {
@@ -68,20 +72,49 @@ export default function ButtonAppBar(props) {
                   </Button>
                ) : null}
 
-               <Button color='inherit' onClick={props.logout}>
-                  Logout
+               <Button
+                  color='inherit'
+                  onClick={event => setAnchorE1(event.currentTarget)}
+               >
+                  <AccountCircleOutlinedIcon
+                     style={{ fontSize: '25px', marginRight: '5px' }}
+                  />
+                  {sessionStorage.getItem('User Name')}
                </Button>
-               {/* <Menu
-                  id='simple-menu'
+               <img
+                  src={T}
+                  alt='Logo'
+                  style={{
+                     marginLeft: '10px',
+                     width: '20px',
+                     height: '30px',
+                     backgroundColor: 'white',
+                     padding: '5px',
+                     borderRadius: '5px'
+                  }}
+               ></img>
+               <Menu
+                  style={{ marginTop: '40px' }}
+                  id='user-menu'
                   anchorEl={anchorEl}
                   keepMounted
                   open={Boolean(anchorEl)}
-                  onClose={handleClose}
+                  TransitionComponent={Fade}
+                  onClose={() => {
+                     setAnchorE1(null);
+                  }}
                >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>My account</MenuItem>
-                  <MenuItem onClick={handleClose}>Logout</MenuItem>
-               </Menu> */}
+                  <MenuItem onClick={props.logout}>
+                     <ExitToAppIcon
+                        style={{
+                           fontSize: '20px',
+                           marginRight: '5px',
+                           padding: '5px'
+                        }}
+                     />
+                     Logout
+                  </MenuItem>
+               </Menu>
             </Toolbar>
          </AppBar>
       </Box>

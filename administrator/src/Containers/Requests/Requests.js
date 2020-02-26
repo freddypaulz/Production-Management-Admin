@@ -37,7 +37,7 @@ export default class Requests extends Component {
       return (
          <Box>
             <AppBar
-               name='Home'
+               name='Requests'
                logout={this.logout}
                home={this.home}
                dashboardMax={this.dashboardMax}

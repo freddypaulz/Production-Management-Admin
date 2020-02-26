@@ -620,7 +620,7 @@ export default class EditDistributor extends Component {
                               index + 1 ? (
                                  <AddBoxOutlinedIcon
                                     color='secondary'
-                                    fontSize='large'
+                                    fontSize='medium'
                                     onClick={() => {
                                        this.setState({});
                                        this.setState(prevState => {
@@ -641,7 +641,7 @@ export default class EditDistributor extends Component {
                               ) : (
                                  <DeleteOutlineIcon
                                     color='secondary'
-                                    fontSize='large'
+                                    fontSize='medium'
                                     onClick={() => {
                                        this.setState({});
                                        this.setState(prevState => {
