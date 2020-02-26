@@ -49,24 +49,31 @@ const PurchaseForm = props => {
       });
    }, [props.data, props.action]);
 
-   useEffect(() => {
-      console.log(state.reqDetails);
-   }, [state.reqDetails]);
+   useEffect(
+      () => {
+         console.log(state.reqDetails);
+      }
+      // , [state.reqDetails]
+   );
 
-   var qURL = [];
-   const childState = url => {
-      qURL = url;
-   };
+   // var qURL = [];
+   // const childState = url => {
+   //    qURL = url;
+   // };
    const onCancel = () => {
       var amount = document.getElementsByName('amount')[0].value;
-      if (qURL.length === 0 || amount <= 0 || isNaN(amount)) {
+      if (
+         // qURL.length === 0 ||
+         amount <= 0 ||
+         isNaN(amount)
+      ) {
          setState(state => ({
             ...state,
             quantity: props.data.Quantity,
             munit: props.data.Measuring_Unit,
             amount: props.data.Total_Price,
             vendor: props.data.Vendor,
-            quotationURL: props.data.Quotation_Document_URL,
+            // quotationURL: props.data.Quotation_Document_URL,
             status: props.data.Status
          }));
       }
@@ -100,7 +107,7 @@ const PurchaseForm = props => {
                status: state.reqDetails.status
             }
          }).then(
-            console.log('Updated: ', state.reqDetails, qURL),
+            // console.log('Updated: ', state.reqDetails, qURL),
             props.handler(props.data, 1)
          );
       }

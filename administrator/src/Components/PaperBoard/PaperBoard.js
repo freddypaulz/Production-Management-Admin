@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
    fixedHeight: {
       maxHeight: '29.5vw',
       minWidth: '300px',
-      minHeight: '100px'
+      minHeight: '5px'
    }
 }));
 

@@ -103,6 +103,7 @@ export default class ManageFinance extends Component {
                      data: [...req]
                   });
                }
+               return null;
             });
          });
    }

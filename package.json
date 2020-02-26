@@ -12,7 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@david.kucsai/react-pdf-table": "^0.3.0",
     "@material-ui/lab": "^4.0.0-alpha.40",
+    "@react-pdf/renderer": "^1.6.8",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
     "concurrently": "^5.0.2",
@@ -24,7 +26,9 @@
     "mongoose": "^5.8.9",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "react-csv-reader": "^2.0.2"
+    "react-csv": "^2.0.1",
+    "react-csv-reader": "^2.0.2",
+    "react-to-pdf": "0.0.10"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

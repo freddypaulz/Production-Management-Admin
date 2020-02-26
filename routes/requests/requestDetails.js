@@ -76,4 +76,68 @@ router.post('/request-details', (req, res) => {
    }
 });
 
+router.post('/request-details-filter', (req, res) => {
+   console.log('req body: ', req.body);
+
+   const {
+      from_date,
+      to_date,
+      from_quantity,
+      to_quantity,
+      measuring_unit,
+      raw_material_id,
+      status,
+      raw_material_code,
+      from_total_price,
+      to_total_price,
+      vendor
+   } = req.body;
+
+   let conditions = {};
+   if (from_date && to_date) {
+      conditions.date = {
+         $gte: new Date(from_date),
+         $lte: new Date(to_date)
+      };
+   }
+
+   if (status) {
+      conditions.Status = status;
+   }
+
+   if (raw_material_id) {
+      conditions.Raw_Material_Id = raw_material_id;
+   }
+
+   if (vendor) {
+      conditions.Vendor = vendor;
+   }
+
+   if (raw_material_code) {
+      conditions.Raw_Material_Code = raw_material_code;
+   }
+
+   if (measuring_unit) {
+      conditions.Measuring_Unit = measuring_unit;
+   }
+
+   if (from_quantity && to_quantity) {
+      conditions.Quantity = {
+         $gte: from_quantity,
+         $lte: to_quantity
+      };
+   }
+
+   if (from_total_price && to_total_price) {
+      conditions.Total_Price = {
+         $gte: from_total_price,
+         $lte: to_total_price
+      };
+   }
+   console.log('query: ', conditions);
+   reqDetails.find(conditions).then(reqDetails => {
+      res.send(reqDetails);
+   });
+});
+
 module.exports = router;

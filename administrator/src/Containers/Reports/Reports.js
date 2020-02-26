@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Box, Button } from '@material-ui/core';
 import Dashboard from '../../Components/Dashboard/Dashboard';
 import auth from '../../Components/Auth/auth';
+import Purchase from './Purchase/Purchase';
+import { Route } from 'react-router-dom';
 
 export default class Home extends Component {
    constructor(props) {
@@ -60,6 +62,11 @@ export default class Home extends Component {
                      </Button>
                   </Box>
                </Box>
+               <Route
+                  exact
+                  path='/home/reports/purchase'
+                  component={Purchase}
+               />
             </Box>
          </Box>
       );

@@ -11,12 +11,9 @@ export default class CityCSVUpload extends Component {
       };
       this.onBulkAddHandler = () => {
          this.state.bulk_upload.map(city => {
-            console.log(city[1]);
             axios
                .post('/states/state-name', { state_name: city[1] })
                .then(State => {
-                  console.log(city);
-                  console.log(State);
                   axios
                      .post('/cities/add-city', {
                         city_name: city[0],
@@ -24,7 +21,6 @@ export default class CityCSVUpload extends Component {
                         description: city[2]
                      })
                      .then(res => {
-                        console.log(res);
                         if (res.data.errors.length > 0) {
                            console.log(res.data.errors);
                            this.setState({
@@ -53,9 +49,7 @@ export default class CityCSVUpload extends Component {
                <Box display='flex' flex='2' alignItems='center'>
                   <CSVReader
                      onFileLoaded={data => {
-                        console.log(data);
                         let max = data.length - 2;
-                        console.log(max);
                         data = data.splice(1, max);
                         data.push('EOF');
                         this.setState({
