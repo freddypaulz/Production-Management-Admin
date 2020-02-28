@@ -1,79 +1,130 @@
-const reqDetails = require('../../models/Requests/RequestDetails');
+const request_details = require('../../models/Requests/RequestDetails');
+const Logs = require('../../models/Logs/Logs');
 const express = require('express');
 const router = express.Router();
+
 router.get('/', (req, res) => {
-   reqDetails.find({}, function(err, data) {
+   request_details.find({}, function(err, data) {
       if (err) throw err;
       res.send(data);
+      console.log(data);
+   });
+});
+router.post('/', (req, res) => {
+   request_details.find({ _id: req.body._id }, function(err, data) {
+      if (err) throw err;
+      res.send(data);
+      console.log(data);
    });
 });
 
-router.post('/request-details', (req, res) => {
-   if (req.body.Edit) {
-      var _Id = req.body.Edit._id;
-      var vendor = req.body.Edit.vendor;
-      var amount = req.body.Edit.amount;
-      //var qURL = req.body.Edit.quotationURL;
-      var quantity = req.body.Edit.quantity;
-      var munit = req.body.Edit.munit;
-      var status = req.body.Edit.status;
-      reqDetails.findByIdAndUpdate(
-         {
-            _id: _Id
-         },
-         {
-            $set: {
-               Quantity: quantity,
-               Measuring_Unit: munit,
-               Vendor: vendor,
-               Total_Price: amount,
-               //Quotation_Document_URL: qURL,
-               Status: status
-            }
-         },
-         { useFindAndModify: false },
-         function(err) {
-            if (err) {
-               throw err;
-            } else {
-               // console.log(
-               //    '_id:',
-               //    _Id,
-               //    ' vendor: ',
-               //    vendor,
-               //    ' amount: ',
-               //    amount,
-               //    'quotationURL: ',
-               //    qURL,
-               //    ' status: ',
-               //    status
-               // );
-            }
-         }
-      );
-   }
+router.post('/add', (req, res) => {
+   const {
+      // _id,
+      Raw_Material_Id,
+      Raw_Material_Code,
+      Quantity,
+      Measuring_Unit,
+      Priority,
+      Due_Date,
+      Status,
+      Vendor,
+      Comments,
+      Created_By,
+      Total_Price,
+      logs
+   } = req.body;
+   console.log(req.body);
 
-   if (req.body.Status) {
-      var _Id = req.body.Status._id;
-      var status = req.body.Status.status;
-      console.log('Status: ', status);
-      reqDetails.findByIdAndUpdate(
-         { _id: _Id },
+   const new_request_details = new request_details({
+      //_id,
+      Raw_Material_Id,
+      Raw_Material_Code,
+      Quantity,
+      Measuring_Unit,
+      Priority,
+      Due_Date,
+      Status,
+      Comments,
+      Total_Price,
+      Vendor,
+      Quotation_Document_URL: [],
+      Created_By
+
+      // : {
+      //    Employee_Id: '5e4a727601f32b18b45bac9b',
+      //    Role_Id: '5e4a8cdbce0f9c2244ca9fb1'
+      // }
+   });
+   new_request_details
+      .save()
+      .then(request_details => {
+         console.log('Hello: ', request_details._id);
+
+         const newLogs = new Logs({
+            Request_Id: request_details._id,
+            Address: {
+               From: logs.from,
+               To: logs.to
+            },
+            Comments: logs.comments
+         });
+         newLogs
+            .save()
+            .then(logs => {
+               return res.send(request_details);
+            })
+            .catch(err => {
+               console.log(err);
+            });
+      })
+      .catch(err => {
+         console.log(err);
+      });
+});
+
+router.post('/delete', (req, res, next) => {
+   request_details
+      .findOneAndDelete({ _id: req.body._id })
+      .then(requestdetails => {
+         res.send(request_details);
+      });
+});
+router.post('/edit', (req, res) => {
+   const {
+      _id,
+      Raw_Material_Id,
+      Raw_Material_Code,
+      Quantity,
+      Measuring_Unit,
+      Priority,
+      Due_Date,
+      Status,
+      Comments,
+      Total_Price,
+      Vendor
+   } = req.body;
+
+   request_details
+      .findOneAndUpdate(
+         { _id },
          {
-            $set: {
-               Status: status
-            }
-         },
-         { useFindAndModify: false },
-         function(err) {
-            if (err) {
-               throw err;
-            } else {
-               console.log(status);
-            }
+            Raw_Material_Id,
+            Raw_Material_Code,
+            Quantity,
+            Measuring_Unit,
+            Priority,
+            Due_Date,
+            Status,
+            Comments,
+            Total_Price,
+            Vendor
          }
-      );
-   }
+      )
+      .then(request_details => {
+         res.send(request_details);
+         console.log(request_details);
+      });
 });
 
 router.post('/request-details-filter', (req, res) => {
@@ -135,7 +186,8 @@ router.post('/request-details-filter', (req, res) => {
       };
    }
    console.log('query: ', conditions);
-   reqDetails.find(conditions).then(reqDetails => {
+   request_details.find(conditions).then(reqDetails => {
+      console.log(reqDetails);
       res.send(reqDetails);
    });
 });

@@ -7,7 +7,7 @@ import {
    TableCell,
    DataTableCell
 } from '@david.kucsai/react-pdf-table';
-
+import moment from 'moment';
 // Create styles
 const styles = StyleSheet.create({
    page: {
@@ -27,7 +27,9 @@ const styles = StyleSheet.create({
 });
 // Create Document Component
 export const ReportPDF = props => (
-   <Document title='Purchase Report'>
+   <Document
+      title={`Purchase Report ${new moment().format('DD/MM/YYYY HH:m:s')}`}
+   >
       <Page orientation='landscape' size='A4' style={styles.page}>
          <Text
             style={{

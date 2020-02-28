@@ -3,7 +3,7 @@ import { Box, Button } from '@material-ui/core';
 import Dashboard from '../../Components/Dashboard/Dashboard';
 import auth from '../../Components/Auth/auth';
 import { Route } from 'react-router-dom';
-import ManagePurchase from './Finance/ManageFinance';
+import ManagePurchase from './Finance/ManagePurchases';
 import AppBar from '../../Components/AppBar/AppBar';
 
 export default class Requests extends Component {

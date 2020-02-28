@@ -18,6 +18,7 @@ import styles from '../../../Components/styles/FormStyles';
 import { PDFViewer } from '@react-pdf/renderer';
 import { ReportPDF } from '../../../Components/ReportPDF/ReportPDF';
 import ReportCSV from '../../../Components/ReportCSV/ReportCSV';
+import moment from 'moment';
 
 export default class Purchase extends Component {
    constructor(props) {
@@ -111,8 +112,7 @@ export default class Purchase extends Component {
                Axios.post('/roles/role', {
                   _id: record.Created_By.Role_Id
                }).then(role => {
-                  if (role.data.Role) {
-                     console.log(role.data.Role[0].role_name);
+                  if (role.data.Role[0]) {
                      record.Role = role.data.Role[0].role_name;
                   } else {
                      record.Role = 'not specified';
@@ -121,26 +121,35 @@ export default class Purchase extends Component {
                      data: [...res.data]
                   });
                });
-               Axios.post('/employees/employee', {
-                  _id: record.Created_By.Employee_Id
-               }).then(employee => {
-                  if (employee.data.Employee) {
-                     console.log(employee.data.Employee[0].employee_first_name);
-                     record.Employee =
-                        employee.data.Employee[0].employee_first_name;
-                  } else {
-                     record.Employee = 'not specified';
-                  }
-                  this.setState({
-                     data: [...res.data]
+               if (record.Created_By.Employee_Id !== 'not specified') {
+                  console.log(record.Created_By.Employee_Id);
+                  Axios.post('/employees/employee', {
+                     _id: record.Created_By.Employee_Id
+                  }).then(employee => {
+                     if (employee.data.Employee[0]) {
+                        console.log(
+                           employee.data.Employee[0].employee_first_name
+                        );
+                        record.Employee =
+                           employee.data.Employee[0].employee_first_name;
+                     } else {
+                        record.Employee = 'not specified';
+                     }
+                     this.setState({
+                        data: [...res.data]
+                     });
                   });
-               });
+               } else {
+                  record.Employee = 'not specified';
+               }
+
                return null;
             });
             this.setState({
                data: [...res.data],
                openReport: true
             });
+            console.log(this.state.data);
          });
       };
    }
@@ -513,7 +522,12 @@ export default class Purchase extends Component {
                      </Button>
                   </Box>
                </Box>
-               <Dialog maxWidth='lg' open={this.state.openReport} fullWidth>
+               <Dialog
+                  fullScreen
+                  maxWidth='lg'
+                  open={this.state.openReport}
+                  fullWidth
+               >
                   <DialogContent ref={this.ref}>
                      <Box
                         fontSize='30px'
@@ -627,7 +641,9 @@ export default class Purchase extends Component {
                            Purchase Report CSV
                         </Box>
                         <ReportCSV
-                           name='Purchase Report.csv'
+                           name={`Purchase Report ${new moment().format(
+                              'DD/MM/YYYY HH:m:s'
+                           )}.csv`}
                            data={this.state.data}
                         />
                      </Box>
