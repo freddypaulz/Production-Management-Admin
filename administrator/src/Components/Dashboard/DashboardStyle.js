@@ -15,10 +15,20 @@ export const useStyles = makeStyles(theme => ({
       '&:hover': {
          cursor: 'pointer',
          maxWidth: '17vw',
-         transition: 'all .2s'
+         transition: 'all .2s',
+         '&::-webkit-scrollbar': {
+            width: '0.25em'
+         },
+
+         '&::-webkit-scrollbar-thumb': {
+            backgroundColor: 'rgba(0,0,0,.1)',
+            outline: '1px solid slategrey'
+         }
+      },
+      '&::-webkit-scrollbar': {
+         width: '0.0em'
       }
    },
-
    boxInProp: {
       fontSize: '1.2vw',
       color: 'black',

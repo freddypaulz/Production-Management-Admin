@@ -13,9 +13,9 @@ router.get('/logs', (req, res) => {
 });
 
 router.post('/logs', (req, res) => {
-   if (req.body._id) {
+   if (req.body.Request_Id) {
       logs
-         .find({ _id: req.body._id })
+         .find({ Request_Id: req.body.Request_Id })
          .then(log => {
             res.send(log);
          })

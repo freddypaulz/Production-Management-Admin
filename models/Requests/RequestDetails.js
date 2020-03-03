@@ -10,11 +10,8 @@ const schema = new Schema({
    Total_Price: { type: Number, required: true },
    Priority: { type: String, required: true },
    Due_Date: { type: Date, required: true },
-   Quotation_Document_URL: [{ type: String, required: true }],
+   Quotation_Document_URL: [{ type: String, required: true, default: [] }],
    Status: { type: String, required: true },
-   Invoice_Date: { type: Date },
-   Invoice_Amount: { type: Number },
-   Invoice_Document_URL: [{ type: String }],
    Comments: { type: String },
    Created_By: {
       type: Object,

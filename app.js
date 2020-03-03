@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const passport = require('passport');
 
+const fileupload = require('express-fileupload');
 //Passport Config
 require('./config/passport')(passport);
 
@@ -55,6 +56,24 @@ app.use('/employees', require('./routes/employees'));
 app.use('/designations', require('./routes/designations'));
 app.use('/request-details', require('./routes/requests/requestDetails'));
 app.use('/logs', require('./routes/logs/logs'));
+app.use(fileupload());
+
+app.post('/upload', (req, res) => {
+   if (req.files !== null) {
+      const file = req.files.file;
+
+      file.mv(`${__dirname}/administrator/public/uploads/${file.name}`, err => {
+         if (err) {
+            res.send(err);
+         } else {
+            res.json({
+               fileName: file.name,
+               filePath: `/uploads/${file.name}`
+            });
+         }
+      });
+   }
+});
 
 app.listen(5000, () => {
    console.log(`App listening on port ${PORT}!`);

@@ -15,7 +15,7 @@ export default class ReportCSV extends Component {
          { label: 'Total Price', key: 'Total_Price' },
          { label: 'Created By', key: 'Employee' },
          { label: 'Designation', key: 'Role' },
-         { label: 'Date', key: 'date' }
+         { label: 'Created Date', key: 'date' }
       ];
    }
    render() {

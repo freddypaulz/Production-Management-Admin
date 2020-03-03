@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Box, Button } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import Dashboard from '../../Components/Dashboard/Dashboard';
 import auth from '../../Components/Auth/auth';
 import AppBar from '../../Components/AppBar/AppBar';
@@ -8,13 +8,11 @@ export default class Home extends Component {
    constructor(props) {
       super(props);
       this.state = {
-         width: '17vw'
+         width: '17vw',
+         dashboardItems: []
       };
-      this.dashboardList = [
-         { Name: 'Management', Path: 'management' },
-         { Name: 'Requests', Path: 'requests/finance' },
-         { Name: 'Reports', Path: 'reports' }
-      ];
+      this.permissions = JSON.parse(sessionStorage.getItem('permissions'));
+      this.contents = ['Management', 'Requests', 'Reports'];
       this.logout = () => {
          if (auth.logout()) {
             this.props.history.push('/');
@@ -31,7 +29,27 @@ export default class Home extends Component {
          });
       };
    }
-
+   componentDidMount() {
+      this.contents.map(content => {
+         if (
+            this.permissions.find(el => {
+               return el === content ? true : false;
+            })
+         ) {
+            //console.log('true: ', content);
+            let path = content.toLowerCase().replace(/ /g, '-');
+            //console.log(path);
+            this.setState({});
+            this.setState(prevState => {
+               prevState.dashboardItems.push({
+                  Name: content,
+                  Path: path
+               });
+            });
+         }
+         return null;
+      });
+   }
    render() {
       return (
          <Box>
@@ -44,7 +62,7 @@ export default class Home extends Component {
             />
             <Box>
                <Dashboard
-                  items={this.dashboardList}
+                  items={this.state.dashboardItems}
                   componentName='home'
                   width={this.state.width}
                   dashboardMin={this.dashboardMin}

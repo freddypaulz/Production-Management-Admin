@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, Divider } from '@material-ui/core';
 import { useStyles } from './DashboardStyle.js';
 import { NavLink } from 'react-router-dom';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import MenuRoundedIcon from '@material-ui/icons/MenuRounded';
 
 export default function Dashboard(props) {
    const classes = useStyles();
+
    const styles = {
       navStyle: {
          display: 'flex',
@@ -18,9 +18,6 @@ export default function Dashboard(props) {
          color: '#3f51b5'
       }
    };
-   // const [state, setState] = useState({
-   //    dashboard: '15vw'
-   // });
    return (
       <Box display='flex'>
          <Box
@@ -71,14 +68,7 @@ export default function Dashboard(props) {
                   padding: '20px'
                }}
             >
-               <MenuRoundedIcon
-                  style={{ fontSize: '40px' }}
-                  // onClick={() => {
-                  //    setState({
-                  //       dashboard: '15vw'
-                  //    });
-                  // }}
-               />
+               <MenuRoundedIcon style={{ fontSize: '40px' }} />
             </Box>
          ) : null}
       </Box>

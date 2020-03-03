@@ -76,7 +76,7 @@ export const ReportPDF = props => (
                      getContent={r => r.Quantity}
                   />
                   <DataTableCell
-                     style={{ padding: '5' }}
+                     style={{ padding: '5', width: '10' }}
                      getContent={r => r.Measuring_Unit}
                   />
                   <DataTableCell

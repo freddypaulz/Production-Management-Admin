@@ -21,11 +21,28 @@ export default class AddUser extends Component {
          role_name: '',
          description: '',
          permissions: Permissions,
+         management: false,
+         requests: false,
+         reports: false,
          errors: [],
          success: false
       };
+
+      this.manageSelected = 0;
+      this.requestSelected = 0;
+      this.reportSelected = 0;
+
       this.onAddHandler = () => {
          let givenPermissions = [];
+         if (this.state.management) {
+            givenPermissions.push({ name: 'Management', Value: true });
+         }
+         if (this.state.reports) {
+            givenPermissions.push({ name: 'Reports', Value: true });
+         }
+         if (this.state.requests) {
+            givenPermissions.push({ name: 'Requests', Value: true });
+         }
          this.state.permissions.map(permission => {
             if (permission.value === true) {
                givenPermissions.push(permission);
@@ -60,8 +77,66 @@ export default class AddUser extends Component {
             })
             .catch(err => console.log(err));
       };
-      this.checkHandleChange = value => event => {
-         this.setState({ [value]: event.target.checked });
+      this.onCheckHandle = (component, value) => {
+         //console.log(component);
+         //console.log(`${component} ${value}`);
+         switch (component) {
+            case 'management': {
+               console.log(`management ${value}`);
+               if (value) {
+                  this.manageSelected++;
+               } else {
+                  this.manageSelected--;
+               }
+               if (this.manageSelected > 0) {
+                  this.setState({
+                     management: true
+                  });
+               } else {
+                  this.setState({
+                     management: false
+                  });
+               }
+
+               break;
+            }
+            case 'reports': {
+               console.log(`reports ${value}`);
+               if (value) {
+                  this.reportSelected++;
+               } else {
+                  this.reportSelected--;
+               }
+               if (this.reportSelected > 0) {
+                  this.setState({
+                     reports: true
+                  });
+               } else {
+                  this.setState({
+                     reports: false
+                  });
+               }
+               break;
+            }
+            case 'requests': {
+               console.log(`requests ${value}`);
+               if (value) {
+                  this.requestSelected++;
+               } else {
+                  this.requestSelected--;
+               }
+               if (this.requestSelected > 0) {
+                  this.setState({
+                     requests: true
+                  });
+               } else {
+                  this.setState({
+                     requests: false
+                  });
+               }
+               break;
+            }
+         }
       };
    }
    componentDidMount() {
@@ -145,6 +220,42 @@ export default class AddUser extends Component {
                   border='2px solid #dbdbdb'
                   padding='5px'
                >
+                  <Box width='20%' display='flex'>
+                     <FormControlLabel
+                        control={
+                           <Checkbox
+                              checked={this.state.management}
+                              disabled
+                              value={this.state.management}
+                           />
+                        }
+                        label='Management'
+                     />
+                  </Box>
+                  <Box width='20%' display='flex'>
+                     <FormControlLabel
+                        control={
+                           <Checkbox
+                              checked={this.state.requests}
+                              disabled
+                              value={this.state.requests}
+                           />
+                        }
+                        label='Requests'
+                     />
+                  </Box>
+                  <Box width='20%' display='flex'>
+                     <FormControlLabel
+                        control={
+                           <Checkbox
+                              checked={this.state.reports}
+                              disabled
+                              value={this.state.reports}
+                           />
+                        }
+                        label='Reports'
+                     />
+                  </Box>
                   {this.state.permissions.map((permission, index) => {
                      return (
                         <Box width='20%' display='flex' key={index}>
@@ -154,12 +265,16 @@ export default class AddUser extends Component {
                                     checked={permission.value}
                                     onClick={e => {
                                        permission.value = !permission.value;
+                                       console.log(permission.component);
+                                       this.onCheckHandle(
+                                          permission.component,
+                                          permission.value
+                                       );
                                        this.setState({
                                           permissions: [
                                              ...this.state.permissions
                                           ]
                                        });
-                                       console.log(this.state.permissions);
                                     }}
                                     value={`${permission.name}`}
                                  />

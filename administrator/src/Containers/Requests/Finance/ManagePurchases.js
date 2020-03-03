@@ -121,7 +121,16 @@ export default class ManagePurchases extends Component {
                      this.loadVendor(RequestDetail);
                   }
                } else {
-                  if (RequestDetail.Status === 'ForwardedToAdmin') {
+                  console.log(
+                     `1: ${
+                        RequestDetail.Created_By.Role_Id
+                     } 2:${sessionStorage.getItem('Role ID')}`
+                  );
+                  if (
+                     RequestDetail.Status === 'ForwardedToAdmin' ||
+                     RequestDetail.Created_By.Role_Id ===
+                        sessionStorage.getItem('Role ID')
+                  ) {
                      this.loadVendor(RequestDetail);
                   }
                }
@@ -204,7 +213,14 @@ export default class ManagePurchases extends Component {
                      icon: 'edit',
                      tooltip: 'Edit User',
                      onClick: (event, rowData) => {
-                        if (rowData.Status === 'ForwardedToAdmin') {
+                        if (
+                           rowData.Status === 'ForwardedToAdmin' ||
+                           rowData.Status === 'ForwardedToFinance' ||
+                           rowData.Status === 'ForwardedToPurchase' ||
+                           rowData.Status === 'Requesting' ||
+                           rowData.Status === 'Rejected' ||
+                           rowData.Status === 'Finance-Accepted'
+                        ) {
                            this.setState({
                               fieldDisabled: {
                                  quantity: false,

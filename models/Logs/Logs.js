@@ -7,7 +7,7 @@ const logSchema = mongoose.Schema({
       To: { type: String, required: true }
    },
    Entry_Date: { type: Date, default: Date.now, required: true },
-   Comments: { type: String, required: true }
+   Comments: { type: String, default: '-', required: true }
 });
 
 const Logs = mongoose.model('Logs', logSchema);

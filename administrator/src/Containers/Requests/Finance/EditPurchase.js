@@ -6,11 +6,17 @@ import {
    Select,
    FormControl,
    InputLabel,
-   MenuItem
+   MenuItem,
+   Link,
+   Dialog,
+   DialogContent
 } from '@material-ui/core';
 import axios from 'axios';
 import Styles from './styles/FormStyles';
 import { Datepick } from '../../../Components/Date/Datepick';
+import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined';
+import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
+import Logs from '../Logs/Logs';
 
 const styles = Styles;
 const style = {
@@ -38,7 +44,10 @@ export default class EditPurchase extends Component {
          materials: [],
          vendors: [],
          code: '',
-         to: ''
+         to: '',
+         quotation: '',
+         openLog: false,
+         logs: []
       };
       this.onEditHandler = () => {
          axios
@@ -59,10 +68,11 @@ export default class EditPurchase extends Component {
                      Raw_Material_Code: this.state.Raw_Material_Code,
                      Quantity: this.state.Quantity,
                      Measuring_Unit: this.state.Measuring_Unit,
+                     Quotation_Document_URL: [],
                      Priority: this.state.Priority,
                      Due_Date: this.state.Due_Date,
                      Status: this.state.Status,
-                     Comments: comments.data._id,
+                     Comments: comments.data.Comments,
                      Vendor: this.state.Vendor,
                      Total_Price: this.state.Total_Price
                   })
@@ -121,7 +131,8 @@ export default class EditPurchase extends Component {
          Priority: this.props.Purchase.Priority,
          Due_Date: this.props.Purchase.Due_Date,
          Comments: this.props.Purchase.Comments,
-         Total_Price: this.props.Purchase.Total_Price
+         Total_Price: this.props.Purchase.Total_Price,
+         quotation: this.props.Purchase.Quotation_Document_URL
       });
    }
 
@@ -184,6 +195,7 @@ export default class EditPurchase extends Component {
                                                 materialCode
                                              );
                                           }
+                                          return null;
                                        });
                                        this.setState({
                                           Raw_Material_Id: event.target.value,
@@ -461,23 +473,54 @@ export default class EditPurchase extends Component {
                                  </Select>
                               </FormControl>
                            </Box>
-                           <Box width='100%' style={style}>
-                              <TextField
-                                 disabled={this.props.disabled.comment}
-                                 size='small'
-                                 multiline
-                                 rowsMax='3'
-                                 variant='outlined'
-                                 fullWidth
-                                 label='Comments'
-                                 value={this.state.Comments}
-                                 onChange={event => {
-                                    this.setState({
-                                       Comments: event.target.value
-                                    });
-                                    console.log(event.target.value);
-                                 }}
-                              ></TextField>
+                           <Box
+                              width='100%'
+                              style={style}
+                              display='flex'
+                              justifyContent='space-between'
+                           >
+                              <Box display='flex' width='85%'>
+                                 <TextField
+                                    disabled={this.props.disabled.comment}
+                                    size='small'
+                                    multiline
+                                    rowsMax='3'
+                                    variant='outlined'
+                                    fullWidth
+                                    label='Comments'
+                                    value={this.state.Comments}
+                                    onChange={event => {
+                                       this.setState({
+                                          Comments: event.target.value
+                                       });
+                                    }}
+                                 />
+                              </Box>
+                              <Box display='flex'>
+                                 <Button
+                                    variant='outlined'
+                                    color='secondary'
+                                    size='small'
+                                    fontWeight='Bold'
+                                    onClick={() => {
+                                       axios
+                                          .post('/logs/logs', {
+                                             Request_Id: this.state._id
+                                          })
+                                          .then(Logs => {
+                                             console.log(Logs.data);
+                                             this.setState({
+                                                logs: Logs.data
+                                             });
+                                             this.setState({
+                                                openLog: true
+                                             });
+                                          });
+                                    }}
+                                 >
+                                    <DescriptionOutlinedIcon />
+                                 </Button>
+                              </Box>
                            </Box>
                         </Box>
                      </Box>
@@ -489,34 +532,79 @@ export default class EditPurchase extends Component {
                pb={2}
                m={0}
                display='flex'
-               justifyContent='flex-end'
-               width='87%'
+               justifyContent='space-between'
+               width='88%'
             >
                <Box display='flex'>
-                  <Button
-                     variant='contained'
-                     color='primary'
-                     size='large'
-                     fontWeight='Bold'
-                     onClick={() => {
-                        this.props.cancel();
-                     }}
-                     style={{ fontWeight: 'bold' }}
+                  <Link
+                     style={styles.link}
+                     href={this.state.quotation}
+                     target='_blank'
+                     rel='noreferrer'
                   >
-                     {this.props.disabled.btnText}
-                  </Button>
+                     <GetAppOutlinedIcon color='secondary' />
+                     Quotation
+                  </Link>
                </Box>
-               <Box marginLeft='10px' display={this.props.disabled.btnDisplay}>
-                  <Button
-                     variant='contained'
-                     color='primary'
-                     size='large'
-                     fontWeight='bold'
-                     onClick={this.onEditHandler}
-                     style={{ fontWeight: 'bold' }}
-                  >
-                     Submit
-                  </Button>
+               <Box display='flex'>
+                  <Box>
+                     <Button
+                        variant='contained'
+                        color='primary'
+                        size='large'
+                        fontWeight='Bold'
+                        onClick={() => {
+                           this.props.cancel();
+                        }}
+                        style={{ fontWeight: 'bold' }}
+                     >
+                        {this.props.disabled.btnText}
+                     </Button>
+                  </Box>
+                  <Box marginLeft='10px'>
+                     <Button
+                        variant='contained'
+                        color='primary'
+                        size='large'
+                        fontWeight='bold'
+                        onClick={this.onEditHandler}
+                        style={{ fontWeight: 'bold' }}
+                     >
+                        Submit
+                     </Button>
+                  </Box>
+                  <Dialog open={this.state.openLog} maxWidth='lg' fullWidth>
+                     <DialogContent>
+                        <Logs
+                           data={this.state.logs}
+                           cancel={() => {
+                              this.setState({
+                                 openLog: false
+                              });
+                              this.handleClose();
+                           }}
+                        />
+                        <Box
+                           width='95%'
+                           display='flex'
+                           justifyContent='flex-end'
+                           marginTop='20px'
+                        >
+                           <Button
+                              variant='contained'
+                              color='primary'
+                              size='large'
+                              onClick={() => {
+                                 this.setState({
+                                    openLog: false
+                                 });
+                              }}
+                           >
+                              Close
+                           </Button>
+                        </Box>
+                     </DialogContent>
+                  </Dialog>
                </Box>
             </Box>
          </Box>

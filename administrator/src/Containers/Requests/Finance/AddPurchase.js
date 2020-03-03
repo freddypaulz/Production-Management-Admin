@@ -21,6 +21,7 @@ export default class AddPurchase extends Component {
    constructor(props) {
       super();
       this.state = {
+         file: null,
          _id: '',
          Raw_Material_Id: '',
          Raw_Material_Code: '',
@@ -40,20 +41,37 @@ export default class AddPurchase extends Component {
          code: '',
          to: ''
       };
-      this.onAddHandler = () => {
-         //  axios
-         //     .post('/logs/comment', {
-         //        logs: {
-         //           reqId: props.Purchase._id,
-         //           from: 'Admin',
-         //           to: this.state.to,
-         //           comments: this.state.Comments
-         //        }
-         //     })
-         //     .then(comments => {
-         //        console.log('Comments: ', comments);
-         console.log('User: ', sessionStorage.getItem('User ID'));
-         console.log('Role: ', sessionStorage.getItem('Role ID'));
+
+      this.onUploadHandler = () => {
+         const formData = new FormData();
+         console.log(this.state.file);
+         if (this.state.file) {
+            formData.append('file', this.state.file);
+            axios
+               .post('/request-details/upload', formData, {
+                  headers: {
+                     'content-type': 'multipart/form-data'
+                  }
+               })
+               .then(res => {
+                  if (res.data) {
+                     this.onAddHandler(res.data);
+                  }
+               })
+               .catch(err => {
+                  console.error(err);
+               });
+         } else {
+            this.setState({});
+            this.setState(prev => {
+               prev.errors.push('Choose a file');
+            });
+            console.log(this.state.errors);
+         }
+      };
+
+      this.onAddHandler = file => {
+         console.log('Add:', file);
          axios
             .post('/request-details/add', {
                Raw_Material_Id: this.state.Raw_Material_Id,
@@ -63,8 +81,8 @@ export default class AddPurchase extends Component {
                Priority: this.state.Priority,
                Due_Date: this.state.Due_Date,
                Status: this.state.Status,
-               //  Comments: comments.data._id,
                Comments: this.state.Comments,
+               Quotation_Document_URL: [file.filePath],
                Vendor: this.state.Vendor,
                Total_Price: this.state.Total_Price,
                Created_By: {
@@ -79,10 +97,20 @@ export default class AddPurchase extends Component {
             })
             .then(res => {
                console.log(res.data);
+               if (res.data.errors.length > 0) {
+                  this.setState({
+                     errors: [...res.data.errors]
+                  });
+               } else {
+                  this.setState({
+                     errors: [...res.data.errors]
+                  });
+                  this.props.cancel();
+               }
+            })
+            .catch(err => {
+               console.log(err);
             });
-         // })
-         // .catch(err => console.log(err));
-         this.props.cancel();
       };
 
       this.loadStatus = () => {
@@ -174,6 +202,7 @@ export default class AddPurchase extends Component {
                                                 materialCode
                                              );
                                           }
+                                          return null;
                                        });
                                        this.setState({
                                           Raw_Material_Id: event.target.value,
@@ -461,6 +490,42 @@ export default class AddPurchase extends Component {
                               ></TextField>
                            </Box>
                         </Box>
+                        <Box
+                           style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignContent: 'center',
+                              paddingTop: '5px',
+                              paddingLeft: '5px',
+                              paddingRight: '5px',
+                              paddingBottom: '5px',
+                              minWidth: '10%'
+                           }}
+                        >
+                           <Box
+                              fontWeight='bold'
+                              fontSize='1.2vw'
+                              mb={1}
+                              ml={1}
+                              display='flex'
+                           >
+                              Add Quotation
+                           </Box>
+                           <Box width='100%' style={style}>
+                              <input
+                                 multiple
+                                 id='file'
+                                 type='file'
+                                 onChange={e => {
+                                    console.log(e.target.files[0]);
+                                    this.setState({
+                                       file: e.target.files[0]
+                                    });
+                                    console.log(this.state.file);
+                                 }}
+                              />
+                           </Box>
+                        </Box>
                      </Box>
                   </Box>
                </Box>
@@ -487,13 +552,14 @@ export default class AddPurchase extends Component {
                      Cancel
                   </Button>
                </Box>
-               <Box marginLeft='10px' display={this.props.disabled.btnDisplay}>
+               <Box marginLeft='10px'>
                   <Button
                      variant='contained'
                      color='primary'
                      size='large'
                      fontWeight='bold'
-                     onClick={this.onAddHandler}
+                     // onClick={this.onAddHandler}
+                     onClick={this.onUploadHandler}
                      style={{ fontWeight: 'bold' }}
                   >
                      Submit

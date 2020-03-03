@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Box, Button } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import Dashboard from '../../Components/Dashboard/Dashboard';
 import auth from '../../Components/Auth/auth';
 import { Route } from 'react-router-dom';
@@ -10,9 +10,11 @@ export default class Requests extends Component {
    constructor(props) {
       super(props);
       this.state = {
-         width: '17vw'
+         width: '17vw',
+         dashboardItems: []
       };
-      this.dashboardList = [{ Name: 'Finance', Path: 'finance' }];
+      this.permissions = JSON.parse(sessionStorage.getItem('permissions'));
+      this.contents = ['Purchase Requests'];
       this.logout = () => {
          if (auth.logout()) {
             this.props.history.push('/');
@@ -32,6 +34,27 @@ export default class Requests extends Component {
          });
       };
    }
+   componentDidMount() {
+      console.log(this.permissions);
+      this.contents.map(content => {
+         if (
+            this.permissions.find(el => {
+               return el === content ? true : false;
+            })
+         ) {
+            let path = content.toLowerCase().replace(/ /g, '-');
+            this.setState({});
+            this.setState(prevState => {
+               prevState.dashboardItems.push({
+                  Name: content,
+                  Path: path
+               });
+            });
+         }
+
+         return null;
+      });
+   }
 
    render() {
       return (
@@ -45,7 +68,7 @@ export default class Requests extends Component {
             />
             <Box display='flex'>
                <Dashboard
-                  items={this.dashboardList}
+                  items={this.state.dashboardItems}
                   componentName='home/requests'
                   width={this.state.width}
                   dashboardMin={this.dashboardMin}
@@ -59,7 +82,7 @@ export default class Requests extends Component {
                >
                   <Route
                      exact
-                     path='/home/requests/finance'
+                     path='/home/requests/purchase-requests'
                      component={ManagePurchase}
                   />
                </Box>

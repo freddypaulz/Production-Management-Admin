@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Box, Button } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import Dashboard from '../../Components/Dashboard/Dashboard';
 import auth from '../../Components/Auth/auth';
 import Purchase from './Purchase/Purchase';
@@ -10,16 +10,11 @@ export default class Home extends Component {
    constructor(props) {
       super(props);
       this.state = {
-         width: '17vw'
+         width: '17vw',
+         dashboardItems: []
       };
-      this.dashboardList = [
-         { Name: 'Purchase', Path: 'purchase' },
-         { Name: 'Finance', Path: 'finance' },
-         { Name: 'Production', Path: 'production' },
-         { Name: 'Quality Check', Path: 'quality-check' },
-         { Name: 'Stock', Path: 'stock' },
-         { Name: 'Sales', Path: 'sales' }
-      ];
+      this.permissions = JSON.parse(sessionStorage.getItem('permissions'));
+      this.contents = ['Purchase Report'];
       this.logout = () => {
          if (auth.logout()) {
             this.props.history.push('/');
@@ -40,6 +35,30 @@ export default class Home extends Component {
       };
    }
 
+   componentDidMount() {
+      console.log(this.permissions);
+      this.contents.map(content => {
+         if (
+            this.permissions.find(el => {
+               return el === content ? true : false;
+            })
+         ) {
+            //console.log('true: ', master);
+            let path = content.toLowerCase().replace(/ /g, '-');
+            //console.log(path);
+            this.setState({});
+            this.setState(prevState => {
+               prevState.dashboardItems.push({
+                  Name: content,
+                  Path: path
+               });
+            });
+         }
+
+         return null;
+      });
+   }
+
    render() {
       return (
          <Box>
@@ -52,7 +71,7 @@ export default class Home extends Component {
             />
             <Box display='flex'>
                <Dashboard
-                  items={this.dashboardList}
+                  items={this.state.dashboardItems}
                   componentName='home/reports'
                   width={this.state.width}
                   dashboardMin={this.dashboardMin}
@@ -66,7 +85,7 @@ export default class Home extends Component {
                >
                   <Route
                      exact
-                     path='/home/reports/purchase'
+                     path='/home/reports/purchase-report'
                      component={Purchase}
                   />
                </Box>

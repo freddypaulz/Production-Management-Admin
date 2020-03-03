@@ -1,8 +1,10 @@
 const request_details = require('../../models/Requests/RequestDetails');
 const Logs = require('../../models/Logs/Logs');
 const express = require('express');
+const fileupload = require('express-fileupload');
 const router = express.Router();
-
+const moment = require('moment');
+router.use(fileupload());
 router.get('/', (req, res) => {
    request_details.find({}, function(err, data) {
       if (err) throw err;
@@ -17,8 +19,32 @@ router.post('/', (req, res) => {
       console.log(data);
    });
 });
+router.post('/upload', (req, res) => {
+   if (req.files !== null) {
+      let i = '25-10-2020';
+      const file = req.files.file;
+      const fileType = file.name.split('.');
+      const fileName = `quotation ${new moment().format('DD_MM_YYYY HH_m_s')}.${
+         fileType[1]
+      }`;
+      file.mv(
+         `${__dirname}/../../administrator/public/uploads/${fileName}`,
+         err => {
+            if (err) {
+               res.send(err);
+            } else {
+               res.json({
+                  fileName: file.name,
+                  filePath: `/uploads/${fileName}`
+               });
+            }
+         }
+      );
+   }
+});
 
 router.post('/add', (req, res) => {
+   const errors = [];
    const {
       // _id,
       Raw_Material_Id,
@@ -29,60 +55,73 @@ router.post('/add', (req, res) => {
       Due_Date,
       Status,
       Vendor,
+      Quotation_Document_URL,
       Comments,
       Created_By,
       Total_Price,
       logs
    } = req.body;
-   console.log(req.body);
+   if (
+      !Raw_Material_Id ||
+      !Raw_Material_Code ||
+      !Quantity ||
+      !Measuring_Unit ||
+      !Priority ||
+      !Due_Date ||
+      !Status ||
+      !Vendor ||
+      !Quotation_Document_URL ||
+      !Comments ||
+      !Created_By ||
+      !Total_Price ||
+      !logs
+   ) {
+      errors.push('Enter all required field');
+   }
 
-   const new_request_details = new request_details({
-      //_id,
-      Raw_Material_Id,
-      Raw_Material_Code,
-      Quantity,
-      Measuring_Unit,
-      Priority,
-      Due_Date,
-      Status,
-      Comments,
-      Total_Price,
-      Vendor,
-      Quotation_Document_URL: [],
-      Created_By
-
-      // : {
-      //    Employee_Id: '5e4a727601f32b18b45bac9b',
-      //    Role_Id: '5e4a8cdbce0f9c2244ca9fb1'
-      // }
-   });
-   new_request_details
-      .save()
-      .then(request_details => {
-         console.log('Hello: ', request_details._id);
-
-         const newLogs = new Logs({
-            Request_Id: request_details._id,
-            Address: {
-               From: logs.from,
-               To: logs.to
-            },
-            Comments: logs.comments
-         });
-         newLogs
-            .save()
-            .then(logs => {
-               return res.send(request_details);
-            })
-            .catch(err => {
-               console.log(err);
-            });
-      })
-      .catch(err => {
-         console.log(err);
+   if (errors.length > 0) {
+      return res.send({ errors });
+   } else {
+      const new_request_details = new request_details({
+         //_id,
+         Raw_Material_Id,
+         Raw_Material_Code,
+         Quantity,
+         Measuring_Unit,
+         Priority,
+         Due_Date,
+         Status,
+         Comments,
+         Total_Price,
+         Vendor,
+         Quotation_Document_URL,
+         Created_By
       });
+      new_request_details
+         .save()
+         .then(request_details => {
+            const newLogs = new Logs({
+               Request_Id: request_details._id,
+               Address: {
+                  From: logs.from,
+                  To: logs.to
+               },
+               Comments: logs.comments
+            });
+            newLogs
+               .save()
+               .then(logs => {
+                  return res.send({ request_details, errors });
+               })
+               .catch(err => {
+                  console.log(err);
+               });
+         })
+         .catch(err => {
+            console.log(err);
+         });
+   }
 });
-
 router.post('/delete', (req, res, next) => {
    request_details
       .findOneAndDelete({ _id: req.body._id })
@@ -102,7 +141,8 @@ router.post('/edit', (req, res) => {
       Status,
       Comments,
       Total_Price,
-      Vendor
+      Vendor,
+      Quotation_Document_URL
    } = req.body;
 
    request_details
@@ -118,12 +158,16 @@ router.post('/edit', (req, res) => {
             Status,
             Comments,
             Total_Price,
-            Vendor
+            Vendor,
+            Quotation_Document_URL
          }
       )
       .then(request_details => {
          res.send(request_details);
          console.log(request_details);
+      })
+      .catch(err => {
+         console.log(err);
       });
 });
 
