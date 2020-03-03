@@ -144,6 +144,9 @@ export default class EditRole extends Component {
                }
                break;
             }
+            default: {
+               break;
+            }
          }
       };
    }

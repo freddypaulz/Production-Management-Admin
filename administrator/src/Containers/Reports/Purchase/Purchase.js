@@ -27,6 +27,8 @@ export default class Purchase extends Component {
       this.state = {
          from_date: null,
          to_date: null,
+         from_due_date: null,
+         to_due_date: null,
          from_quantity: '',
          to_quantity: '',
          measuring_unit: '',
@@ -58,6 +60,8 @@ export default class Purchase extends Component {
          Axios.post('/request-details/request-details-filter', {
             from_date: this.state.from_date,
             to_date: this.state.to_date,
+            from_due_date: this.state.from_due_date,
+            to_due_date: this.state.to_due_date,
             from_quantity: this.state.from_quantity,
             to_quantity: this.state.to_quantity,
             measuring_unit: this.state.measuring_unit,
@@ -187,7 +191,7 @@ export default class Purchase extends Component {
                      <Box style={styles.box} marginRight='10px'>
                         <Datepick
                            id='1'
-                           Name='From Date'
+                           Name='From Requested Date'
                            minDate={new Date('01-01-1990')}
                            maxDate={new Date()}
                            value={this.state.from_date}
@@ -206,7 +210,7 @@ export default class Purchase extends Component {
                               this.state.from_date !== null ? false : true
                            }
                            id='2'
-                           Name='To Date'
+                           Name='To Requested Date'
                            minDate={this.state.from_date}
                            value={this.state.to_date}
                            setDate={date => {
@@ -219,7 +223,41 @@ export default class Purchase extends Component {
                         />
                      </Box>
                   </Box>
-
+                  <Box style={styles.box_field}>
+                     <Box style={styles.box} marginRight='10px'>
+                        <Datepick
+                           id='1'
+                           Name='From Due Date'
+                           minDate={new Date('01-01-1990')}
+                           value={this.state.from_due_date}
+                           setDate={date => {
+                              date = date.startOf('day');
+                              this.setState({
+                                 from_due_date: date,
+                                 disabled: true
+                              });
+                           }}
+                        />
+                     </Box>
+                     <Box style={styles.box}>
+                        <Datepick
+                           disabled={
+                              this.state.from_due_date !== null ? false : true
+                           }
+                           id='2'
+                           Name='To Due Date'
+                           minDate={this.state.from_due_date}
+                           value={this.state.to_due_date}
+                           setDate={date => {
+                              date = date.endOf('day');
+                              this.setState({
+                                 to_due_date: date,
+                                 disabled: false
+                              });
+                           }}
+                        />
+                     </Box>
+                  </Box>
                   <Box style={styles.box}>
                      <FormControl size='small' variant='outlined' fullWidth>
                         <InputLabel
@@ -493,6 +531,8 @@ export default class Purchase extends Component {
                            this.setState({
                               from_date: null,
                               to_date: null,
+                              from_due_date: null,
+                              to_due_date: null,
                               from_quantity: '',
                               to_quantity: '',
                               measuring_unit: '',

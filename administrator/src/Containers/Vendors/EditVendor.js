@@ -475,7 +475,7 @@ export default class EditVendor extends Component {
                   {this.state.vendor_point_of_contacts
                      .map((poc, index) => {
                         return (
-                           <Box style={styles.box_field}>
+                           <Box key={index} style={styles.box_field}>
                               <Box style={styles.box} marginRight='10px'>
                                  <TextField
                                     size='small'
@@ -607,7 +607,7 @@ export default class EditVendor extends Component {
                               index + 1 ? (
                                  <AddBoxOutlinedIcon
                                     color='secondary'
-                                    fontSize='medium'
+                                    style={{ fontSize: '30px' }}
                                     onClick={() => {
                                        this.setState({});
                                        this.setState(prevState => {
@@ -628,7 +628,7 @@ export default class EditVendor extends Component {
                               ) : (
                                  <DeleteOutlineIcon
                                     color='secondary'
-                                    fontSize='medium'
+                                    style={{ fontSize: '30px' }}
                                     onClick={() => {
                                        this.setState({});
                                        this.setState(prevState => {

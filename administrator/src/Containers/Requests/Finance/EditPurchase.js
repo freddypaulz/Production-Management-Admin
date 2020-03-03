@@ -409,6 +409,7 @@ export default class EditPurchase extends Component {
                                  id='4'
                                  variant='outlined'
                                  Name='Due_Date'
+                                 minDate={new Date()}
                                  value={this.state.Due_Date}
                                  setDate={date => {
                                     this.setState({

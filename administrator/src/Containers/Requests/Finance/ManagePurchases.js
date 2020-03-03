@@ -37,7 +37,9 @@ export default class ManagePurchases extends Component {
             comment: false,
             btnDisplay: 'none',
             btnText: 'Close'
-         }
+         },
+         found: false,
+         msg: 'Fetching Data...'
       };
       this.closeAlert = () => {
          this.setState({ alert: false });
@@ -114,11 +116,26 @@ export default class ManagePurchases extends Component {
 
       this.handleClose = () => {
          this.req = [];
+         this.setState({
+            msg: 'Fetching Data...'
+         });
          axios.get('/request-details').then(RequestDetails => {
             RequestDetails.data.map(RequestDetail => {
                if (this.props.load) {
                   if (RequestDetail.Status !== 'Completed') {
                      this.loadVendor(RequestDetail);
+                     this.setState({
+                        found: true
+                     });
+                  }
+                  if (this.state.found) {
+                     this.setState({
+                        msg: 'Loading....'
+                     });
+                  } else {
+                     this.setState({
+                        msg: 'No data Found!'
+                     });
                   }
                } else {
                   console.log(
@@ -131,12 +148,25 @@ export default class ManagePurchases extends Component {
                      RequestDetail.Created_By.Role_Id ===
                         sessionStorage.getItem('Role ID')
                   ) {
+                     this.setState({
+                        found: true
+                     });
                      this.loadVendor(RequestDetail);
+                  }
+                  if (this.state.found) {
+                     this.setState({
+                        msg: 'Loading....'
+                     });
+                  } else {
+                     this.setState({
+                        msg: 'No data Found!'
+                     });
                   }
                }
                this.setState({
                   data: [...this.req]
                });
+
                return null;
             });
          });
@@ -199,6 +229,11 @@ export default class ManagePurchases extends Component {
                columns={this.state.columns}
                data={this.state.data}
                style={{ width: '90%', maxHeight: '500px', overflow: 'auto' }}
+               localization={{
+                  body: {
+                     emptyDataSourceMessage: this.state.msg
+                  }
+               }}
                options={{
                   sorting: true,
                   headerStyle: {

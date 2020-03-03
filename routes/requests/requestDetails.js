@@ -177,6 +177,8 @@ router.post('/request-details-filter', (req, res) => {
    const {
       from_date,
       to_date,
+      from_due_date,
+      to_due_date,
       from_quantity,
       to_quantity,
       measuring_unit,
@@ -193,6 +195,13 @@ router.post('/request-details-filter', (req, res) => {
       conditions.date = {
          $gte: new Date(from_date),
          $lte: new Date(to_date)
+      };
+   }
+
+   if (from_due_date && to_due_date) {
+      conditions.Due_Date = {
+         $gte: new Date(from_due_date),
+         $lte: new Date(to_due_date)
       };
    }
 
