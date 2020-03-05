@@ -588,12 +588,14 @@ export default class Purchase extends Component {
                            columns={this.state.columns}
                            data={this.state.data}
                            options={{
+                              search: false,
                               draggable: false,
                               sorting: true,
                               headerStyle: {
                                  backgroundColor: '#3f51b5',
                                  color: '#FFF'
-                              }
+                              },
+                              pageSize: this.state.data.length
                            }}
                         />
 

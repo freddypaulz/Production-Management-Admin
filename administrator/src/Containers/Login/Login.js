@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Box, TextField, Button } from '@material-ui/core';
+import { Box, TextField, Button, Checkbox } from '@material-ui/core';
 import { PaperBoard } from '../../Components/PaperBoard/PaperBoard';
 import AccountBoxOutlinedIcon from '@material-ui/icons/AccountBoxOutlined';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import axios from 'axios';
 import auth from '../../Components/Auth/auth';
+// import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { yellow } from '@material-ui/core/colors';
 
 const styles = {
    box: {
@@ -15,6 +17,12 @@ const styles = {
       marginBottom: '20px'
    }
 };
+
+// const theme = createMuiTheme({
+//    palette: {
+//       primary: yellow
+//    }
+// });
 
 export default class Login extends Component {
    componentDidMount() {
@@ -42,20 +50,32 @@ export default class Login extends Component {
          <Box
             flexDirection='column'
             height='100vh'
-            bgcolor='#eee'
+            bgcolor='#3f51b5'
             style={styles.box}
          >
+            {/* <ThemeProvider theme={theme}>
+               <Checkbox defaultChecked color='primary' />
+            </ThemeProvider> */}
             <Box width='30vw'>
                <PaperBoard>
-                  <Box fontSize='2vw' mb={3}>
-                     WELCOME
+                  <Box
+                     style={{ fontWeight: 'bolder', color: '#3f51b5' }}
+                     fontSize='3vw'
+                     mb={3}
+                  >
+                     Login
                   </Box>
                   <Box style={styles.box}>
                      <AccountBoxOutlinedIcon
-                        style={{ fontSize: '40px', marginRight: '10px' }}
+                        style={{
+                           fontSize: '40px',
+                           marginRight: '10px'
+                        }}
                         color='primary'
                      ></AccountBoxOutlinedIcon>
                      <TextField
+                        color='primary'
+                        size='small'
                         fullWidth
                         required
                         variant='outlined'
@@ -68,10 +88,14 @@ export default class Login extends Component {
                   </Box>
                   <Box style={styles.box}>
                      <VpnKeyIcon
-                        style={{ fontSize: '40px', marginRight: '10px' }}
+                        style={{
+                           fontSize: '40px',
+                           marginRight: '10px'
+                        }}
                         color='primary'
                      ></VpnKeyIcon>
                      <TextField
+                        size='small'
                         variant='outlined'
                         fullWidth
                         label='Password'
@@ -84,8 +108,8 @@ export default class Login extends Component {
                   </Box>
                   <Button
                      variant='contained'
-                     color='primary'
                      size='large'
+                     color='primary'
                      onClick={() => {
                         axios
                            .post('/users/login', {

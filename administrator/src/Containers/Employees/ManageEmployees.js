@@ -6,6 +6,7 @@ import axios from 'axios';
 import AddEmployee from './AddEmployee';
 import EditEmployee from './EditEmployee';
 import permissionCheck from '../../Components/Auth/permissionCheck';
+import FilterEmployee from './FilterEmployee';
 
 export default class ManageEmployees extends Component {
    constructor(props) {
@@ -14,19 +15,43 @@ export default class ManageEmployees extends Component {
       this.state = {
          columns: [
             { title: 'ID', field: 'id' },
-            { title: 'Employee First Name', field: 'employee_first_name' },
-            { title: 'Employee Last Name', field: 'employee_last_name' },
-            { title: 'Employee ID', field: 'employee_id' },
-            { title: 'Employee Designation', field: 'employee_designation' },
+            { title: 'First Name', field: 'employee_first_name' },
+            { title: 'Last Name', field: 'employee_last_name' },
+            { title: 'ID', field: 'employee_id' },
+            { title: 'Designation', field: 'employee_designation' },
             {
-               title: 'Employee Work Location',
+               title: 'Work Location',
                field: 'employee_work_location'
             },
-            { title: 'Employee shift', field: 'employee_shift' }
+            { title: 'shift', field: 'employee_shift' }
          ],
          data: [],
+         filters: {
+            firstName: '',
+            lastName: '',
+            fromDOB: null,
+            toDOB: null,
+            fromAge: '',
+            toAge: '',
+            gender: '',
+            mobile: '',
+            email: '',
+            country: '',
+            state: '',
+            city: '',
+            postalCode: '',
+            employeeId: '',
+            fromDateOfJoining: null,
+            toDateOfJoining: null,
+            designation: '',
+            fromSalary: '',
+            toSalary: '',
+            workLocation: '',
+            shift: ''
+         },
          openAdd: false,
-         openEdit: false
+         openEdit: false,
+         openFilter: false
       };
       this.OnEditHandler = (event, rowData) => {
          console.log(rowData._id);
@@ -162,6 +187,22 @@ export default class ManageEmployees extends Component {
                >
                   Add
                </Button>
+               <Button
+                  variant='contained'
+                  color='primary'
+                  style={{
+                     marginBottom: '20px',
+                     display: 'flex'
+                  }}
+                  size='large'
+                  onClick={() => {
+                     this.setState({
+                        openFilter: true
+                     });
+                  }}
+               >
+                  Filters
+               </Button>
             </Box>
 
             <MaterialTable
@@ -228,6 +269,32 @@ export default class ManageEmployees extends Component {
                            openEdit: false
                         });
                         this.handleClose();
+                     }}
+                  />
+               </DialogContent>
+            </Dialog>
+            <Dialog open={this.state.openFilter} maxWidth='lg' fullWidth>
+               <DialogContent style={{ padding: '20px' }}>
+                  <FilterEmployee
+                     filters={this.state.filters}
+                     setData={data => {
+                        this.setState({
+                           data: data
+                        });
+                     }}
+                     cancel={() => {
+                        this.setState({
+                           openFilter: false
+                        });
+                     }}
+                     saveFilters={filters => {
+                        this.setState(prevState => {
+                           prevState.filters = filters;
+                        });
+
+                        this.setState({
+                           openFilter: false
+                        });
                      }}
                   />
                </DialogContent>

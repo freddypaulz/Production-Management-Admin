@@ -246,4 +246,115 @@ router.post('/delete-employee', (req, res) => {
    });
 });
 
+router.post('/filter', (req, res) => {
+   let filters = {};
+   const {
+      firstName,
+      lastName,
+      fromDOB,
+      toDOB,
+      fromAge,
+      toAge,
+      gender,
+      mobile,
+      email,
+      city,
+      country,
+      state,
+      postalCode,
+      employeeId,
+      fromDateOfJoining,
+      toDateOfJoining,
+      designation,
+      fromSalary,
+      toSalary,
+      workLocation,
+      shift
+   } = req.body;
+   console.log(req.body);
+   if (firstName) {
+      filters.employee_first_name = firstName;
+   }
+
+   if (lastName) {
+      filters.employee_last_name = lastName;
+   }
+
+   if (fromDOB && toDOB) {
+      filters.employee_dob = {
+         $gte: new Date(fromDOB),
+         $lte: new Date(toDOB)
+      };
+   }
+
+   if (fromAge && toAge) {
+      filters.employee_age = {
+         $gte: fromAge,
+         $lte: toAge
+      };
+   }
+
+   if (gender) {
+      filters.employee_gender = gender;
+   }
+
+   if (mobile) {
+      filters.employee_mobile_no = mobile;
+   }
+
+   if (email) {
+      filters.employee_email = email;
+   }
+
+   if (country) {
+      filters.employee_country = country;
+   }
+
+   if (state) {
+      filters.employee_state = state;
+   }
+
+   if (city) {
+      filters.employee_city = city;
+   }
+
+   if (postalCode) {
+      filters.employee_postal_code = postalCode;
+   }
+
+   if (employeeId) {
+      filters.employee_id = employeeId;
+   }
+
+   if (fromDateOfJoining && toDateOfJoining) {
+      filters.employee_date_of_joinig = {
+         $gte: fromDateOfJoining,
+         $lte: toDateOfJoining
+      };
+   }
+
+   if (designation) {
+      filters.employee_designation = designation;
+   }
+
+   if (fromSalary && toSalary) {
+      filters.employee_salary = {
+         $gte: fromSalary,
+         $lte: toSalary
+      };
+   }
+
+   if (workLocation) {
+      filters.employee_work_location = workLocation;
+   }
+
+   if (shift) {
+      filters.employee_shift = shift;
+   }
+
+   Employees.find(filters).then(Employees => {
+      res.send(Employees);
+   });
+});
+
 module.exports = router;
