@@ -516,7 +516,7 @@ export default class AddEmployee extends Component {
                      ></TextField>
                   </Box>
                   <Datepick
-                     id='1'
+                     id='2'
                      Name='Date Of Joining'
                      Req={true}
                      value={this.state.employee_date_of_joinig}

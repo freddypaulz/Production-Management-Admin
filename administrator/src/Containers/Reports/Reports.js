@@ -6,7 +6,7 @@ import Purchase from './Purchase/Purchase';
 import { Route } from 'react-router-dom';
 import AppBar from '../../Components/AppBar/AppBar';
 
-export default class Home extends Component {
+export default class Reports extends Component {
    constructor(props) {
       super(props);
       this.state = {

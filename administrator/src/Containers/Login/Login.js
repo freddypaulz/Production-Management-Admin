@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Box, TextField, Button, Checkbox } from '@material-ui/core';
+import { Box, TextField, Button } from '@material-ui/core';
 import { PaperBoard } from '../../Components/PaperBoard/PaperBoard';
 import AccountBoxOutlinedIcon from '@material-ui/icons/AccountBoxOutlined';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import axios from 'axios';
 import auth from '../../Components/Auth/auth';
 // import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { yellow } from '@material-ui/core/colors';
+// import { yellow } from '@material-ui/core/colors';
 
 const styles = {
    box: {

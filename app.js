@@ -53,27 +53,12 @@ app.use('/departments', require('./routes/departments'));
 app.use('/vendors', require('./routes/vendors'));
 app.use('/distributors', require('./routes/distributors'));
 app.use('/employees', require('./routes/employees'));
+app.use('/boxes', require('./routes/boxes'));
 app.use('/designations', require('./routes/designations'));
 app.use('/request-details', require('./routes/requests/requestDetails'));
 app.use('/logs', require('./routes/logs/logs'));
-app.use(fileupload());
-
-app.post('/upload', (req, res) => {
-   if (req.files !== null) {
-      const file = req.files.file;
-
-      file.mv(`${__dirname}/administrator/public/uploads/${file.name}`, err => {
-         if (err) {
-            res.send(err);
-         } else {
-            res.json({
-               fileName: file.name,
-               filePath: `/uploads/${file.name}`
-            });
-         }
-      });
-   }
-});
+app.use('/logs', require('./routes/logs/logs'));
+app.use('/product-code', require('./routes/configurations/productCode'));
 
 app.listen(5000, () => {
    console.log(`App listening on port ${PORT}!`);

@@ -53,6 +53,7 @@ router.post('/add-raw-material', (req, res) => {
    if (description.length > 200) {
       errors.push('Use 20 or less characters for description');
    }
+
    if (errors.length > 0) {
       res.send({ errors });
    } else {
@@ -74,7 +75,6 @@ router.post('/add-raw-material', (req, res) => {
          }
       });
    }
-   console.log('Hello');
 });
 
 router.post('/edit-raw-material', (req, res) => {

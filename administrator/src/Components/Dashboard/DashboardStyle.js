@@ -8,8 +8,8 @@ export const useStyles = makeStyles(theme => ({
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'left',
-      maxHeight: '90vh',
-      minHeight: '90vh',
+      maxHeight: '92vh',
+      minHeight: '92vh',
       overflow: 'auto',
       transition: 'all .2s',
       '&:hover': {

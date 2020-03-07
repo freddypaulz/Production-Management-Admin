@@ -67,26 +67,26 @@ export default function FilterEmployee(props) {
                   });
             });
       });
-   }, []);
+   }, [props.filters.country, props.filters.state, props.filters.city]);
 
    useEffect(() => {
       axios.get('/designations/designations').then(res => {
          setDesignations(res.data.Designations);
-         console.log(res.data.Designations);
+         //console.log(res.data.Designations);
       });
    }, []);
 
    useEffect(() => {
       axios.get('/work-locations/work-locations').then(res => {
          setWorkLocations(res.data.WorkLocations);
-         console.log(res.data.WorkLocations);
+         //console.log(res.data.WorkLocations);
       });
    }, []);
 
    useEffect(() => {
       axios.get('/shifts/shifts').then(res => {
          setShifts(res.data.Shifts);
-         console.log(res.data.Shifts);
+         //console.log(res.data.Shifts);
       });
    }, []);
 
@@ -259,7 +259,7 @@ export default function FilterEmployee(props) {
                                  country_id: event.target.value
                               })
                               .then(res => {
-                                 console.log(res);
+                                 //console.log(res);
                                  setStates([...res.data.state]);
                               });
                         }}
@@ -305,7 +305,7 @@ export default function FilterEmployee(props) {
                                  state_id: event.target.value
                               })
                               .then(res => {
-                                 console.log(res);
+                                 //console.log(res);
                                  setCities([...res.data.city]);
                               });
                         }}
@@ -590,7 +590,8 @@ export default function FilterEmployee(props) {
                      setFirstName('');
                      setLastName('');
                      setFromDOB(null);
-                     setToAge(null);
+                     setToDOB(null);
+                     setToAge('');
                      setGender('');
                      setMobile('');
                      setEmail('');
@@ -686,12 +687,11 @@ export default function FilterEmployee(props) {
                            designation,
                            fromSalary,
                            toSalary,
-                           designation,
                            workLocation,
                            shift
                         })
                         .then(res => {
-                           props.setData(res.data);
+                           props.setData(res);
                            props.saveFilters(filters);
                         });
                   }}

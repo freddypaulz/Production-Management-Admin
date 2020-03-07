@@ -18,12 +18,12 @@ export default class ManageEmployees extends Component {
             { title: 'First Name', field: 'employee_first_name' },
             { title: 'Last Name', field: 'employee_last_name' },
             { title: 'ID', field: 'employee_id' },
-            { title: 'Designation', field: 'employee_designation' },
+            { title: 'shift', field: 'employee_shift_name' },
+            { title: 'Designation', field: 'employee_designation_name' },
             {
                title: 'Work Location',
-               field: 'employee_work_location'
-            },
-            { title: 'shift', field: 'employee_shift' }
+               field: 'employee_work_location_name'
+            }
          ],
          data: [],
          filters: {
@@ -51,7 +51,10 @@ export default class ManageEmployees extends Component {
          },
          openAdd: false,
          openEdit: false,
-         openFilter: false
+         openFilter: false,
+         shifts: [],
+         workLocations: [],
+         designations: []
       };
       this.OnEditHandler = (event, rowData) => {
          console.log(rowData._id);
@@ -68,94 +71,106 @@ export default class ManageEmployees extends Component {
                });
             });
       };
-      this.handleClose = () => {
+
+      this.dataFetch = () => {
          axios
             .get('/employees/employees')
             .then(res => {
-               //console.log(res.data.States[0].country_id);
-               for (let i = 0; i < res.data.Employees.length; i++) {
-                  res.data.Employees[i].id = i + 1;
-                  axios
-                     .post('/work-locations/work-location', {
-                        _id: res.data.Employees[i].employee_work_location
-                     })
-                     .then(WorkLocation => {
-                        console.log(WorkLocation);
-                        if (WorkLocation.data.WorkLocation[0]) {
-                           console.log(
-                              WorkLocation.data.WorkLocation[0]
-                                 .work_location_name
-                           );
-                           res.data.Employees[i].employee_work_location =
-                              WorkLocation.data.WorkLocation[0].work_location_name;
-                           this.setState({
-                              data: [...res.data.Employees]
-                           });
-                        } else {
-                           res.data.Employees[i].work_location =
-                              'problem loading Work Location';
-                           this.setState({
-                              data: [...res.data.Employees]
-                           });
-                        }
-                     });
-                  axios
-                     .post('/shifts/shift', {
-                        _id: res.data.Employees[i].employee_shift
-                     })
-                     .then(Shift => {
-                        console.log(Shift);
-                        if (Shift.data.shift[0]) {
-                           console.log(Shift.data.shift[0].shift_name);
-                           res.data.Employees[i].employee_shift =
-                              Shift.data.shift[0].shift_name;
-                           this.setState({
-                              data: [...res.data.Employees]
-                           });
-                        } else {
-                           res.data.Employees[i].shift =
-                              'problem loading Shift';
-                           this.setState({
-                              data: [...res.data.Employees]
-                           });
-                        }
-                     });
-                  axios
-                     .post('/designations/designation', {
-                        _id: res.data.Employees[i].employee_designation
-                     })
-                     .then(Designation => {
-                        console.log(Designation);
-                        if (Designation.data.Designation) {
-                           console.log(
-                              Designation.data.Designation[0].designation_name
-                           );
-                           res.data.Employees[i].employee_designation =
-                              Designation.data.Designation[0].designation_name;
-                           this.setState({
-                              data: [...res.data.Employees]
-                           });
-                        } else {
-                           res.data.Employees[i].designation =
-                              'problem loading Designation';
-                           this.setState({
-                              data: [...res.data.Employees]
-                           });
-                        }
-                     });
-               }
-               this.setState({
-                  data: [...res.data.Employees]
-               });
+               this.handleClose(res);
             })
-            .catch(err => {
-               console.log('Error');
+            .catch(err => {});
+      };
+
+      this.handleClose = res => {
+         for (let i = 0; i < res.data.Employees.length; i++) {
+            res.data.Employees[i].id = i + 1;
+
+            //Designations
+            this.state.designations.find((designation, index) => {
+               if (
+                  designation._id === res.data.Employees[i].employee_designation
+               ) {
+                  //console.log('Hello');
+                  res.data.Employees[i].employee_designation_name =
+                     designation.designation_name;
+               } else {
+                  if (
+                     index === this.state.designations.length - 1 &&
+                     !res.data.Employees[i].employee_designation_name
+                  ) {
+                     res.data.Employees[i].employee_designation_name =
+                        ' Problem Loading Data';
+                  }
+               }
+               return null;
             });
+
+            //WorkLocations
+            this.state.workLocations.find((work_location, index) => {
+               if (
+                  work_location._id ===
+                  res.data.Employees[i].employee_work_location
+               ) {
+                  // console.log('Hello');
+                  res.data.Employees[i].employee_work_location_name =
+                     work_location.work_location_name;
+               } else {
+                  if (
+                     index === this.state.workLocations.length - 1 &&
+                     !res.data.Employees[i].employee_work_location_name
+                  ) {
+                     res.data.Employees[i].employee_work_location_name =
+                        ' Problem Loading Data';
+                  }
+               }
+               return null;
+            });
+
+            //shifts
+            this.state.shifts.find((shift, index) => {
+               if (shift._id === res.data.Employees[i].employee_shift) {
+                  res.data.Employees[i].employee_shift_name = shift.shift_name;
+               } else {
+                  if (
+                     index === this.state.shifts.length - 1 &&
+                     !res.data.Employees[i].employee_shift_name
+                  ) {
+                     res.data.Employees[i].employee_shift_name =
+                        ' Problem Loading Data';
+                  }
+               }
+               return null;
+            });
+         }
+         this.setState({
+            data: [...res.data.Employees]
+         });
       };
    }
    componentDidMount() {
       if (permissionCheck(this.props, 'Manage Employees')) {
-         this.handleClose();
+         if (
+            this.state.shifts.length === 0 &&
+            this.state.designations.length === 0 &&
+            this.state.workLocations.length === 0
+         ) {
+            axios.get('/shifts/shifts').then(res => {
+               this.setState({
+                  shifts: res.data.Shifts
+               });
+               axios.get('/work-locations/work-locations').then(res => {
+                  this.setState({
+                     workLocations: res.data.WorkLocations
+                  });
+                  axios.get('/designations/designations').then(res => {
+                     this.setState({
+                        designations: res.data.Designations
+                     });
+                     this.dataFetch();
+                  });
+               });
+            });
+         }
       }
    }
    render() {
@@ -255,7 +270,7 @@ export default class ManageEmployees extends Component {
                         this.setState({
                            openAdd: false
                         });
-                        this.handleClose();
+                        this.dataFetch();
                      }}
                   />
                </DialogContent>
@@ -268,7 +283,7 @@ export default class ManageEmployees extends Component {
                         this.setState({
                            openEdit: false
                         });
-                        this.handleClose();
+                        // this.dataFetch();
                      }}
                   />
                </DialogContent>
@@ -277,10 +292,9 @@ export default class ManageEmployees extends Component {
                <DialogContent style={{ padding: '20px' }}>
                   <FilterEmployee
                      filters={this.state.filters}
-                     setData={data => {
-                        this.setState({
-                           data: data
-                        });
+                     setData={res => {
+                        //console.log('Hello', res);
+                        this.handleClose(res);
                      }}
                      cancel={() => {
                         this.setState({

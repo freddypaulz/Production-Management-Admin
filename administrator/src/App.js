@@ -7,6 +7,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import ProtectedRoute from './Components/Auth/ProtectedRoute';
 import Requests from './Containers/Requests/Requests';
 import Reports from './Containers/Reports/Reports';
+import Configurations from './Containers/Configurations/Configurations';
 
 function App() {
    return (
@@ -16,6 +17,10 @@ function App() {
          <ProtectedRoute path='/home/management' component={Management} />
          <ProtectedRoute path='/home/requests' component={Requests} />
          <ProtectedRoute path='/home/reports' component={Reports} />
+         <ProtectedRoute
+            path='/home/configurations'
+            component={Configurations}
+         />
       </BrowserRouter>
    );
 }

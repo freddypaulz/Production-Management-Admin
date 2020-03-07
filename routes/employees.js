@@ -353,7 +353,7 @@ router.post('/filter', (req, res) => {
    }
 
    Employees.find(filters).then(Employees => {
-      res.send(Employees);
+      res.send({ Employees });
    });
 });
 

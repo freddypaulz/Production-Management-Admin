@@ -16,8 +16,10 @@ const Permissions = [
    { name: 'Manage Departments', value: false, component: 'management' },
    { name: 'Manage Production Units', value: false, component: 'management' },
    { name: 'Manage Designations', value: false, component: 'management' },
+   { name: 'Manage Boxes', value: false, component: 'management' },
    { name: 'Purchase Requests', value: false, component: 'requests' },
-   { name: 'Purchase Report', value: false, component: 'reports' }
+   { name: 'Purchase Report', value: false, component: 'reports' },
+   { name: 'Product Code', value: false, component: 'configurations' }
 ];
 
 export default Permissions;

@@ -3,21 +3,18 @@ import MaterialTable from 'material-table';
 import { Box, Button, DialogContent } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import axios from 'axios';
-import AddRawMaterial from './AddRawMaterial';
-import EditRawMaterial from './EditRawMaterial';
 import permissionCheck from '../../Components/Auth/permissionCheck';
-
-export default class ManageRawMaterials extends Component {
+import AddBox from './AddBox';
+import EditBox from './EditBox';
+export default class ManageBoxes extends Component {
    constructor(props) {
       super();
       this.EditData = {};
       this.state = {
          columns: [
             { title: 'ID', field: 'id' },
-            { title: 'Name', field: 'raw_material_name' },
-            { title: 'Code', field: 'raw_material_code' },
-            { title: 'Type', field: 'raw_material_type' },
-            { title: 'Measuring Unit', field: 'raw_material_measuring_unit' },
+            { title: 'Box Name', field: 'box_name' },
+            { title: 'Box Size', field: 'box_size' },
             { title: 'Description', field: 'description' }
          ],
          data: [],
@@ -27,87 +24,32 @@ export default class ManageRawMaterials extends Component {
       this.OnEditHandler = (event, rowData) => {
          console.log(rowData._id);
          axios
-            .post('/raw-materials/raw-material', {
+            .post('/boxes/box', {
                _id: rowData._id
             })
-            .then(res => {
-               console.log(res);
-               this.EditData = { ...res.data.RawMaterial };
-               console.log(this.EditData[0]);
+            .then(Box => {
+               console.log(Box.data);
+               this.EditData = { ...Box.data.box[0] };
+               console.log(this.EditData);
                this.setState({
                   openEdit: true
                });
             });
       };
       this.handleClose = () => {
-         axios
-            .get('/raw-materials/raw-materials')
-            .then(res => {
-               //console.log(res.data.States[0].country_id);
-               for (let i = 0; i < res.data.RawMaterials.length; i++) {
-                  res.data.RawMaterials[i].id = i + 1;
-                  axios
-                     .post('/material-types/material-type', {
-                        _id: res.data.RawMaterials[i].raw_material_type
-                     })
-                     .then(MaterialType => {
-                        console.log(MaterialType);
-                        if (MaterialType.data.MaterialType[0]) {
-                           console.log(
-                              MaterialType.data.MaterialType[0]
-                                 .material_type_name
-                           );
-                           res.data.RawMaterials[i].raw_material_type =
-                              MaterialType.data.MaterialType[0].material_type_name;
-                           this.setState({
-                              data: [...res.data.RawMaterials]
-                           });
-                        } else {
-                           res.data.RawMaterials[i].material_type =
-                              'problem loading Material Type';
-                           this.setState({
-                              data: [...res.data.RawMaterials]
-                           });
-                        }
-                     });
-                  axios
-                     .post('/measuring-units/measuring-unit', {
-                        _id:
-                           res.data.RawMaterials[i].raw_material_measuring_unit
-                     })
-                     .then(MeasuringUnit => {
-                        console.log(MeasuringUnit);
-                        if (MeasuringUnit.data.MeasuringUnit[0]) {
-                           console.log(
-                              MeasuringUnit.data.MeasuringUnit[0]
-                                 .measuring_unit_name
-                           );
-                           res.data.RawMaterials[
-                              i
-                           ].raw_material_measuring_unit =
-                              MeasuringUnit.data.MeasuringUnit[0].measuring_unit_name;
-                           this.setState({
-                              data: [...res.data.RawMaterials]
-                           });
-                        } else {
-                           res.data.RawMaterials[
-                              i
-                           ].raw_material_measuring_unit =
-                              'problem loading measuring unit';
-                           this.setState({
-                              data: [...res.data.RawMaterial]
-                           });
-                        }
-                     });
-               }
-            })
-            .catch(err => {
-               console.log('Error');
+         axios.get('/boxes/boxes').then(res => {
+            console.log(res.data.Boxes);
+            for (let i = 0; i < res.data.Boxes.length; i++) {
+               res.data.Boxes[i].id = i + 1;
+            }
+            this.setState({
+               data: [...res.data.Boxes]
             });
+         });
       };
    }
    componentDidMount() {
-      if (permissionCheck(this.props, 'Manage Raw Materials')) {
+      if (permissionCheck(this.props, 'Manage Boxes')) {
          this.handleClose();
       }
    }
@@ -120,7 +62,7 @@ export default class ManageRawMaterials extends Component {
             flexDirection='column'
          >
             <Box fontSize='30px' mb={3}>
-               Manage Raw Materials
+               Manage Boxes
             </Box>
             <Box width='90%' display='flex' flexDirection='row'>
                <Button
@@ -166,12 +108,12 @@ export default class ManageRawMaterials extends Component {
                editable={{
                   onRowDelete: oldData =>
                      axios
-                        .post('/raw-materials/delete-raw-material', {
+                        .post('/boxes/delete-box', {
                            _id: oldData._id
                         })
-                        .then(res => {
-                           console.log(res);
-                           if (res) {
+                        .then(Box => {
+                           console.log(Box);
+                           if (Box) {
                               this.setState(prevState => {
                                  const data = [...prevState.data];
                                  data.splice(data.indexOf(oldData), 1);
@@ -184,10 +126,9 @@ export default class ManageRawMaterials extends Component {
                   this.OnEditHandler(event, rowData);
                }}
             />
-
             <Dialog open={this.state.openAdd} maxWidth='lg' fullWidth>
                <DialogContent style={{ padding: '20px' }}>
-                  <AddRawMaterial
+                  <AddBox
                      cancel={() => {
                         this.setState({
                            openAdd: false
@@ -199,8 +140,9 @@ export default class ManageRawMaterials extends Component {
             </Dialog>
             <Dialog open={this.state.openEdit} maxWidth='lg' fullWidth>
                <DialogContent style={{ padding: '20px' }}>
-                  <EditRawMaterial
-                     RawMaterial={this.EditData[0]}
+                  <EditBox
+                     Box={this.EditData}
+                     props={this.props}
                      cancel={() => {
                         this.setState({
                            openEdit: false

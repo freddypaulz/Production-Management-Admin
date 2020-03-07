@@ -24,6 +24,7 @@ export default class AddUser extends Component {
          management: false,
          requests: false,
          reports: false,
+         configurations: false,
          errors: [],
          success: false
       };
@@ -31,6 +32,7 @@ export default class AddUser extends Component {
       this.manageSelected = 0;
       this.requestSelected = 0;
       this.reportSelected = 0;
+      this.configurationSelected = 0;
 
       this.onAddHandler = () => {
          let givenPermissions = [];
@@ -42,6 +44,9 @@ export default class AddUser extends Component {
          }
          if (this.state.requests) {
             givenPermissions.push({ name: 'Requests', Value: true });
+         }
+         if (this.state.configurations) {
+            givenPermissions.push({ name: 'Configurations', Value: true });
          }
          this.state.permissions.map(permission => {
             if (permission.value === true) {
@@ -136,6 +141,24 @@ export default class AddUser extends Component {
                }
                break;
             }
+            case 'configurations': {
+               console.log(`configurations ${value}`);
+               if (value) {
+                  this.configurationSelected++;
+               } else {
+                  this.configurationSelected--;
+               }
+               if (this.configurationSelected > 0) {
+                  this.setState({
+                     configurations: true
+                  });
+               } else {
+                  this.setState({
+                     configurations: false
+                  });
+               }
+               break;
+            }
             default: {
                break;
             }
@@ -145,9 +168,6 @@ export default class AddUser extends Component {
    componentDidMount() {
       if (permissionCheck(this.props, 'Manage Roles')) {
       }
-      // this.state.permissions.map(permission => {
-      //    permission.value = false;
-      // });
    }
    componentWillUnmount() {
       this.state.permissions.map(permission => {
@@ -257,6 +277,18 @@ export default class AddUser extends Component {
                            />
                         }
                         label='Reports'
+                     />
+                  </Box>
+                  <Box width='20%' display='flex'>
+                     <FormControlLabel
+                        control={
+                           <Checkbox
+                              checked={this.state.configurations}
+                              disabled
+                              value={this.state.configurations}
+                           />
+                        }
+                        label='Configurations'
                      />
                   </Box>
                   {this.state.permissions.map((permission, index) => {

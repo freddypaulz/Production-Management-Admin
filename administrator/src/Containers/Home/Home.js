@@ -12,7 +12,7 @@ export default class Home extends Component {
          dashboardItems: []
       };
       this.permissions = JSON.parse(sessionStorage.getItem('permissions'));
-      this.contents = ['Management', 'Requests', 'Reports'];
+      this.contents = ['Management', 'Requests', 'Reports', 'Configurations'];
       this.logout = () => {
          if (auth.logout()) {
             this.props.history.push('/');
