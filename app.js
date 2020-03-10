@@ -36,6 +36,10 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
+//aws
+const path = require('path');
+app.use(express.static(path.join(__dirname, 'administrator/build')));
+
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 app.use('/roles', require('./routes/roles'));
