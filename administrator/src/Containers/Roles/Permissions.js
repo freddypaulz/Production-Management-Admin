@@ -19,6 +19,7 @@ const Permissions = [
    { name: 'Manage Boxes', value: false, component: 'management' },
    { name: 'Purchase Requests', value: false, component: 'requests' },
    { name: 'Purchase Report', value: false, component: 'reports' },
+   { name: 'Production and Sales Report', value: false, component: 'reports' },
    { name: 'Product Code', value: false, component: 'configurations' }
 ];
 

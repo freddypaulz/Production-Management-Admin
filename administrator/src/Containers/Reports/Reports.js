@@ -3,6 +3,7 @@ import { Box } from '@material-ui/core';
 import Dashboard from '../../Components/Dashboard/Dashboard';
 import auth from '../../Components/Auth/auth';
 import Purchase from './Purchase/Purchase';
+import ProductionAndSales from './ProductionAndSales/ProductionAndSales';
 import { Route } from 'react-router-dom';
 import AppBar from '../../Components/AppBar/AppBar';
 
@@ -14,7 +15,7 @@ export default class Reports extends Component {
          dashboardItems: []
       };
       this.permissions = JSON.parse(sessionStorage.getItem('permissions'));
-      this.contents = ['Purchase Report'];
+      this.contents = ['Purchase Report', 'Production and Sales Report'];
       this.logout = () => {
          if (auth.logout()) {
             this.props.history.push('/');
@@ -87,6 +88,11 @@ export default class Reports extends Component {
                      exact
                      path='/home/reports/purchase-report'
                      component={Purchase}
+                  />
+                  <Route
+                     exact
+                     path='/home/reports/production-and-sales-report'
+                     component={ProductionAndSales}
                   />
                </Box>
             </Box>

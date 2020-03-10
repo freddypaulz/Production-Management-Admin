@@ -57,8 +57,9 @@ app.use('/boxes', require('./routes/boxes'));
 app.use('/designations', require('./routes/designations'));
 app.use('/request-details', require('./routes/requests/requestDetails'));
 app.use('/logs', require('./routes/logs/logs'));
-app.use('/logs', require('./routes/logs/logs'));
 app.use('/product-code', require('./routes/configurations/productCode'));
+app.use('/productions', require('./routes/reports/productions'));
+app.use('/sales', require('./routes/reports/sales'));
 
 app.listen(5000, () => {
    console.log(`App listening on port ${PORT}!`);
