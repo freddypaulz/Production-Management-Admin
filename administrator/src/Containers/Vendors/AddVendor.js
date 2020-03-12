@@ -38,15 +38,15 @@ export default class AddVendor extends Component {
                sec_mobile_no: ''
             }
          ],
+         poc_name: '',
+         poc_designation: '',
+         poc_mobile_no: '',
+         poc_sec_mobile_no: '',
          description: '',
          errors: [],
          countries: [],
          states: [],
-         cities: [],
-         poc_name: '',
-         poc_designation: '',
-         poc_mobile_no: '',
-         poc_sec_mobile_no: ''
+         cities: []
       };
       this.onAddHandler = () => {
          axios

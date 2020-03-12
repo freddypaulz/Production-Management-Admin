@@ -120,55 +120,61 @@ export default class ManagePurchases extends Component {
             msg: 'Fetching Data...'
          });
          axios.get('/request-details').then(RequestDetails => {
-            RequestDetails.data.map(RequestDetail => {
-               if (this.props.load) {
-                  if (RequestDetail.Status !== 'Completed') {
-                     this.loadVendor(RequestDetail);
-                     this.setState({
-                        found: true
-                     });
-                  }
-                  if (this.state.found) {
-                     this.setState({
-                        msg: 'Loading....'
-                     });
+            if (RequestDetails.data[0] !== undefined) {
+               RequestDetails.data.map(RequestDetail => {
+                  if (this.props.load) {
+                     if (RequestDetail.Status !== 'Completed') {
+                        this.loadVendor(RequestDetail);
+                        this.setState({
+                           found: true
+                        });
+                     }
+                     if (this.state.found) {
+                        this.setState({
+                           msg: 'Loading....'
+                        });
+                     } else {
+                        this.setState({
+                           msg: 'No data Found!'
+                        });
+                     }
                   } else {
-                     this.setState({
-                        msg: 'No data Found!'
-                     });
+                     console.log(
+                        `1: ${
+                           RequestDetail.Created_By.Role_Id
+                        } 2:${sessionStorage.getItem('Role ID')}`
+                     );
+                     if (
+                        RequestDetail.Status === 'ForwardedToAdmin' ||
+                        RequestDetail.Created_By.Role_Id ===
+                           sessionStorage.getItem('Role ID')
+                     ) {
+                        this.setState({
+                           found: true
+                        });
+                        this.loadVendor(RequestDetail);
+                     }
+                     if (this.state.found) {
+                        this.setState({
+                           msg: 'Loading....'
+                        });
+                     } else {
+                        this.setState({
+                           msg: 'No data Found!'
+                        });
+                     }
                   }
-               } else {
-                  console.log(
-                     `1: ${
-                        RequestDetail.Created_By.Role_Id
-                     } 2:${sessionStorage.getItem('Role ID')}`
-                  );
-                  if (
-                     RequestDetail.Status === 'ForwardedToAdmin' ||
-                     RequestDetail.Created_By.Role_Id ===
-                        sessionStorage.getItem('Role ID')
-                  ) {
-                     this.setState({
-                        found: true
-                     });
-                     this.loadVendor(RequestDetail);
-                  }
-                  if (this.state.found) {
-                     this.setState({
-                        msg: 'Loading....'
-                     });
-                  } else {
-                     this.setState({
-                        msg: 'No data Found!'
-                     });
-                  }
-               }
-               this.setState({
-                  data: [...this.req]
-               });
+                  this.setState({
+                     data: [...this.req]
+                  });
 
-               return null;
-            });
+                  return null;
+               });
+            } else {
+               this.setState({
+                  msg: 'No data Found!'
+               });
+            }
          });
       };
    }
