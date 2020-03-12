@@ -9,16 +9,19 @@ const fileupload = require('express-fileupload');
 require('./config/passport')(passport);
 
 //DB Config
-const db = require('./config/keys').MONGO_URI;
+//const db = require('./config/keys').MONGO_URI;
 
 //mongo
 mongoose
-   .connect(db, {
-      useNewUrlParser: true,
-      useCreateIndex: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false
-   })
+   .connect(
+      'mongodb+srv://freddypaulz:mongo123@cluster0-6kohd.mongodb.net/ProductionManagement?retryWrites=true&w=majority',
+      {
+         useNewUrlParser: true,
+         useCreateIndex: true,
+         useUnifiedTopology: true,
+         useFindAndModify: false
+      }
+   )
    .then(() => {
       console.log('DB connected');
    })
@@ -37,8 +40,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //aws
-// const path = require('path');
-// app.use(express.static(path.join(__dirname, 'administrator/build')));
+const path = require('path');
+app.use(express.static(path.join(__dirname, 'administrator/build')));
 
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
